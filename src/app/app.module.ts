@@ -58,6 +58,7 @@ import { AdminsComponent } from './manage/admins/admins.component';
 import { AddAdminFormComponent } from './add-admin-form/add-admin-form.component';
 import { BrandSortFormComponent } from './brand-sort-form/brand-sort-form.component';
 import { AuthGuardService } from './services/guard/auth-guard.service';
+import { AdminGuardService } from './services/guard/admin-guard.service';
 
 // import { EditItemComponent } from './edit-item/edit-item.component';
 // import { DistributorAreasComponent } from './manage/distributor-areas/distributor-areas.component';
@@ -73,15 +74,15 @@ import { AuthGuardService } from './services/guard/auth-guard.service';
 
 const appRoutes : Routes = [
   {path: '' , component:LoginComponent , pathMatch:"full"},
-  {path: 'categories' , component : CategoriesListComponent , canActivate : [AuthGuardService]},
-  {path : 'itemsOf/:categoryKey/:categoryName' , component : ItemListComponent , canActivate : [AuthGuardService] },
-  {path:'notifications' , component:NotificationsComponent , canActivate : [AuthGuardService]},
+  {path: 'categories' , component : CategoriesListComponent , canActivate : [AuthGuardService , AdminGuardService]},
+  {path : 'itemsOf/:categoryKey/:categoryName' , component : ItemListComponent , canActivate : [AuthGuardService , AdminGuardService] },
+  {path:'notifications' , component:NotificationsComponent , canActivate : [AuthGuardService , AdminGuardService]},
   {path : 'dailyReport' , component : OrdersComponent , canActivate : [AuthGuardService]},
-  {path : 'manage' , component : ManageComponent , canActivate : [AuthGuardService]},
+  {path : 'manage' , component : ManageComponent , canActivate : [AuthGuardService , AdminGuardService]},
   {path : 'manage' , component : ManageComponent , children:[
-    {path : 'distributors', component : DistributorsListComponent , canActivate : [AuthGuardService]},
-    {path : 'areas', component : DistributorAreasComponent , canActivate : [AuthGuardService]},
-    {path : 'admins' , component : AdminsComponent , canActivate : [AuthGuardService]}
+    {path : 'distributors', component : DistributorsListComponent , canActivate : [AuthGuardService , AdminGuardService]},
+    {path : 'areas', component : DistributorAreasComponent , canActivate : [AuthGuardService , AdminGuardService]},
+    {path : 'admins' , component : AdminsComponent , canActivate : [AuthGuardService , AdminGuardService]}
   ] ,},
   {path : 'processedOrders' , component : OldOrdersComponent , canActivate : [AuthGuardService]},
   {path : 'orderBill/:orderKey' , component : OrderDetailComponent , canActivate :[AuthGuardService]},
