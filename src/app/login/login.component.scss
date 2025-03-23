@@ -1,0 +1,103 @@
+.animated-logo {
+  display: block;
+  margin: 20px auto;
+  width: 150px;
+  height: auto;
+  animation: slight-vibration 0.2s infinite alternate ease-in-out, jump 1s infinite ease-in-out;
+}
+
+/* Slight Vibration (fast subtle shake on Y-axis) */
+@keyframes slight-vibration {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-2px); } 
+}
+
+/* Small Jump (every 3 seconds) */
+@keyframes jump {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.background-image {
+  background-image: url('https://coolbackgrounds.io/images/backgrounds/black/black-trianglify-b6181ec2.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.2; /* Adjust the opacity value as per your preference */
+  z-index: -1;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 10px 10px 5px grey;
+}
+
+.brand-image {
+  display: block;
+  margin: 20px auto;
+  width: 150px;
+  height: auto;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-control-manual {
+  width: 90%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.btn-primary-manual {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-primary-manual:hover {
+  background-color: #0056b3;
+}
+
+.center-loader{
+    display: block;
+    text-align: center;
+}

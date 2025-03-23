@@ -1,0 +1,43 @@
+<div class="row">
+    <div class="col">
+        <div class="container">
+            <h3 style = "display : inline; font-size:48px;" class = "pangolin">User Requests!</h3> 
+            <p>All these users want to join ODO's network! Please approve to <span style ="color:green; font-weight: bold;">Allow</span> them or <span style = "color:red; font-weight: bold;">Reject</span></p>
+            <hr>
+        </div>
+    </div>
+</div>
+
+<div class="loader center" *ngIf = "isLoading">
+
+</div>
+
+<div class="container" *ngIf = "!isLoading">
+
+    <p *ngIf = "notificationData.length == 0" style = "color: red; font-size: 20px;" class = "pangolin">No Pending User Requests!</p>
+ <div class="row">
+     <div class="col-xs-3" *ngFor="let data of notificationData; let i=index;" style = "margin-bottom: 5px;">
+        <div class="card flex justify-content-center">
+            <p-card header="NAME : {{data.name}}">
+                <p style = "font-weight: bold; color: red; font-size:15px;">
+                    GST NO. {{data.GST}}
+                </p>
+                <p style = "font-weight: bold; color: red; font-size:15px;">
+                    Shop : {{data.shop}}
+                </p>
+                <p style = "font-weight: bold; color: red; font-size:15px;">
+                    Area : {{data.area}}
+                </p>
+                <p style = "font-weight: bold; color: red; font-size:15px;">
+                    Ph No. : {{data.contact}}
+                </p>
+                <ng-template pTemplate="footer">
+                    <p-button label="Approve" icon="pi pi-check" (click) = "onApprove(i)"></p-button>
+                    <p-button label="Reject" icon="pi pi-times" styleClass="p-button-secondary" [style]="{ 'margin-left': '.5em' }" (click) = "onReject(i)"></p-button>
+                </ng-template>
+            </p-card>
+        </div>
+     </div>
+ </div>   
+
+</div>

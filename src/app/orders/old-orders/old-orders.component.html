@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-4">
+            <mat-card class="demo-inline-calendar-card">
+                <mat-calendar [(selected)]="selected" (selectedChange) = "changeDate()"></mat-calendar>
+              </mat-card>
+              <p>Selected date: {{selected}}</p> 
+        </div>
+        <div class="col-xs-6">
+            <h4>Select a date to see order</h4>
+            <img src = "https://c8.alamy.com/comp/M6DFNB/cartoon-of-businessman-holding-arrow-sign-pointing-left-M6DFNB.jpg" style = "height:300px;">
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="loader" *ngIf = "isLoading">
+
+    </div>
+
+    <p *ngIf = "processedOrders.length == 0">No orders for selected date available in Databse.</p>
+
+    <div class="row" *ngIf ="!isLoading">
+        <div *ngFor = "let order of processedOrders; let i = index;" class = "col-xs-3 w3-card pointer order-card" (click) = "showBill(processedOrders[i] , processedOrderKeys[i])">
+            <p style = "font-weight: bold;">{{order.orderedBy | uppercase}}</p>
+            <p style = "font-weight: bold;">{{order.shop | uppercase}}</p>
+            <p style = "font-weight: bold;">{{order.orderTime}}</p>
+            <p style = "font-weight: bold; color: green;">Accepted By : {{order.acceptedBy}}</p>
+        </div>
+    </div>
+    
+         
+</div>

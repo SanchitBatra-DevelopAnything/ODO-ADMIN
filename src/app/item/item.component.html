@@ -1,0 +1,28 @@
+<p-dialog header="SURE?" [(visible)]="dialogVisible" [style]="{width: '50%'}" [modal] = "true">
+    <h6>
+        Selected Item will be deleted. Click OK to proceed!
+    </h6>
+    <button class = "btn choc-button" (click) = "deleteItem()">OK</button>
+</p-dialog>
+<div class="card bottom-spaced-box">
+    <img src = {{item.imgUrl}} class = "card-img-top img img-responsive">
+    <div class="card-body">
+                <div style = "display: flex; flex-direction: column; height: 190px;">
+                    <h5 class="card-title center-text pangolin" style= "font-size: 30px; display: inline-block;">
+                        {{item.itemName | uppercase}}
+                    </h5>
+                    <div class ="container">
+                        <div style = "margin-left:10px;" class = "pangolin;">
+                            <h4>PRICE : Rs.{{item.itemPrice}}</h4>
+                            <p>{{item.slab_1_start}} - {{item.slab_1_end}} @ {{item.slab_1_discount}}%</p>
+                            <p>{{item.slab_2_start}} - {{item.slab_2_end}} @ {{item.slab_2_discount}}%</p>
+                            <p>{{item.slab_3_start}} - {{item.slab_3_end}} @ {{item.slab_3_discount}}%</p>
+                        </div>
+                        <div class = "edit-btn-container">
+                             <p-speedDial [model]="items" direction="up"></p-speedDial> 
+                        </div>
+                    </div>
+                </div>
+    </div>
+</div>
+

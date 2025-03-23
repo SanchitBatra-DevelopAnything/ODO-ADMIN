@@ -1,0 +1,88 @@
+body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  header {
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+  }
+  
+  .navbar {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    padding: 0 20px;
+    background-color: black;
+  }
+  
+  .navbar-icon {
+    cursor: pointer;
+    font-size: 24px;
+    margin-right: 10px;
+    color: white;
+  }
+  
+  .navbar-menu {
+    flex-grow: 1;
+  }
+  
+  .navbar-menu ul {
+    display: flex;
+    justify-content: flex-end;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+  }
+  
+  .navbar-menu ul li {
+    margin: 0 10px;
+    color: white;
+  }
+  
+  .navbar-menu ul li a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+    cursor: pointer;
+  }
+  
+  .navbar-menu ul li a:hover {
+    color: yellow;
+  }
+  
+  .content {
+    margin-top: 80px;
+    padding: 20px;
+  }
+
+  .option {
+      cursor: pointer;
+  }
+
+  .custom-hr
+  {
+      margin: 0px;
+  }
+
+  .active-link
+  {
+      color: red;
+      font-size: 24px;
+      font-weight: bolder;
+  }
+  ::ng-deep .p-sidebar
+  {
+    width: 320px;
+  }
+
+  ::ng-deep .p-sidebar-active
+  {
+    width: 320px;
+  }

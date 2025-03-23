@@ -1,0 +1,21 @@
+<div class="container">
+    <h3>Sort your brands here!</h3>
+    <p style = "color: red; font-weight: bold;">Make sure number assigned to each brand is unique! Give 1 to top brand , 2 to second brand, for brands you dont care about , leave with no value!</p>
+    <p style ="color: green; font-weight: bolder;">Users will see brands based on values you give here!</p>
+    <hr>
+    
+    
+        <div *ngIf="isLoading">Loading...</div>
+    
+        <div *ngFor="let key of objectKeys(brands)">
+            <h6>{{ brands[key].categoryName }}</h6>
+            
+                <input type="number" class = "form-control" [(ngModel)]="brands[key].sortOrder" (change)="onSortOrderChange(key, $event)" />
+            
+            
+        </div>
+        <hr>
+        <button (click)="updateSortOrder()" class = "btn choc-button" [disabled]="isLoading">Save Sort Order</button>
+    
+        
+</div>

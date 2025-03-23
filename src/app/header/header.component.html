@@ -1,0 +1,50 @@
+<!-- <nav class = "navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+                <img src = "../../assets/kidys logo-17.png" class = "navbar-brand">
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li routerLinkActive = "active"><a routerLink = "/categories">Categories</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                
+                <li *ngIf = "loggedIn"><a routerLink = "/" (click) = "onLogout()">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav> -->
+
+<div class="navbar">
+    
+    <a for="navbar-toggle" class="navbar-icon" (click) = "toggleDrawer()">&#9776;</a>
+
+    <div class="navbar-header">
+        <img src = "../../assets/odo.jpeg" class = "navbar-brand">
+    </div>
+
+
+    <h4 style = "color:white;" class = "pangolin">Welcome to ODO Admin Portal</h4>
+    <nav class="navbar-menu">
+      <ul class = "navbar-right">
+        <li *ngIf = "loggedIn"><a routerLink = "/" (click) = "onLogout()">Logout</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <p-sidebar [(visible)]="openDrawer" (onHide) = "openDrawer = false;">
+    <ng-template pTemplate="header">
+        <img src = "../../assets/odo.jpeg" class = "img img-responsive">
+    </ng-template>
+    <hr class = "custom-hr">
+    <ng-template pTemplate="content">
+        <h4 class = "pangolin option"><a routerLink = "/categories" routerLinkActive = "active-link" (click) = "openDrawer = false;" *ngIf = "adminType!='Sub'">CATEGORIES</a></h4>
+        <hr class = "custom-hr">
+        <h4 class = "pangolin option"><a routerLink = "/dailyReport" routerLinkActive = "active-link" (click) = "openDrawer = false;">ORDERS</a></h4>
+        <hr class = "custom-hr">
+        <h4 class = "pangolin option"><a routerLink = "/notifications" routerLinkActive = "active-link" (click) = "openDrawer = false;" *ngIf = "adminType!='Sub'">NOTIFICATIONS</a></h4>
+        <hr class = "custom-hr">
+        <h4 class = "pangolin option"><a routerLink = "/manage" routerLinkActive = "active-link" (click) = "openDrawer = false;" *ngIf = "adminType!='Sub'">MANAGE</a></h4>
+        <hr class = "custom-hr">
+    </ng-template>
+</p-sidebar>

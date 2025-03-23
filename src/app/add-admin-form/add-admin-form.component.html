@@ -1,0 +1,26 @@
+<div *ngIf = "!isLoading" class = "container">
+    <h1>Add a new sub-admin!</h1>
+    <h5 class ="emoji">Looks like more and more members need ODO!</h5>
+
+
+    <form [formGroup]="adminForm" (ngSubmit) = "onSubmit()">
+
+           <div class="form-group">
+             <label for="name">USERNAME : </label>
+             <input type="text" id="name" formControlName="username" class = "form-control">
+             <label for="name">PASSWORD : </label>
+            <input type="text" id="name" formControlName="password" class = "form-control">
+            <hr>
+            <label>Area:</label>
+    <select formControlName="area" required class = "form-control">
+      <option *ngFor="let area of areas" [value]="area.areaName">{{ area.areaName }}</option>
+    </select>
+           </div>
+           
+           <button type="submit" class = "btn choc-button">Submit</button>
+         </form>
+
+</div>
+
+<div class="loader" *ngIf = "isLoading" style = "position: absolute; top:50%; left: 50%;"></div>
+

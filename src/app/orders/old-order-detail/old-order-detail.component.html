@@ -1,0 +1,31 @@
+<h3 style = "text-align: center;">ORDER DETAIL</h3>
+<h6 style = "color:green; font-weight: bold;">Accepted By : {{order.acceptedBy}}</h6>
+<h6 style = "font-weight: bold;">GST : {{order.GST}}</h6>
+<h6 style = "font-weight: bold;">Phone Number : {{order.contact}}</h6>
+<h6>PRICE : {{order.totalPrice}}</h6>
+<h6>Discounted Price : {{order.totalPriceAfterDiscount}}</h6>
+
+<hr>
+
+<p-table [value]="items" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+        <tr>
+            
+            <th>Item Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Discount</th>
+            <th>Discounted Price</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+        <tr>
+            
+            <td>{{ item.item }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.price }}</td>
+            <td>{{ item.discount_percentage }} % </td>
+            <td>{{item.priceAfterDiscount}}</td>
+        </tr>
+    </ng-template>
+</p-table>

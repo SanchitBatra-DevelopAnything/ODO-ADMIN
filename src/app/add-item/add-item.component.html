@@ -1,0 +1,109 @@
+<!-- app.component.html -->
+<div class="container" *ngIf = "!isLoading">
+    <h1>Add items here!</h1>
+    <h5>for : {{parentCategoryData.categoryName}}</h5>
+  
+    <form [formGroup]="addItemForm" (ngSubmit) = "onSubmit(addItemForm.value)">
+    
+     
+   <div class="form-group">
+    <label for="photo">Photo Upload</label>
+    <div class="file-input-container">
+      <input type="file" id="photo" class="file-input" (change)="onFileChange($event)" accept="image/*">
+      <label class="file-input-label button-blue" for="photo" style = "font-size: 15px;">Choose a file</label>
+    </div>
+    <div class="photo-preview" *ngIf="photoPreview">
+      <img [src]="photoPreview" alt="Photo Preview">
+    </div>
+  </div>
+      <div class="form-group">
+        <label for="name">ITEM NAME</label>
+        <input type="text" id="name" formControlName="itemName" class = "form-control">
+      </div>
+      <div class="form-group">
+        <label for="itemPrice">MRP</label>
+        <input type="number" id="itemPrice" formControlName="itemPrice" class = "form-control">
+      </div>
+      <hr>
+      <div>
+        <p style = "text-align: center; font-size: 12px; font-weight: bold; color: red;">Set upto 3 discount slabs , ignore if not needed!</p>
+      </div>
+      <div class="col">
+        <div class="col-xs-4">
+            <div class="form-group">
+                <label for="name">Slab 1 Start At : </label>
+                <input type="number" id="slab_1_start" formControlName="slab_1_start" class = "form-control">
+              </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="form-group">
+                <label for="name">Slab 1 End At : </label>
+                <input type="number" id="slab_1_end" formControlName="slab_1_end" class = "form-control">
+              </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="form-group">
+                <label for="name">Discount %</label>
+                <input type="number" id="slab_1_discount" formControlName="slab_1_discount" class = "form-control">
+              </div>
+        </div>
+      </div>
+
+
+      <div class="col">
+        <div class="col-xs-4">
+            <div class="form-group">
+                <label for="name">Slab 2 Start At : </label>
+                <input type="number" id="slab_2_start" formControlName="slab_2_start" class = "form-control">
+              </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="form-group">
+                <label for="name">Slab 2 End At : </label>
+                <input type="number" id="slab_2_end" formControlName="slab_2_end" class = "form-control">
+              </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="form-group">
+                <label for="name">Discount %</label>
+                <input type="number" id="slab_2_discount" formControlName="slab_2_discount" class = "form-control">
+              </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="col-xs-4">
+            <div class="form-group">
+                <label for="name">Slab 3 Start At : </label>
+                <input type="number" id="slab_3_start" formControlName="slab_3_start" class = "form-control">
+              </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="form-group">
+                <label for="name">Slab 3 End At : </label>
+                <input type="number" id="slab_3_end" formControlName="slab_3_end" class = "form-control">
+              </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="form-group">
+                <label for="name">Discount %</label>
+                <input type="number" id="slab_3_discount" formControlName="slab_3_discount" class = "form-control">
+              </div>
+        </div>
+      </div>
+      <hr>
+      <h6 style = "color: red;">Add prices for the areas , Ignore if you need MRP in that area.</h6>
+      <div class="row">
+        <div formArrayName="areaPrices">
+          <div *ngFor="let areaCtrl of areaPricesControls; let i = index" [formGroupName]="i" class = "col-xs-4">
+            <label>{{ areaCtrl.value.areaName }} Price:</label>
+            <input type="number" class = "form-control" formControlName="price" />
+          </div>
+        </div>
+      </div>
+      <button type="submit" class = "btn choc-button">Submit</button>
+    </form>
+  </div>
+
+  <div class="loader center" *ngIf = "isLoading"></div>
+  

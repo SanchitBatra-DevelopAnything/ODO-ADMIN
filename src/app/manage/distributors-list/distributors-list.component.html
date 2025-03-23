@@ -1,0 +1,12 @@
+<div class = "loader center" *ngIf = "isLoading"></div>
+<div class="container" *ngIf = "!isLoading">
+    <h3 class = "inline-heading">Members!</h3>
+    <p>New members will be added through the ODO Android/iOS App. Please see the <a routerLink = "/notifications">notifications</a>  to add new members into the system.</p>
+    <hr>
+    <input type = "number" placeholder = "search members by phone number" style = "width: 40%;" (input) = "filterDistributors($event)">
+    <ul class="list-group list-group-flush" style = "margin-top:10px;">
+        <li class="list-group-item" style ="height:50px;" *ngFor = "let distributor of filteredDistributorUsefulData; let i = index;">{{distributor.name | uppercase}} , {{distributor.contact | uppercase}} , {{distributor.GST}} , {{distributor.shop}}
+            <button class = "btn btn-danger" style = "float:right;" (click) = "deleteDistributor(filteredDistributorUsefulData[i]['distributorKey'])">Delete</button>
+        </li>
+      </ul>
+</div>

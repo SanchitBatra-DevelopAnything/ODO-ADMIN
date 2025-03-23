@@ -1,0 +1,28 @@
+<!-- app.component.html -->
+<div class="container" *ngIf = "!isLoading">
+    <h3>ODO's got a new brand tie-up!</h3>
+    <h5>Onboard them quick!</h5>
+  
+    <form [formGroup]="addBrandForm" (ngSubmit) = "onSubmit(addBrandForm.value)">
+     
+   <div class="form-group">
+    <label for="photo">Photo Upload</label>
+    <div class="file-input-container">
+      <input type="file" id="photo" class="file-input" (change)="onFileChange($event)" accept="image/*">
+      <label class="file-input-label button-blue" for="photo" style = "font-size: 15px;">Choose a file</label>
+    </div>
+    <div class="photo-preview" *ngIf="photoPreview">
+      <img [src]="photoPreview" alt="Photo Preview">
+    </div>
+  </div>
+      <div class="form-group">
+        <label for="name">BRAND NAME</label>
+        <input type="text" id="name" formControlName="categoryName" class = "form-control">
+      </div>
+  
+      <button type="submit" class = "btn choc-button">Submit</button>
+    </form>
+  </div>
+
+  <div class="loader center" *ngIf = "isLoading"></div>
+  

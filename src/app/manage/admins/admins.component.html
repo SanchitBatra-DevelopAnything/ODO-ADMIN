@@ -1,0 +1,13 @@
+<div class = "loader" *ngIf = "isLoading"></div>
+<div class="container" *ngIf = "!isLoading">
+    <h3 class = "inline-heading">ODO's Sub-Admins</h3>
+    <p style = "color: red;">Manage all ODO sub-admins here!</p>
+        <button class = "btn choc-button" (click) = "onAddAdmin()">Add a new sub-admin</button> 
+    <hr>
+
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item" style ="height:50px;" *ngFor = "let admin of adminData; let i = index;"><span style = "font-weight: bold;">Username : {{admin.username}} , Area : {{admin.area}}</span>
+            <button class = "btn btn-danger" style = "float:right;" (click) = "deleteAdmin(i)">Delete</button>
+        </li>
+      </ul>
+</div>

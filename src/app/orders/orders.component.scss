@@ -1,0 +1,32 @@
+.order-card{
+    height:150px;
+      margin-top:15px; min-height:70px; padding-top:20px; text-align: center; background-color:pink; margin-right: 3px; color:black; display : flex; flex-direction: column;
+  }
+  
+  .order-card-custom{
+      height:130px;
+      margin-top:15px; min-height:70px; padding-top:20px; text-align: center; background-color:greenyellow; margin-right: 3px; color:black; display : flex; flex-direction: column;
+  }
+  
+  .flex-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 70px;
+    }
+  
+    .containerT {
+      position: relative;
+      padding: 30px;
+    }
+    
+    .tag {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background-color: royalblue;
+      color: #ffffff;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+    

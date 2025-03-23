@@ -1,0 +1,24 @@
+<div class="background-image"></div>
+<div class="loader center" *ngIf = "isLoading"></div>
+
+<div class="row" style="text-align: center;">
+    <div class="col-xs-6">
+        <div class="container">
+            <h3 style = "display : inline; font-size:48px;" class = "pangolin">ODO's Brand Tie Ups!</h3> 
+        </div>
+    </div>
+    <div class="col-xs-6">
+            <button class = "btn choc-button" style="text-align: center; font-weight: bolder;" (click)="onBrandOnboard()">Onboard a new brand</button>
+            <hr>
+            <button class = "btn choc-button" style = "text-align: center; font-weight: bolder;" (click) = "openSortOrder()">Sort your brands!</button>
+    </div>
+</div>
+<hr>
+
+    <div class="row">
+        <div class="col col-xs-3" *ngFor = "let category of categoryList ; let i = index">
+            <app-category-item [category] = category
+            [categoryKeyInDb] = "categoryKeys[i]"></app-category-item>
+        </div>
+    </div>
+

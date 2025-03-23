@@ -1,0 +1,27 @@
+table{
+    width: 100%;
+}
+
+.mat-cell{
+    font-size:12px;
+    font-family: Verdana,Sans-Serif;
+    display: table-cell;
+    height: 48px;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(0, 0, 0, 1);
+    border-top: 1px solid rgba(0, 0, 0, 1);
+    border-left: 2px solid rgba(0, 0, 0, 1);
+    border-right: 2px solid rgba(0, 0, 0, 1);
+}
+
+.mat-cell-hide {
+    font-size:12px;
+    font-family: Verdana,Sans-Serif;
+    display: table-cell;
+    height: 48px;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(0, 0, 0, 1);
+    border-top: 1px solid rgba(0, 0, 0, 1);
+    border-left: 2px solid rgba(0, 0, 0, 1);
+    border-right:2px solid white;
+}

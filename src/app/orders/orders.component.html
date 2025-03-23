@@ -1,0 +1,26 @@
+<div class="container">
+    <h3>
+        Active Orders!
+    </h3>
+    <p style = "font-weight: bold;">Click on the Order for viewing its BILL</p>
+    <hr>
+    <button class = "btn btn-primary" (click) = "oldOrderPage()">Show Last 7 Days Orders</button>
+
+    <div class="loader" *ngIf = "isLoading">
+
+    </div>
+
+    <h3 class = "pangolin">Active Orders from members of <strong>ODO!</strong></h3>
+    <hr>
+    <div class="row">
+
+        <div *ngFor = "let order of activeOrders; let i = index;" class = "col-xs-2 w3-card pointer order-card" (click) = "showBill(order.shop , order.orderedBy , activeOrdersKeys[i])">
+            <p style = "font-weight: bold;">{{order.shop | uppercase}}</p>
+            <p style = "font-weight: bold;">By : {{order.orderedBy | uppercase}}</p>
+            <p style = "font-weight: bold; font-size: 12px;">{{order.orderTime}}</p>
+            <p style = "color: red;">AREA : {{order.area}}</p>
+        </div>
+
+    </div>
+    
+</div>

@@ -1,0 +1,18 @@
+<div *ngIf = "!isLoading" class = "container">
+    <h1>Add a new area!</h1>
+    <h5 class ="emoji">Yes! ODO's Expanding!</h5>
+
+
+    <form [formGroup]="addAreaForm" (ngSubmit) = "onSubmit(addAreaForm.value)">
+
+           <div class="form-group">
+             <label for="name">AREA NAME : </label>
+             <input type="text" id="name" formControlName="areaName" class = "form-control">
+           </div>       
+           <button type="submit" class = "btn choc-button">Submit</button>
+         </form>
+
+</div>
+
+<div class="loader" *ngIf = "isLoading" style = "position: absolute; top:50%; left: 50%;"></div>
+
