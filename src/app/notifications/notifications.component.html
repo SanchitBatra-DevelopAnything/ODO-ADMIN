@@ -16,7 +16,7 @@
 
     <p *ngIf = "notificationData.length == 0" style = "color: red; font-size: 20px;" class = "pangolin">No Pending User Requests!</p>
  <div class="row">
-     <div class="col-xs-3" *ngFor="let data of notificationData; let i=index;" style = "margin-bottom: 5px;">
+     <div class="col-xs-12 col-md-3"  *ngFor="let data of notificationData; let i=index;" style = "margin-bottom: 5px;">
         <div class="card flex justify-content-center">
             <p-card header="NAME : {{data.name}}">
                 <p style = "font-weight: bold; color: red; font-size:15px;">
