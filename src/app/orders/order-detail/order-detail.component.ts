@@ -118,6 +118,26 @@ export class OrderDetailComponent {
     })
   }
 
+  openGoogleMaps()
+{
+  const latitude = this.orderData['delivery-latitude'];
+  const longitude = this.orderData['delivery-longitude'];
+
+  if (latitude !== "not-found" && longitude !== "not-found") {
+    const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
+    
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+      // Open Google Maps app on mobile browser
+      window.location.href = url;
+    } else {
+      // Open link in a new tab in desktop browser
+      window.open(url, '_blank');
+    }
+  } else {
+    console.error("Delivery latitude or longitude is not available.");
+  }
+}
+
   deleteOrder()
   {
     this.isLoading = true;

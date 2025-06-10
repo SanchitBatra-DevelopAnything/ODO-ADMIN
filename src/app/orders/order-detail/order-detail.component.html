@@ -24,6 +24,10 @@
         <p style = "font-weight: bold;">{{orderData['shopAddress']}}</p>
     </div>
 
+    <div *ngIf = "orderData['delivery-latitude']!='not-found' && orderData['delivery-latitude']!=undefined">
+        <button class = "btn btn-success" (click) = "openGoogleMaps()">Open location in maps.</button>
+    </div>
+
 
 
     <hr>
