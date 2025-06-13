@@ -76,7 +76,7 @@ const appRoutes : Routes = [
   {path: '' , component:LoginComponent , pathMatch:"full"},
   {path: 'categories' , component : CategoriesListComponent , canActivate : [AuthGuardService , AdminGuardService]},
   {path : 'itemsOf/:categoryKey/:categoryName' , component : ItemListComponent , canActivate : [AuthGuardService , AdminGuardService] },
-  {path:'notifications' , component:NotificationsComponent , canActivate : [AuthGuardService , AdminGuardService]},
+  {path:'notifications' , component:NotificationsComponent , canActivate : [AuthGuardService]},
   {path : 'dailyReport' , component : OrdersComponent , canActivate : [AuthGuardService]},
   {path : 'manage' , component : ManageComponent , canActivate : [AuthGuardService , AdminGuardService]},
   {path : 'manage' , component : ManageComponent , children:[
