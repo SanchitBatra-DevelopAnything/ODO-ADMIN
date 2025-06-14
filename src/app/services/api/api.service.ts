@@ -10,11 +10,12 @@ export class ApiService {
   //category can be considered a brand in ODO's scenario.
 
   dbUrl = "https://odo-admin-app-default-rtdb.asia-southeast1.firebasedatabase.app/";
+  apiUrl = "http://localhost:8080/"
   constructor(private http:HttpClient) { }
 
   public getAdmins() : Observable<any>
   { 
-    return this.http.get(this.dbUrl + "admins.json");
+    return this.http.get(this.apiUrl + "v1/admins");
   }
 
   public getCategories() : Observable<any> {
