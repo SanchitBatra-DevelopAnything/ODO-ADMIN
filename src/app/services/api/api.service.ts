@@ -58,12 +58,12 @@ export class ApiService {
 
   public getDistributors() : Observable<any>
   {
-    return this.http.get(this.dbUrl+"Distributors.json");
+    return this.http.get(this.apiUrl+"v1/members");
   }
 
   public deleteDistributor(key:any) : Observable<any>
   {
-    return this.http.delete(this.dbUrl+"Distributors/"+key+".json");
+    return this.http.delete(this.apiUrl+"v1/members/"+key);
   }
 
   public getActiveOrders():Observable<any>
