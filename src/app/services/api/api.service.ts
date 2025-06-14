@@ -44,16 +44,16 @@ export class ApiService {
 
   public getNotificationRequests() : Observable<any>
   {
-    return this.http.get(this.dbUrl+"DistributorNotifications.json");
+    return this.http.get(this.apiUrl+"v1/members/notifications");
   }
 
   public makeUser(data:any) : Observable<any>
   {
-    return this.http.post(this.dbUrl+"Distributors.json" , data);
+    return this.http.post(this.apiUrl+"v1/members" , data);
   }
 
   public deleteNotification(key:any) :Observable<any> {
-    return this.http.delete(this.dbUrl+"DistributorNotifications/"+key+".json");
+    return this.http.delete(this.apiUrl+"v1/members/notifications/"+key);
   }
 
   public getDistributors() : Observable<any>
