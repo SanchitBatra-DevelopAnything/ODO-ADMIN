@@ -30,7 +30,7 @@ export class BrandOnboardComponent implements OnInit {
 
   ngOnInit() {
     this.addBrandForm = this.formBuilder.group({
-      categoryName: ['', Validators.required],
+      brandName: ['', Validators.required],
     });
   }
 
@@ -60,22 +60,16 @@ export class BrandOnboardComponent implements OnInit {
       this.task = this.storage.upload(filePath, this.selectedImage);
       (await this.task).ref.getDownloadURL().then((url: any) => {
         formValue["imageUrl"] = url;
-        this.apiService.onboardBrandAsParent(formValue).subscribe((response: any) => {
-          const parentKey = response?.name;
-          if (parentKey) {
-            this.apiService.onboardBrandForViewing(formValue, parentKey).subscribe(() => {
-              this.isLoading = false;
-              this.toastr.success('Brand Onboarded Successfully!', 'Close and refresh!', {
-                timeOut: 4000,
-                closeButton: true,
-                positionClass: 'toast-top-right'
-              });
-              this.resetForm();
-              this.utilityService.categoryAdded.next(true);
-              this.ref?.close();
-            })
-          }
-          
+        this.apiService.onboardNewBrand(formValue).subscribe((response: any) => {
+          this.isLoading = false;
+          this.toastr.success('Brand Onboarded Successfully!', 'Close and refresh!', {
+            timeOut: 4000,
+            closeButton: true,
+            positionClass: 'toast-top-right'
+          });
+          this.resetForm();
+          this.utilityService.categoryAdded.next(true);
+          this.ref?.close();
         });
       });
     } else {

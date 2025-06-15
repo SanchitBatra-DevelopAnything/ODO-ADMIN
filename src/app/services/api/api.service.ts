@@ -13,6 +13,11 @@ export class ApiService {
   apiUrl = "http://localhost:8080/"
   constructor(private http:HttpClient) { }
 
+  public onboardNewBrand(data:any) : Observable<any>
+  {
+    return this.http.post(this.apiUrl+"v1/brands" , data);
+  }
+
   public getAdmins() : Observable<any>
   { 
     return this.http.get(this.apiUrl + "v1/admins");
