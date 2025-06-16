@@ -20,7 +20,7 @@ export class BrandSortFormComponent {
 
   fetchBrands() {
     this.isLoading = true;
-    this.apiService.getCategories().subscribe((data: any) => {
+    this.apiService.getBrands().subscribe((data: any) => {
       this.brands = data;
       this.initializeSortOrderSet();
       this.isLoading = false;

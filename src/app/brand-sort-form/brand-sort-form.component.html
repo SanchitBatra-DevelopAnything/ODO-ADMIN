@@ -8,7 +8,7 @@
         <div *ngIf="isLoading">Loading...</div>
     
         <div *ngFor="let key of objectKeys(brands)">
-            <h6>{{ brands[key].categoryName }}</h6>
+            <h6>{{ brands[key].brandName }}</h6>
             
                 <input type="number" class = "form-control" [(ngModel)]="brands[key].sortOrder" (change)="onSortOrderChange(key, $event)" />
             

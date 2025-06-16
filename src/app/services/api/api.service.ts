@@ -23,8 +23,8 @@ export class ApiService {
     return this.http.get(this.apiUrl + "v1/admins");
   }
 
-  public getCategories() : Observable<any> {
-    return this.http.get(this.dbUrl+"onlyCategories.json");
+  public getBrands() : Observable<any> {
+    return this.http.get(this.apiUrl+"v1/brands");
   }
 
   public addItem(value:any , catKey:any) : Observable<any>

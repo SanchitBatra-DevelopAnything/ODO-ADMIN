@@ -14,16 +14,16 @@ import { BrandSortFormComponent } from '../brand-sort-form/brand-sort-form.compo
 export class CategoriesListComponent {
 
   isLoading : boolean = false;
-  categoryList : any[] = [];
-  categoryKeys : any[] = [];
+  brandList : any[] = [];
+  brandKeys : any[] = [];
   ref:DynamicDialogRef | undefined;
-  categoryAddedSub:Subscription = new Subscription();
+  brandAddedSub:Subscription = new Subscription();
 
   constructor(private apiService:ApiService , private dialogService : DialogService , private utilityService : UtilityService){}
 
   ngOnInit(): void {
     this.loadCategories();
-    this.categoryAddedSub = this.utilityService.categoryAdded.subscribe((_)=>{
+    this.brandAddedSub = this.utilityService.categoryAdded.subscribe((_)=>{
       this.loadCategories();
     });
   }
@@ -31,14 +31,14 @@ export class CategoriesListComponent {
   loadCategories()
   {
     this.isLoading = true;
-    this.apiService.getCategories().subscribe((allCategories:any)=>{
-      this.categoryList = Object.values(allCategories);
-      let categoryNames = [];
-      for(let i=0;i<this.categoryList.length;i++)
+    this.apiService.getBrands().subscribe((allBrands:any)=>{
+      this.brandList = Object.values(allBrands);
+      let brandNames = [];
+      for(let i=0;i<this.brandList.length;i++)
       {
-        categoryNames.push({categoryName : this.categoryList[i].categoryName});
+        brandNames.push({categoryName : this.brandList[i].brandName});
       }
-      this.categoryKeys = Object.keys(allCategories);
+      this.brandKeys = Object.keys(allBrands);
 
       this.isLoading = false;
     });
@@ -66,7 +66,7 @@ export class CategoriesListComponent {
 
   onDestroy()
   {
-    this.categoryAddedSub.unsubscribe();
+    this.brandAddedSub.unsubscribe();
   }
 
 }
