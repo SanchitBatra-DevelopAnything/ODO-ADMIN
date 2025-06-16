@@ -23,9 +23,9 @@ export class CategoryItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getCategoryName()
+  getBrandName()
   {
-    return this.category.categoryName;
+    return this.category.brandName;
   }
 
   onAddItem()
@@ -44,6 +44,6 @@ export class CategoryItemComponent implements OnInit {
 
   openCategoryScreen(e:any)
   {
-    this.router.navigate(['itemsOf/'+this.categoryKeyInDb+"/"+this.getCategoryName()]);
+    this.router.navigate(['itemsOf/'+this.categoryKeyInDb+"/"+this.getBrandName()]);
   }
 }
