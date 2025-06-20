@@ -27,24 +27,26 @@ export class ApiService {
     return this.http.get(this.apiUrl+"v1/brands");
   }
 
-  public addItem(value:any , catKey:any) : Observable<any>
+  public addItem(value:any , brandKey:any) : Observable<any>
   {
-    return this.http.post(this.dbUrl+"Categories/"+catKey+"/items.json" , value);
+    value["brandId"] = brandKey;
+    return this.http.post(this.apiUrl+"v1/items" , value);
   }
 
-  public getItems(categoryKey : string) : Observable<any>
+  public getItems(brandKey : string) : Observable<any>
   {
-    return this.http.get(this.dbUrl+"Categories/"+categoryKey+"/items.json");
+    return this.http.get(this.apiUrl+"v1/items/brand/"+brandKey);
   }
 
   public deleteItem(categoryKey:string , itemKey:string) : Observable<any>
   {
-    return this.http.delete(this.dbUrl+"Categories/"+categoryKey+"/items/"+itemKey+".json");
+    return this.http.delete(this.apiUrl+"v1/items/"+itemKey);
   }
 
-  public editItem(categoryKey : string , itemKey : string , updatedItem:any)
+  public editItem(brandKey : string , itemKey : string , updatedItem:any)
   {
-    return this.http.put(this.dbUrl+"Categories/" + categoryKey + "/items/" + itemKey+".json" , updatedItem);
+    updatedItem['brandId'] = brandKey;
+    return this.http.put(this.apiUrl+"v1/items/"+itemKey , updatedItem);
   }
 
   public getNotificationRequests() : Observable<any>
@@ -300,6 +302,6 @@ export class ApiService {
 
   public updateSortOrder(brands:any) : Observable<any>
   {
-    return this.http.put(this.dbUrl+"onlyCategories.json",brands);
+    return this.http.put(this.apiUrl+"v1/brands/sortOrder",brands);
   }
 }

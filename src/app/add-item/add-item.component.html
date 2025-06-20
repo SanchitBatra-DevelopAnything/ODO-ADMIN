@@ -1,7 +1,7 @@
 <!-- app.component.html -->
 <div class="container" *ngIf = "!isLoading">
     <h1>Add items here!</h1>
-    <h5>for : {{parentCategoryData.categoryName}}</h5>
+    <h5>for : {{parentBrandData.brandName}}</h5>
   
     <form [formGroup]="addItemForm" (ngSubmit) = "onSubmit(addItemForm.value)">
     

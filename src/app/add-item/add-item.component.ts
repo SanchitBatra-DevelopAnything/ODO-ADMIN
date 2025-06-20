@@ -14,9 +14,9 @@ import { ApiService } from '../services/api/api.service';
 export class AddItemComponent implements OnInit{
 
   ref:DynamicDialogRef | undefined;
-  categoryKey:string = "";
+  brandKey:string = "";
   fullConfig:any;
-  parentCategoryData:any;
+  parentBrandData:any;
   task:AngularFireUploadTask | any;
   isLoading:boolean = false;
 
@@ -32,8 +32,8 @@ export class AddItemComponent implements OnInit{
   ngOnInit()
   {
     this.fullConfig = this.config;
-    this.categoryKey = this.fullConfig["data"]["key"];
-    this.parentCategoryData = this.fullConfig["data"]["category"];
+    this.brandKey = this.fullConfig["data"]["key"];
+    this.parentBrandData = this.fullConfig["data"]["category"];
 
     this.addItemForm = this.formBuilder.group({
       itemName: ['', Validators.required],
@@ -121,7 +121,7 @@ export class AddItemComponent implements OnInit{
       ...formData,
       areaPrices: areaPricesMap
     };
-          this.apiService.addItem(requestBody , this.categoryKey).subscribe(()=>{
+          this.apiService.addItem(requestBody , this.brandKey).subscribe(()=>{
             this.isLoading = false;
             this.toastr.success('Item Added Successfully!', 'Notification!' , {
               timeOut : 4000 ,
