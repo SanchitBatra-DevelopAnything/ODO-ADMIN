@@ -21,7 +21,7 @@ export class AddItemComponent implements OnInit {
   addItemForm: FormGroup = new FormGroup({});
   photoPreview: string | undefined;
   selectedImage: any;
-  areas: any;
+  areas: any[] = [];
 
   constructor(
     private config: DynamicDialogConfig,
@@ -60,7 +60,10 @@ export class AddItemComponent implements OnInit {
     this.isLoading = true;
     this.apiService.getDistributorships().subscribe((data) => {
       if (data) {
-        this.areas = Object.values(data).map((area: any) => area.areaName);
+        this.areas = Object.entries(data).map(([areaId, areaData]: [string, any]) => ({
+          areaId,
+          areaName: areaData.areaName
+        }));
         this.initializeAreaWiseSlabs();
       }
       this.isLoading = false;
@@ -72,7 +75,8 @@ export class AddItemComponent implements OnInit {
     this.areas.forEach((area: any) => {
       slabsArray.push(
         this.formBuilder.group({
-          areaName: [area.toLowerCase().trim()],
+          areaName: [area.areaName.toLowerCase().trim()],
+          areaId: [area.areaId],
           useDefault: [true],
           slab_1_start: [{ value: '', disabled: true }],
           slab_1_end: [{ value: '', disabled: true }],
@@ -135,7 +139,6 @@ export class AddItemComponent implements OnInit {
       this.isLoading = true;
 
       const filePath = `items/${this.selectedImage.name}_${new Date().getTime()}`;
-      const fileRef = this.storage.ref(filePath);
       this.task = this.storage.upload(filePath, this.selectedImage);
       (await this.task).ref.getDownloadURL().then((url: any) => {
         formValue['imgUrl'] = url;
@@ -143,8 +146,13 @@ export class AddItemComponent implements OnInit {
 
         const areaSlabs: { [key: string]: any } = {};
         formData.areaWiseSlabs.forEach((area: any) => {
-          const { areaName, useDefault, ...slabData } = area;
-          areaSlabs[areaName] = slabData;
+          if (!area.useDefault) {
+            const { areaName, areaId, useDefault, ...slabData } = area;
+            areaSlabs[areaName.toLowerCase()] = {
+              areaId,
+              ...slabData,
+            };
+          }
         });
 
         const requestBody = {
