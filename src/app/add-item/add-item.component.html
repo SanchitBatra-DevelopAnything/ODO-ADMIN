@@ -67,7 +67,7 @@
         [formGroupName]="i"
         class="col-12 border p-2 mb-3"
       >
-        <h5>{{ areaCtrl.value.areaName | titlecase }}</h5>
+        <h4 style = "font-weight: bolder; text-decoration: underline; text-decoration-color: red;">{{ areaCtrl.value.areaName | titlecase}}</h4>
         <label>
           <input type="checkbox" formControlName="useDefault" (change)="onToggleUseDefault(i)" />
           Use default slab
@@ -99,6 +99,7 @@
             />
           </div>
         </div>
+        <hr>
       </div>
     </div>
 
