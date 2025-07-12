@@ -15,6 +15,7 @@ export class UtilityService {
   itemAddedInExistingOrder:Subject<boolean>;
   adminAdded:Subject<boolean>;
   categoryAdded:Subject<boolean>;
+  bannerAdded:Subject<boolean>;
 
   constructor() { 
     this.userLoggedIn = new Subject<boolean>();
@@ -25,5 +26,6 @@ export class UtilityService {
     this.itemAddedInExistingOrder = new Subject<boolean>();
     this.adminAdded = new Subject<boolean>();
     this.categoryAdded = new Subject<boolean>();
-  }
+    this.bannerAdded = new Subject<boolean>();
+}
 }

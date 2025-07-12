@@ -296,4 +296,18 @@ export class ApiService {
   {
     return this.http.put(this.dbUrl+"onlyCategories.json",brands);
   }
+
+  public uploadB2BBanner(bannerData:any) : Observable<any>
+  {
+    return this.http.post(this.dbUrl+"B2BBanners.json" , bannerData);
+  }
+  public getB2bBanners() : Observable<any>
+  {
+    return this.http.get(this.dbUrl+"B2BBanners.json");
+  }
+
+  public deleteB2BBanner(bannerKey:any) : Observable<any>
+  {
+    return this.http.delete(this.dbUrl+"B2BBanners/"+bannerKey+".json");
+  }
 }
