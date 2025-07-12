@@ -1,0 +1,21 @@
+<div class = "loader" *ngIf = "isLoading"></div>
+<div class="container" *ngIf = "!isLoading">
+    <h3 class = "inline-heading">B2B Banners</h3>
+        <button class = "btn choc-button" (click) = "onAddBanner()">Add A New B2B-Banner</button> 
+    <hr>
+
+    
+    <div class="container">
+        <div class="row">
+          <div class="col-md-4 mb-4" *ngFor="let banner of bannerData; let i = index">
+            <div class="card shadow-sm">
+              <img [src]="banner.imageUrl" class="card-img-top" alt="{{ banner.bannerName }}">
+              <div class="card-body text-center">
+                <h5 class="card-title">{{ banner.bannerName }}</h5>
+                <button class="btn btn-danger btn-sm" (click)="deleteBanner(i)">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>

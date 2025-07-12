@@ -59,6 +59,8 @@ import { AddAdminFormComponent } from './add-admin-form/add-admin-form.component
 import { BrandSortFormComponent } from './brand-sort-form/brand-sort-form.component';
 import { AuthGuardService } from './services/guard/auth-guard.service';
 import { AdminGuardService } from './services/guard/admin-guard.service';
+import { BannersComponent } from './manage/banners/banners.component';
+import { AddB2bBannerFormComponent } from './add-b2b-banner-form/add-b2b-banner-form.component';
 
 // import { EditItemComponent } from './edit-item/edit-item.component';
 // import { DistributorAreasComponent } from './manage/distributor-areas/distributor-areas.component';
@@ -82,7 +84,8 @@ const appRoutes : Routes = [
   {path : 'manage' , component : ManageComponent , children:[
     {path : 'distributors', component : DistributorsListComponent , canActivate : [AuthGuardService , AdminGuardService]},
     {path : 'areas', component : DistributorAreasComponent , canActivate : [AuthGuardService , AdminGuardService]},
-    {path : 'admins' , component : AdminsComponent , canActivate : [AuthGuardService , AdminGuardService]}
+    {path : 'admins' , component : AdminsComponent , canActivate : [AuthGuardService , AdminGuardService]},
+    {path : 'banners/b2b' , component : BannersComponent , canActivate : [AuthGuardService , AdminGuardService]}
   ] ,},
   {path : 'processedOrders' , component : OldOrdersComponent , canActivate : [AuthGuardService]},
   {path : 'orderBill/:orderKey' , component : OrderDetailComponent , canActivate :[AuthGuardService]},
@@ -113,6 +116,8 @@ const appRoutes : Routes = [
     AdminsComponent,
     AddAdminFormComponent,
     BrandSortFormComponent,
+    BannersComponent,
+    AddB2bBannerFormComponent,
   ],
   imports: [
     BrowserModule,
