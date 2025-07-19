@@ -14,9 +14,6 @@ import { UtilityService } from '../services/utility/utility.service';
 })
 export class BrandOnboardComponent implements OnInit {
   ref: DynamicDialogRef | undefined;
-  //categoryKey:string = "";
-  //fullConfig:any;
-  //parentCategoryData:any;
   task: AngularFireUploadTask | any;
   isLoading: boolean = false;
 
