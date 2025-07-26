@@ -307,15 +307,15 @@ export class ApiService {
 
   public uploadB2BBanner(bannerData:any) : Observable<any>
   {
-    return this.http.post(this.dbUrl+"B2BBanners.json" , bannerData);
+    return this.http.post(this.apiUrl+"v1/B2BBanners" , bannerData);
   }
   public getB2bBanners() : Observable<any>
   {
-    return this.http.get(this.dbUrl+"B2BBanners.json");
+    return this.http.get(this.apiUrl+"v1/B2BBanners");
   }
 
   public deleteB2BBanner(bannerKey:any) : Observable<any>
   {
-    return this.http.delete(this.dbUrl+"B2BBanners/"+bannerKey+".json");
+    return this.http.delete(this.apiUrl+"v1/B2BBanners/"+bannerKey);
   }
 }
