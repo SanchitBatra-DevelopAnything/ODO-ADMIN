@@ -50,6 +50,7 @@ export class AddItemComponent implements OnInit {
         slab_3_end: [],
         slab_3_discount: [],
       }),
+      itemDetails : [''],
       areaWiseSlabs: this.formBuilder.array([]),
     });
 
@@ -161,6 +162,7 @@ export class AddItemComponent implements OnInit {
           imgUrl: formValue.imgUrl,
           ...formData.defaultSlab,
           areaSlabs: areaSlabs,
+          itemDetails : formData.itemDetails,
         };
 
         this.apiService.addItem(requestBody, this.categoryKey).subscribe(() => {
