@@ -48,6 +48,7 @@ export class EditItemComponent implements OnInit {
     this.editItemForm = this.formBuilder.group({
       itemName: [this.itemData['itemName'], Validators.required],
       itemPrice: [this.itemData['itemPrice'], Validators.required],
+      itemDetails : [this.itemData['itemDetails'] || ''],
       defaultSlab: this.formBuilder.group({
         slab_1_start: [this.itemData['slab_1_start']],
         slab_1_end: [this.itemData['slab_1_end']],
@@ -175,6 +176,7 @@ export class EditItemComponent implements OnInit {
           imgUrl: url,
           ...formData.defaultSlab,
           areaSlabs,
+          itemDetails : formData.itemDetails,
         };
 
         this.apiService.editItem(this.categoryKey, this.itemKey, requestBody).subscribe(() => {
