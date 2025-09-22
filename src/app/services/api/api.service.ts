@@ -310,4 +310,14 @@ export class ApiService {
   {
     return this.http.delete(this.dbUrl+"B2BBanners/"+bannerKey+".json");
   }
+
+  public getReferralLeaderboardData() : Observable<any>
+  {
+    return this.http.get(this.dbUrl+"ReferralLeaderboard.json");
+  }
+
+  public addReferrer(referrerData:any) : Observable<any>
+  {
+    return this.http.post(this.dbUrl+"ReferralLeaderboard.json" , referrerData);
+  }
 }
