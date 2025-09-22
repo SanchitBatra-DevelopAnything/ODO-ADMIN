@@ -43,8 +43,12 @@ export class ReferralLeaderboardComponent {
           this.isLoading = false;
           return;
         }
-        this.referrerData = Object.values(referrers);
-        this.referrerKeys = Object.keys(referrers);
+        let sortedEntries = Object.entries(referrers)
+        .sort(([, a], [, b]) => (b as any).referrals - (a as any).referrals);
+        this.referrerData = sortedEntries;
+
+        console.log(sortedEntries);
+        console.log(this.referrerData);
         this.isLoading = false;
       });
     }
