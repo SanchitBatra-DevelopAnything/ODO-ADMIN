@@ -31,6 +31,9 @@
                 <p style = "font-weight: bold; color: red; font-size:15px;">
                     Ph No. : {{data.contact}}
                 </p>
+                <p style = "font-weight: bold; color: red; font-size:15px;">
+                    Referred By : {{data.referrer}}
+                </p>
                 <ng-template pTemplate="footer">
                     <p-button label="Approve" icon="pi pi-check" (click) = "onApprove(i)"></p-button>
                     <p-button label="Reject" icon="pi pi-times" styleClass="p-button-secondary" [style]="{ 'margin-left': '.5em' }" (click) = "onReject(i)"></p-button>
