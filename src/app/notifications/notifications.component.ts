@@ -12,6 +12,7 @@ export class NotificationsComponent implements OnInit {
   isLoading:boolean = false;
   notificationData:any;
   notificationKeys:any;
+  leaderBoardData:any;
 
 
 
@@ -20,6 +21,27 @@ export class NotificationsComponent implements OnInit {
   ngOnInit()
   {
     this.loadNotifications();
+    this.loadReferralLeaderboard();
+  }
+
+  loadReferralLeaderboard()
+  {
+    this.isLoading = true;
+    this.apiService.getReferralLeaderboardData().subscribe((data)=>{
+      if(data == null)
+      {
+        this.leaderBoardData = [];
+        this.isLoading = false;
+        return;
+      }
+      else
+      {
+        this.leaderBoardData = Object.values(data);
+        this.isLoading = false;
+        return;
+      }
+    }
+    );
   }
 
   loadNotifications()
@@ -46,14 +68,32 @@ export class NotificationsComponent implements OnInit {
   onApprove(index:any)
   {
     this.isLoading = true;
+
     this.apiService.deleteNotification(this.notificationKeys[index]).subscribe((_)=>{
       this.apiService.makeUser(this.notificationData[index]).subscribe((_)=>{
-        this.loadNotifications();
-        this.toastr.success('Request Approved Successfully!', 'Notification!' , {
-          timeOut : 4000 ,
-          closeButton : true , 
-          positionClass : 'toast-top-right'
-        });
+        const referrer = this.leaderBoardData.find((r:any) => r.referrerName.toLowerCase() === this.notificationData[index].referrer.toLowerCase());
+        if (referrer) {
+          referrer.referrals += 1;
+          this.apiService.updateReferralLeaderboardData(this.leaderBoardData).subscribe((_)=>{
+            this.loadNotifications();
+            this.toastr.success('Request Approved Successfully , Leaderboard Updated accordingly!', 'Notification!' , {
+              timeOut : 4000 ,
+              closeButton : true , 
+              positionClass : 'toast-top-right'
+            });
+          }
+          );
+        }
+        else
+        {
+          this.loadNotifications();
+          this.toastr.success('Request Approved Successfully , No referrer catched , leaderboard not updated!', 'Notification!' , {
+            timeOut : 4000 ,
+            closeButton : true , 
+            positionClass : 'toast-top-right'
+          });
+        }
+       
       });
     });
   }

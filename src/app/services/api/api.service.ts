@@ -320,4 +320,9 @@ export class ApiService {
   {
     return this.http.post(this.dbUrl+"ReferralLeaderboard.json" , referrerData);
   }
+
+  public updateReferralLeaderboardData(fullLeaderboard:any) : Observable<any>
+  {
+    return this.http.put(this.dbUrl+"ReferralLeaderboard.json" , fullLeaderboard);
+  }
 }
