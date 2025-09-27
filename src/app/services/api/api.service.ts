@@ -321,8 +321,19 @@ export class ApiService {
     return this.http.post(this.dbUrl+"ReferralLeaderboard.json" , referrerData);
   }
 
-  public updateReferralLeaderboardData(fullLeaderboard:any) : Observable<any>
-  {
-    return this.http.put(this.dbUrl+"ReferralLeaderboard.json" , fullLeaderboard);
+  private generateFirebaseKey(): string {
+    return '-' + Math.random().toString(36).substring(2, 12) + Date.now().toString(36);
   }
+  
+  public updateReferralLeaderboardData(fullLeaderboard: any[]): Observable<any> {
+    const leaderboardMap: any = {};
+  
+    fullLeaderboard.forEach(item => {
+      const key = this.generateFirebaseKey();
+      leaderboardMap[key] = item;
+    });
+  
+    return this.http.put(this.dbUrl + "ReferralLeaderboard.json", leaderboardMap);
+  }
+  
 }
