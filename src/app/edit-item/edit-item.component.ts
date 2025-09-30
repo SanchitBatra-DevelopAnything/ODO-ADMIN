@@ -49,6 +49,7 @@ export class EditItemComponent implements OnInit {
       itemName: [this.itemData['itemName'], Validators.required],
       itemPrice: [this.itemData['itemPrice'], Validators.required],
       itemDetails : [this.itemData['itemDetails'] || ''],
+      inStock: [this.itemData['inStock'] , [Validators.required]],
       defaultSlab: this.formBuilder.group({
         slab_1_start: [this.itemData['slab_1_start']],
         slab_1_end: [this.itemData['slab_1_end']],
@@ -173,6 +174,7 @@ export class EditItemComponent implements OnInit {
         const requestBody = {
           itemName: formData.itemName,
           itemPrice: formData.itemPrice,
+          inStock: formData.inStock,
           imgUrl: url,
           ...formData.defaultSlab,
           areaSlabs,
@@ -203,6 +205,7 @@ export class EditItemComponent implements OnInit {
 
   resetForm() {
     this.editItemForm.reset();
+    this.editItemForm.patchValue({ inStock: true });
     this.photoPreview = undefined;
     this.originalUrl = undefined;
     this.selectedImage = null;
