@@ -184,6 +184,7 @@ export class AddItemComponent implements OnInit {
 
   resetForm() {
     this.addItemForm.reset();
+    this.addItemForm.patchValue({ inStock: true });
     this.photoPreview = undefined;
     this.selectedImage = null;
   }
