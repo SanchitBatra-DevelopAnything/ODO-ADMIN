@@ -51,6 +51,7 @@ export class AddItemComponent implements OnInit {
         slab_3_discount: [],
       }),
       itemDetails : [''],
+      inStock: [true , [Validators.required]],
       areaWiseSlabs: this.formBuilder.array([]),
     });
 
@@ -163,6 +164,7 @@ export class AddItemComponent implements OnInit {
           ...formData.defaultSlab,
           areaSlabs: areaSlabs,
           itemDetails : formData.itemDetails,
+          inStock: formData.inStock,
         };
 
         this.apiService.addItem(requestBody, this.categoryKey).subscribe(() => {
