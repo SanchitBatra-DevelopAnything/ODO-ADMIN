@@ -49,7 +49,7 @@ export class EditItemComponent implements OnInit {
       itemName: [this.itemData['itemName'], Validators.required],
       itemPrice: [this.itemData['itemPrice'], Validators.required],
       itemDetails : [this.itemData['itemDetails'] || ''],
-      inStock: [this.itemData['inStock'] , [Validators.required]],
+      inStock: [this.itemData['inStock']??true , [Validators.required]],
       defaultSlab: this.formBuilder.group({
         slab_1_start: [this.itemData['slab_1_start']],
         slab_1_end: [this.itemData['slab_1_end']],
