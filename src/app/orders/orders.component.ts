@@ -40,6 +40,7 @@ export class OrdersComponent implements OnInit{
         this.activeOrders = Object.values(orders);
         this.activeOrdersKeys = Object.keys(orders);
         this.isLoading = false;
+        console.log(JSON.stringify(this.activeOrders));
       }
       else
       {
@@ -74,4 +75,62 @@ export class OrdersComponent implements OnInit{
   {
     this.router.navigate(['/processedOrders']);
   }
+
+  downloadCSV() {
+    const invalidShops = this.activeOrders.filter((order:any) =>
+      !order['delivery-latitude'] ||
+      !order['delivery-longitude'] ||
+      order['delivery-latitude'] === 'not-found' ||
+      order['delivery-longitude'] === 'not-found'
+    );
+
+    // Step 2: Show alert with bullet-point list of invalid shops (if any)
+if (invalidShops.length > 0) {
+  // Extract unique shop names
+  const uniqueShopNames = Array.from(new Set(invalidShops.map((o: any) => o.shop)));
+
+  // Create bullet list
+  const bulletList = uniqueShopNames.map(shop => `• ${shop}`).join('\n');
+
+  // Show alert
+  alert(`⚠️ Missing delivery coordinates for the following shops:\n\n${bulletList}`);
 }
+
+
+    // Step 3: Filter valid orders
+    const validOrders = this.activeOrders.filter((order:any) =>
+      order['delivery-latitude'] &&
+      order['delivery-longitude'] &&
+      order['delivery-latitude'] !== 'not-found' &&
+      order['delivery-longitude'] !== 'not-found'
+    );
+
+    if (validOrders.length === 0) {
+      alert('❌ No valid coordinates found. CSV not generated.');
+      return;
+    }
+
+    // Step 4: Generate CSV content
+    const header = 'shop,delivery-latitude,delivery-longitude\n';
+    const rows = validOrders
+      .map((order:any) => `${order.shop},${order['delivery-latitude']},${order['delivery-longitude']}`)
+      .join('\n');
+    const csvContent = header + rows;
+
+    // Step 5: Trigger CSV download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'shop_locations.csv';
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+    // Step 6: Success alert
+    alert('✅ CSV file successfully generated with valid shop locations!');
+  }
+
+
+  }
