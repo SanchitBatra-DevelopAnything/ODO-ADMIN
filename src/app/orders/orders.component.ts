@@ -182,7 +182,9 @@ export class OrdersComponent implements OnInit {
 
     this.selectedDate = formatted;
 
-    let dateFilteredOrders = this.activeOrders.filter((order: any) => order.date === this.selectedDate);
+    let dateFilteredOrders = this.activeOrders.filter((order: any) => order.orderDate == this.selectedDate);
+
+    console.log(JSON.stringify(dateFilteredOrders));
 
     this.downloadTotalParchi(dateFilteredOrders);
   }
