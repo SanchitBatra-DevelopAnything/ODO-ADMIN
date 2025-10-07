@@ -12,80 +12,73 @@ import { MatDatepicker } from '@angular/material/datepicker';
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.scss']
 })
-export class OrdersComponent implements OnInit{
+export class OrdersComponent implements OnInit {
 
-  activeOrders:any = [];
-  activeOrdersKeys :any= [];
+  activeOrders: any = [];
+  activeOrdersKeys: any = [];
   isLoading = false;
-  selectedDate: Date | null = null;
+  selectedDate: any = null;
 
   @ViewChild('picker') datepicker!: MatDatepicker<Date>;
 
-  constructor(private apiService:ApiService , private router:Router)
-  {
+  constructor(private apiService: ApiService, private router: Router) {
 
   }
 
-  ngOnInit() : void{
+  ngOnInit(): void {
     this.isLoading = true;
     this.getActiveOrders();
   }
 
-  getActiveOrders()
-  {
+  getActiveOrders() {
     console.log("Getting active orders");
-    this.apiService.getActiveOrders().subscribe((orders:any)=>{
-      if(orders == null)
-      {
+    this.apiService.getActiveOrders().subscribe((orders: any) => {
+      if (orders == null) {
         this.isLoading = false;
         this.activeOrders = [];
         this.activeOrdersKeys = [];
         return;
       }
-      if(sessionStorage.getItem('adminType')!='Sub')
-      {
+      if (sessionStorage.getItem('adminType') != 'Sub') {
         //for SuperAdmins
         this.activeOrders = Object.values(orders);
         this.activeOrdersKeys = Object.keys(orders);
         this.isLoading = false;
         console.log(JSON.stringify(this.activeOrders));
       }
-      else
-      {
+      else {
         //for Sub-Admins
         // Convert object to array
         console.log("Starting to filter the orders");
         const adminArea = sessionStorage.getItem('loggedInArea');
-      const allOrderData = Object.values(orders);
-      const allOrderKeys = Object.keys(orders);
-  
-      // Filter only those admins where type === "Sub"
-      const filteredOrders = allOrderData.map((order, index) => ({ order, key: allOrderKeys[index] }))
-                                        .filter((item:any) => item.order.area.trim().toLowerCase() == adminArea?.trim().toLowerCase());
-  
-      // Extract filtered data back into separate arrays
-      this.activeOrders = filteredOrders.map(item => item.order);
-      this.activeOrdersKeys = filteredOrders.map(item => item.key);
-  
-      this.isLoading = false;
+        const allOrderData = Object.values(orders);
+        const allOrderKeys = Object.keys(orders);
+
+        // Filter only those admins where type === "Sub"
+        const filteredOrders = allOrderData.map((order, index) => ({ order, key: allOrderKeys[index] }))
+          .filter((item: any) => item.order.area.trim().toLowerCase() == adminArea?.trim().toLowerCase());
+
+        // Extract filtered data back into separate arrays
+        this.activeOrders = filteredOrders.map(item => item.order);
+        this.activeOrdersKeys = filteredOrders.map(item => item.key);
+
+        this.isLoading = false;
       }
-      
+
     });
-    
+
   }
 
-  showBill(area:string , orderedBy : string, orderKey:string)
-  {
-    this.router.navigate(['orderBill/'+orderKey]);
+  showBill(area: string, orderedBy: string, orderKey: string) {
+    this.router.navigate(['orderBill/' + orderKey]);
   }
 
-  oldOrderPage()
-  {
+  oldOrderPage() {
     this.router.navigate(['/processedOrders']);
   }
 
   downloadCSV() {
-    const invalidShops = this.activeOrders.filter((order:any) =>
+    const invalidShops = this.activeOrders.filter((order: any) =>
       !order['delivery-latitude'] ||
       !order['delivery-longitude'] ||
       order['delivery-latitude'] === 'not-found' ||
@@ -93,20 +86,20 @@ export class OrdersComponent implements OnInit{
     );
 
     // Step 2: Show alert with bullet-point list of invalid shops (if any)
-if (invalidShops.length > 0) {
-  // Extract unique shop names
-  const uniqueShopNames = Array.from(new Set(invalidShops.map((o: any) => o.shop)));
+    if (invalidShops.length > 0) {
+      // Extract unique shop names
+      const uniqueShopNames = Array.from(new Set(invalidShops.map((o: any) => o.shop)));
 
-  // Create bullet list
-  const bulletList = uniqueShopNames.map(shop => `• ${shop}`).join('\n');
+      // Create bullet list
+      const bulletList = uniqueShopNames.map(shop => `• ${shop}`).join('\n');
 
-  // Show alert
-  alert(`⚠️ Missing delivery coordinates for the following shops:\n\n${bulletList}`);
-}
+      // Show alert
+      alert(`⚠️ Missing delivery coordinates for the following shops:\n\n${bulletList}`);
+    }
 
 
     // Step 3: Filter valid orders
-    const validOrders = this.activeOrders.filter((order:any) =>
+    const validOrders = this.activeOrders.filter((order: any) =>
       order['delivery-latitude'] &&
       order['delivery-longitude'] &&
       order['delivery-latitude'] !== 'not-found' &&
@@ -121,7 +114,7 @@ if (invalidShops.length > 0) {
     // Step 4: Generate CSV content
     const header = 'shop,delivery-latitude,delivery-longitude\n';
     const rows = validOrders
-      .map((order:any) => `${order.shop},${order['delivery-latitude']},${order['delivery-longitude']}`)
+      .map((order: any) => `${order.shop},${order['delivery-latitude']},${order['delivery-longitude']}`)
       .join('\n');
     const csvContent = header + rows;
 
@@ -140,12 +133,12 @@ if (invalidShops.length > 0) {
     alert('✅ CSV file successfully generated with valid shop locations!');
   }
 
-  downloadTotalParchi() {
+  downloadTotalParchi(dateFilteredOrders: any) {
     // Step 1: aggregate all items by name
     const totalMap: { [key: string]: number } = {};
-  
+
     // Loop through all orders
-    Object.values(this.activeOrders).forEach((order: any) => {
+    Object.values(dateFilteredOrders).forEach((order: any) => {
       if (order.items && Array.isArray(order.items)) {
         order.items.forEach((item: any) => {
           const name = item.item.trim().toUpperCase(); // normalize name
@@ -153,7 +146,7 @@ if (invalidShops.length > 0) {
         });
       }
     });
-  
+
     // Step 2: convert map to array of objects for Excel
     const dataForExcel = Object.entries(totalMap).map(([item, totalQty]) => ({
       Item: item,
@@ -167,15 +160,33 @@ if (invalidShops.length > 0) {
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataForExcel);
     const workbook: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Total Parchi');
-  
+
     // Step 4: generate Excel file and trigger download
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     const blob: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
     saveAs(blob, `Total_Parchi_${new Date().toISOString().slice(0, 10)}.xlsx`);
   }
 
-  openCalendar()
-  {
+  openCalendar() {
     this.datepicker.open();
   }
+
+  onDateChange(e: any) {
+    const date: Date = e.value; // this is a Date object
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+
+    const formatted = `${day}-${month}-${year}`;
+    console.log('Formatted:', formatted);
+
+    this.selectedDate = formatted;
+
+    let dateFilteredOrders = this.activeOrders.filter((order: any) => order.date === this.selectedDate);
+
+    this.downloadTotalParchi(dateFilteredOrders);
   }
+
+
+
+}
