@@ -1,6 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api/api.service';
+
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { MatDatepicker } from '@angular/material/datepicker';
+
 
 @Component({
   selector: 'app-orders',
@@ -12,6 +17,9 @@ export class OrdersComponent implements OnInit{
   activeOrders:any = [];
   activeOrdersKeys :any= [];
   isLoading = false;
+  selectedDate: Date | null = null;
+
+  @ViewChild('picker') datepicker!: MatDatepicker<Date>;
 
   constructor(private apiService:ApiService , private router:Router)
   {
@@ -132,5 +140,42 @@ if (invalidShops.length > 0) {
     alert('✅ CSV file successfully generated with valid shop locations!');
   }
 
+  downloadTotalParchi() {
+    // Step 1: aggregate all items by name
+    const totalMap: { [key: string]: number } = {};
+  
+    // Loop through all orders
+    Object.values(this.activeOrders).forEach((order: any) => {
+      if (order.items && Array.isArray(order.items)) {
+        order.items.forEach((item: any) => {
+          const name = item.item.trim().toUpperCase(); // normalize name
+          totalMap[name] = (totalMap[name] || 0) + item.quantity;
+        });
+      }
+    });
+  
+    // Step 2: convert map to array of objects for Excel
+    const dataForExcel = Object.entries(totalMap).map(([item, totalQty]) => ({
+      Item: item,
+      'Total Quantity': totalQty
+    }));
 
+
+    dataForExcel.sort((a, b) => a.Item.localeCompare(b.Item));
+
+    // Step 3: create worksheet and workbook
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataForExcel);
+    const workbook: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Total Parchi');
+  
+    // Step 4: generate Excel file and trigger download
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(blob, `Total_Parchi_${new Date().toISOString().slice(0, 10)}.xlsx`);
+  }
+
+  openCalendar()
+  {
+    this.datepicker.open();
+  }
   }

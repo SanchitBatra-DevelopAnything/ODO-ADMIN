@@ -16,10 +16,11 @@ import { CardModule } from 'primeng/card';
 import { DropdownModule } from 'primeng/dropdown';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { TableModule } from 'primeng/table';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { MatInputModule } from '@angular/material/input';
 
 import { environment } from 'src/environments/environment';
 
@@ -97,6 +98,18 @@ const appRoutes : Routes = [
   {path : 'orderBill/:orderKey' , component : OrderDetailComponent , canActivate :[AuthGuardService]},
 ];
 
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD-MM-YYYY',
+  },
+  display: {
+    dateInput: 'd-M-yyyy',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
+
 
 @NgModule({
   declarations: [
@@ -152,9 +165,14 @@ const appRoutes : Routes = [
     MatCardModule,
     TableModule,
     RadioButtonModule,
+    MatInputModule,
     RouterModule.forRoot(appRoutes,{useHash: true}),
   ],
-  providers: [DialogService],
+  providers: [DialogService , { provide: MAT_DATE_LOCALE, useValue: 'en-GB' } , { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },],
   bootstrap: [AppComponent]
 })
+
+
 export class AppModule { }
+
+

@@ -7,6 +7,8 @@
     <button class = "btn btn-primary" (click) = "oldOrderPage()">Show Last 7 Days Orders</button>
     <hr>
     <button class = "btn btn-success" (click) = "downloadCSV()">Download Locations for Delivery</button>
+    <hr>
+    <button class = "btn btn-primary" (click) = "openCalendar()">Download Total Parchi Excel Sheet</button>
 
     <div class="loader" *ngIf = "isLoading">
 
@@ -26,3 +28,10 @@
     </div>
     
 </div>
+
+<mat-form-field appearance="outline">
+    <mat-label>Select Date</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" placeholder="dd-mm-yyyy">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
