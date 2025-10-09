@@ -147,7 +147,7 @@ export class OrdersComponent implements OnInit {
 
 
     // Step 3: Filter valid orders
-    const validOrders = this.activeOrders.filter((order: any) =>
+    const validOrders = this.pendingOrders.filter((order: any) =>
       order['delivery-latitude'] &&
       order['delivery-longitude'] &&
       order['delivery-latitude'] !== 'not-found' &&
