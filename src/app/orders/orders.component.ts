@@ -16,6 +16,11 @@ export class OrdersComponent implements OnInit {
 
   activeOrders: any = [];
   activeOrdersKeys: any = [];
+  pendingOrders: any = [];
+  pendingOrdersKeys: any = [];
+  outForDeliveryOrders: any = [];
+  outForDeliveryOrdersKeys: any = [];
+
   isLoading = false;
   selectedDate: any = null;
 
@@ -43,8 +48,30 @@ export class OrdersComponent implements OnInit {
         //for SuperAdmins
         this.activeOrders = Object.values(orders);
         this.activeOrdersKeys = Object.keys(orders);
+
+        // Initialize arrays for segregated orders
+        this.pendingOrders = [];
+        this.pendingOrdersKeys = [];
+        this.outForDeliveryOrders = [];
+        this.outForDeliveryOrdersKeys = [];
+
+        // Segregate orders based on status
+        this.activeOrders.forEach((order: any, index: number) => {
+          const key = this.activeOrdersKeys[index];
+          const status = order.status ? order.status.trim().toLowerCase() : '';
+
+          if (!status || status === 'pending') {
+            // If status is null/empty/undefined OR explicitly 'pending'
+            this.pendingOrders.push(order);
+            this.pendingOrdersKeys.push(key);
+          } else if (status === 'out-for-delivery') {
+            this.outForDeliveryOrders.push(order);
+            this.outForDeliveryOrdersKeys.push(key);
+          }
+        });
+
         this.isLoading = false;
-        console.log(JSON.stringify(this.activeOrders));
+
       }
       else {
         //for Sub-Admins
@@ -61,6 +88,27 @@ export class OrdersComponent implements OnInit {
         // Extract filtered data back into separate arrays
         this.activeOrders = filteredOrders.map(item => item.order);
         this.activeOrdersKeys = filteredOrders.map(item => item.key);
+
+        // Initialize arrays for segregated orders
+        this.pendingOrders = [];
+        this.pendingOrdersKeys = [];
+        this.outForDeliveryOrders = [];
+        this.outForDeliveryOrdersKeys = [];
+
+        // Segregate orders based on status
+        this.activeOrders.forEach((order: any, index: number) => {
+          const key = this.activeOrdersKeys[index];
+          const status = order.status ? order.status.trim().toLowerCase() : '';
+
+          if (!status || status === 'pending') {
+            // If status is null/empty/undefined OR explicitly 'pending'
+            this.pendingOrders.push(order);
+            this.pendingOrdersKeys.push(key);
+          } else if (status === 'out-for-delivery') {
+            this.outForDeliveryOrders.push(order);
+            this.outForDeliveryOrdersKeys.push(key);
+          }
+        });
 
         this.isLoading = false;
       }

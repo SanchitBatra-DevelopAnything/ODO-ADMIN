@@ -152,6 +152,18 @@ export class OrderDetailComponent {
     });
   }
 
+  outForDelivery()
+  {
+    this.apiService.updateOrderStatus(this.orderKey , "out-for-delivery").subscribe((_ : any)=>{
+      this.toastr.success('Order marked as Out for Delivery!' , 'Notitfication!' , {
+        timeOut : 4000,
+        closeButton : true,
+        positionClass : 'toast-top-right'
+      });
+      this.router.navigate(['/dailyReport']);
+    });
+  }
+
 }
 
 export interface BillElement {

@@ -25,7 +25,22 @@
     <hr>
     <div class="row">
 
-        <div *ngFor = "let order of activeOrders; let i = index;" class = "col-xs-2 w3-card pointer order-card" (click) = "showBill(order.shop , order.orderedBy , activeOrdersKeys[i])">
+        <div *ngFor = "let order of pendingOrders; let i = index;" class = "col-xs-2 w3-card pointer order-card" (click) = "showBill(order.shop , order.orderedBy , pendingOrdersKeys[i])">
+            <p style = "font-weight: bold;">{{order.shop | uppercase}}</p>
+            <p style = "font-weight: bold;">By : {{order.orderedBy | uppercase}}</p>
+            <p style = "font-weight: bold; font-size: 12px;">{{order.orderTime}}</p>
+            <p style = "color: red;">AREA : {{order.area}}</p>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <h3 class = "pangolin">Out For Delivery Orders!</h3>
+    <hr>
+    <div class="row">
+
+        <div *ngFor = "let order of outForDeliveryOrders; let i = index;" class = "col-xs-2 w3-card pointer order-card-delivery" (click) = "showBill(order.shop , order.orderedBy , outForDeliveryOrdersKeys[i])">
             <p style = "font-weight: bold;">{{order.shop | uppercase}}</p>
             <p style = "font-weight: bold;">By : {{order.orderedBy | uppercase}}</p>
             <p style = "font-weight: bold; font-size: 12px;">{{order.orderTime}}</p>

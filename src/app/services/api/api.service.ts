@@ -335,5 +335,10 @@ export class ApiService {
   
     return this.http.put(this.dbUrl + "ReferralLeaderboard.json", leaderboardMap);
   }
+
+  public updateOrderStatus(orderKey:string , newStatus:string) : Observable<any>
+  {
+    return this.http.patch(this.dbUrl+"activeDistributorOrders/"+orderKey+".json" , {status : newStatus});
+  }
   
 }
