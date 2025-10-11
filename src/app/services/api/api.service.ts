@@ -345,5 +345,15 @@ export class ApiService {
   {
     return this.http.put(this.dbUrl+"deliveryRoutes/"+routeId+".json" , routeData);
   }
+
+  public deleteRouteFromDB(routeId:any) : Observable<any>
+  {
+    return this.http.delete(this.dbUrl+"deliveryRoutes/"+routeId+".json");
+  }
+
+  public getDeliveryRoutesFromDB() : Observable<any>
+  {
+    return this.http.get(this.dbUrl+"deliveryRoutes.json");
+  }
   
 }

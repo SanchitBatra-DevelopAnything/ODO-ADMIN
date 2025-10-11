@@ -26,6 +26,22 @@ export class DeliveryRouteMakerComponent {
         }
       }
     );
+
+    this.loadExistingRoutes();
+  }
+
+  loadExistingRoutes() {
+    this.isLoading = true;
+    this.apiService.getDeliveryRoutesFromDB().subscribe((routes:any)=>{
+      if(routes == null) {
+        this.deliveryRoutes = [];
+        this.selectedRoute=null;
+        this.isLoading = false;
+        return;
+      }
+      this.deliveryRoutes = Object.values(routes);
+      this.isLoading = false;
+    });
   }
 
   createNewRoute() {
@@ -72,10 +88,27 @@ export class DeliveryRouteMakerComponent {
     })
   }
 
-  sendRouteViaWhatsApp(route: any) 
-    {
+  deleteRouteFromDatabase(route:any)
+  {
+    this.isLoading = true;
+    this.apiService.deleteRouteFromDB(route.id).subscribe((_:any)=>{
+        this.isLoading = false;
+        this.toastr.success('Route Deleted Successfully', 'Notification!' , {
+          timeOut : 4000 ,
+          closeButton : true , 
+          positionClass : 'toast-top-right'
+        });
+        this.deliveryRoutes = this.deliveryRoutes.filter(r => r.id !== route.id);
+        if (this.selectedRoute?.id === route.id) {
+          this.selectedRoute = null;
+        }
+    });
+  }
 
-    }
+  sendRouteViaWhatsApp(route: any) 
+  {
+
+  }
 
   ngOnDestroy(){
     if (this.uniqueShopsSubscription) {
