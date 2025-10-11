@@ -1,10 +1,28 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilityService {
+
+  //these are for delivery route making.
+  private _shopsForDelivery : any[]=[];
+  sendUniqueShopsForDeliveryRoute = new BehaviorSubject<any[]>([]);
+  
+
+  setDeliveryShops(shops: any[]) {
+    this._shopsForDelivery = shops;
+    this.sendUniqueShopsForDeliveryRoute.next(shops);
+  }
+
+  getDeliveryShops(): any[] {
+    return this._shopsForDelivery;
+  }
+
+  hasDeliveryShops(): boolean {
+    return this._shopsForDelivery.length > 0;
+  }
 
   userLoggedIn : Subject<boolean>;
   itemDeleted:Subject<string>;

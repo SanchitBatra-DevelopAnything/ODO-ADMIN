@@ -5,6 +5,7 @@ import { ApiService } from '../services/api/api.service';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { UtilityService } from '../services/utility/utility.service';
 
 
 @Component({
@@ -26,11 +27,11 @@ export class OrdersComponent implements OnInit {
 
   @ViewChild('picker') datepicker!: MatDatepicker<Date>;
 
-  constructor(private apiService: ApiService, private router: Router) {
+  constructor(private apiService: ApiService, private router: Router , private utilityService : UtilityService) {
 
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.isLoading = true;
     this.getActiveOrders();
   }
@@ -69,9 +70,6 @@ export class OrdersComponent implements OnInit {
             this.outForDeliveryOrdersKeys.push(key);
           }
         });
-
-        this.isLoading = false;
-
       }
       else {
         //for Sub-Admins
@@ -109,12 +107,29 @@ export class OrdersComponent implements OnInit {
             this.outForDeliveryOrdersKeys.push(key);
           }
         });
-
-        this.isLoading = false;
       }
-
+      this.isLoading = false;
     });
 
+  }
+
+  sendPendingOrdersForDeliveryRoutes() {
+    const shopSet = new Set<{ shop: string; latitude: string; longitude: string; contact: string }>();
+    console.log(this.pendingOrders.length);
+    this.pendingOrders.forEach((order: any) => {
+      if (order.shop) {
+        console.log("Added shop to set");
+      shopSet.add({
+        shop: order.shop,
+        latitude: order['delivery-latitude'] || 'not-found',
+        longitude: order['delivery-longitude'] || 'not-found',
+        contact: order.contact || 'not-found'
+      });
+      }
+    });
+
+    // Send data to delivery route making component.
+    this.utilityService.setDeliveryShops(Array.from(shopSet));
   }
 
   showBill(area: string, orderedBy: string, orderKey: string) {
@@ -235,6 +250,13 @@ export class OrdersComponent implements OnInit {
     console.log(JSON.stringify(dateFilteredOrders));
 
     this.downloadTotalParchi(dateFilteredOrders);
+  }
+
+  goToDeliveryRoutePage()
+  {
+    //send pending orders for delivery route.
+    this.sendPendingOrdersForDeliveryRoutes();
+    this.router.navigate(['/deliveryRouteMaker']);
   }
 
 
