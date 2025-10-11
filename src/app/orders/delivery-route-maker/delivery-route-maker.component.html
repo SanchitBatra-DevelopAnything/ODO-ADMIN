@@ -1,0 +1,80 @@
+<div class="loader center" *ngIf = "isLoading"></div>
+
+<div class="delivery-route-maker">
+    <!-- Header Section -->
+    <div class="header">
+      <h2>Delivery Route Maker</h2>
+      <div class="rules">
+        <p>⚠️ Do not refresh this page</p>
+        <p>📝 Go to Orders --- Load new orders and then come back here by clicking the delivery route button to load all shops for pending orders.</p>
+      </div>
+    </div>
+  
+    <div class="main-content">
+      <!-- Left Section - Available Shops -->
+      <div class="shops-panel">
+        <div class="shops-header">
+          <h3>Available Shops ({{shopsAvailableForDelivery.length}})</h3>
+          <input type="text" placeholder="Search shops..." (input)="filterShops($event)">
+        </div>
+        
+        <div class="shops-list">
+          <div *ngFor="let shop of filteredShops" class="shop-item">
+            <div class="shop-info">
+              <strong>{{shop.shop}} , </strong>
+              <span>{{shop.contact}}</span>
+            </div>
+            <button (click)="addShopToRoute(shop, selectedRoute)" 
+                    [disabled]="!selectedRoute"
+                    class="add-btn">
+              Add to Route
+            </button>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Right Section - Routes -->
+      <div class="routes-panel">
+        <button (click)="createNewRoute()" class="create-route-btn">
+          + Create New Route
+        </button>
+  
+        <div class="routes-list">
+          <div *ngFor="let route of deliveryRoutes" 
+               class="route-card"
+               [class.selected]="route === selectedRoute">
+            
+               <div class="route-header">
+                <div class="route-info">
+                  <h4>Route #{{route.id}}</h4>
+                  <input [(ngModel)]="route.driver" 
+                         placeholder="Assign Driver Name"
+                         class="driver-input">
+                </div>
+                <div class="route-actions">
+                  <button (click)="saveRouteToDatabase(route)" class="btn btn-primary">Save Route in Database.</button>
+                  <button (click)="deleteRouteFromDatabase(route)" class="btn btn-danger">Delete Route from Database.</button>
+                  <button (click)="sendRouteViaWhatsApp(route)" class="btn btn-success">Send via WhatsApp</button>
+                </div>
+              </div>
+              
+            <div class="route-shops">
+              <div *ngFor="let shop of route.shops" class="route-shop-item">
+                <div class="priority-input">
+                  <input type="number" 
+                         [(ngModel)]="shop.priority" 
+                         min="1"
+                         [max]="route.shops.length"
+                         (change)="updateShopPriority(route, shop, shop.priority)">
+                </div>
+                <div class="shop-details">
+                  {{shop.shop}}
+                  <small>{{shop.contact}}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -21,6 +21,7 @@ export class AddReferrerFormComponent {
     {
       this.addReferrerForm = this.formBuilder.group({
         referrerName: ['', Validators.required],
+        contact : ['' , Validators.required],
       });
     }
   

@@ -81,15 +81,13 @@ export class DistributorsListComponent {
       return;
     }
     this.filteredDistributorUsefulData = this.distributorUsefulData.filter((distributorObj)=>{
-      console.log(distributorObj.distributorKey);
-      if(distributorObj.contact.toString().trim().startsWith(dataReceived.toString().trim()))
+      
+      if(distributorObj.contact.toString().trim().startsWith(dataReceived.toString().trim()) || distributorObj.name.toLowerCase().toString().trim().startsWith(dataReceived.toString().toLowerCase().trim()))
       {
         return true;
       }
       return false;
     });
-
-    console.log('now it is = '+JSON.stringify(this.filteredDistributorUsefulData));
   }
 
 }

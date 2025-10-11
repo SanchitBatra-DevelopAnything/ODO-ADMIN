@@ -66,6 +66,7 @@ import { ReferralLeaderboardComponent } from './manage/referral-leaderboard/refe
 import { AddReferrerFormComponent } from './add-referrer-form/add-referrer-form.component';
 import { GoogleMapComponent } from './google-map/google-map.component';
 import { SafeUrlPipe } from './safe-url.pipe';
+import { DeliveryRouteMakerComponent } from './orders/delivery-route-maker/delivery-route-maker.component';
 
 // import { EditItemComponent } from './edit-item/edit-item.component';
 // import { DistributorAreasComponent } from './manage/distributor-areas/distributor-areas.component';
@@ -96,6 +97,7 @@ const appRoutes : Routes = [
   ]},
   {path : 'processedOrders' , component : OldOrdersComponent , canActivate : [AuthGuardService]},
   {path : 'orderBill/:orderKey' , component : OrderDetailComponent , canActivate :[AuthGuardService]},
+  {path : 'deliveryRouteMaker' , component : DeliveryRouteMakerComponent , canActivate :[AuthGuardService]},
 ];
 
 export const MY_DATE_FORMATS = {
@@ -141,6 +143,7 @@ export const MY_DATE_FORMATS = {
     AddReferrerFormComponent,
     GoogleMapComponent,
     SafeUrlPipe,
+    DeliveryRouteMakerComponent,
   ],
   imports: [
     BrowserModule,
