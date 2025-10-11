@@ -15,11 +15,11 @@
       <div class="shops-panel">
         <div class="shops-header">
           <h3>Available Shops ({{shopsAvailableForDelivery.length}})</h3>
-          <input type="text" placeholder="Search shops..." #searchInput>
+          <input type="text" placeholder="Search shops..." (input)="filterShops($event)">
         </div>
         
         <div class="shops-list">
-          <div *ngFor="let shop of shopsAvailableForDelivery" class="shop-item">
+          <div *ngFor="let shop of filteredShops" class="shop-item">
             <div class="shop-info">
               <strong>{{shop.shop}} , </strong>
               <span>{{shop.contact}}</span>

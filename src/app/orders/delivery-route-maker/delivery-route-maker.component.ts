@@ -11,6 +11,7 @@ import { UtilityService } from 'src/app/services/utility/utility.service';
 })
 export class DeliveryRouteMakerComponent {
   shopsAvailableForDelivery: any[] = [];
+  filteredShops: any[] = [];
   deliveryRoutes: any[] = [];
   uniqueShopsSubscription: Subscription = new Subscription();
   selectedRoute: any = null;
@@ -23,6 +24,7 @@ export class DeliveryRouteMakerComponent {
       (shops: any) => {
         if (shops?.length > 0) {
           this.shopsAvailableForDelivery = shops;
+          this.filteredShops = [...this.shopsAvailableForDelivery];
         }
       }
     );
@@ -139,6 +141,19 @@ export class DeliveryRouteMakerComponent {
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
+  }
+
+  filterShops(e:any)
+  {
+    let query = e.target.value.toLowerCase().trim();
+    if(query.length == 0)
+    {
+      this.filteredShops = [...this.shopsAvailableForDelivery];
+      return;
+    }
+    this.filteredShops = this.shopsAvailableForDelivery.filter((shop)=>{
+      return shop.shop.toLowerCase().includes(query);
+    });
   }
 
   ngOnDestroy() {
