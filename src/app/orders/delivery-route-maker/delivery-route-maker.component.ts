@@ -89,6 +89,7 @@ export class DeliveryRouteMakerComponent {
     this.isLoading = true;
     this.apiService.saveRouteInDB(route, route.id).subscribe((_: any) => {
       this.isLoading = false;
+      this.selectedRoute=null;
       this.toastr.success('Route Saved Successfully', 'Notification!', {
         timeOut: 4000,
         closeButton: true,
