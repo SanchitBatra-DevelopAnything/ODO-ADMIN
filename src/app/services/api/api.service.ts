@@ -340,5 +340,10 @@ export class ApiService {
   {
     return this.http.patch(this.dbUrl+"activeDistributorOrders/"+orderKey+".json" , {status : newStatus});
   }
+
+  public saveRouteInDB(routeData:any , routeId:any): Observable<any>
+  {
+    return this.http.put(this.dbUrl+"deliveryRoutes/"+routeId+".json" , routeData);
+  }
   
 }

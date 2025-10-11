@@ -1,3 +1,5 @@
+<div class="loader center" *ngIf = "isLoading"></div>
+
 <div class="delivery-route-maker">
     <!-- Header Section -->
     <div class="header">
@@ -50,7 +52,7 @@
                          class="driver-input">
                 </div>
                 <div class="route-actions">
-                  <button (click)="saveRouteToDatabase(route)" class="btn btn-primary">Save Route</button>
+                  <button (click)="saveRouteToDatabase(route)" class="btn btn-primary">Save Route in Database.</button>
                   <button (click)="sendRouteViaWhatsApp(route)" class="btn btn-success">Send via WhatsApp</button>
                 </div>
               </div>

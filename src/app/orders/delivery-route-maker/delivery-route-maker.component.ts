@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { ApiService } from 'src/app/services/api/api.service';
 import { UtilityService } from 'src/app/services/utility/utility.service';
 
 @Component({
@@ -12,8 +14,9 @@ export class DeliveryRouteMakerComponent {
   deliveryRoutes: any[] = [];
   uniqueShopsSubscription: Subscription = new Subscription();
   selectedRoute: any = null;
+  isLoading:boolean = false;
 
-  constructor(private utilityService: UtilityService) {}
+  constructor(private apiService:ApiService , private utilityService: UtilityService , private toastr:ToastrService) {}
 
   ngOnInit() {
     this.uniqueShopsSubscription = this.utilityService.sendUniqueShopsForDeliveryRoute.subscribe(
@@ -57,7 +60,16 @@ export class DeliveryRouteMakerComponent {
 
   saveRouteToDatabase(route:any)
   {
-
+    //for now only saving metadata of a route in database.
+    this.isLoading = true;
+    this.apiService.saveRouteInDB(route , route.id).subscribe((_:any)=>{
+        this.isLoading = false;
+        this.toastr.success('Route Saved Successfully', 'Notification!' , {
+          timeOut : 4000 ,
+          closeButton : true , 
+          positionClass : 'toast-top-right'
+        });
+    })
   }
 
   sendRouteViaWhatsApp(route: any) 
