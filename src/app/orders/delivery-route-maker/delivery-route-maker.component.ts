@@ -14,14 +14,14 @@ export class DeliveryRouteMakerComponent {
   deliveryRoutes: any[] = [];
   uniqueShopsSubscription: Subscription = new Subscription();
   selectedRoute: any = null;
-  isLoading:boolean = false;
+  isLoading: boolean = false;
 
-  constructor(private apiService:ApiService , private utilityService: UtilityService , private toastr:ToastrService) {}
+  constructor(private apiService: ApiService, private utilityService: UtilityService, private toastr: ToastrService) { }
 
   ngOnInit() {
     this.uniqueShopsSubscription = this.utilityService.sendUniqueShopsForDeliveryRoute.subscribe(
       (shops: any) => {
-        if(shops?.length > 0) {
+        if (shops?.length > 0) {
           this.shopsAvailableForDelivery = shops;
         }
       }
@@ -32,10 +32,10 @@ export class DeliveryRouteMakerComponent {
 
   loadExistingRoutes() {
     this.isLoading = true;
-    this.apiService.getDeliveryRoutesFromDB().subscribe((routes:any)=>{
-      if(routes == null) {
+    this.apiService.getDeliveryRoutesFromDB().subscribe((routes: any) => {
+      if (routes == null) {
         this.deliveryRoutes = [];
-        this.selectedRoute=null;
+        this.selectedRoute = null;
         this.isLoading = false;
         return;
       }
@@ -74,43 +74,74 @@ export class DeliveryRouteMakerComponent {
     route.driver = driverName;
   }
 
-  saveRouteToDatabase(route:any)
-  {
+  saveRouteToDatabase(route: any) {
+    if (!route.driver || route.driver.trim().length == 0) {
+      this.toastr.error('Please assign a driver before sending the route.', 'Error!', {
+        timeOut: 4000,
+        closeButton: true,
+        positionClass: 'toast-top-right'
+      });
+      return;
+    }
     //for now only saving metadata of a route in database.
     this.isLoading = true;
-    this.apiService.saveRouteInDB(route , route.id).subscribe((_:any)=>{
-        this.isLoading = false;
-        this.toastr.success('Route Saved Successfully', 'Notification!' , {
-          timeOut : 4000 ,
-          closeButton : true , 
-          positionClass : 'toast-top-right'
-        });
+    this.apiService.saveRouteInDB(route, route.id).subscribe((_: any) => {
+      this.isLoading = false;
+      this.toastr.success('Route Saved Successfully', 'Notification!', {
+        timeOut: 4000,
+        closeButton: true,
+        positionClass: 'toast-top-right'
+      });
     })
   }
 
-  deleteRouteFromDatabase(route:any)
-  {
+  deleteRouteFromDatabase(route: any) {
     this.isLoading = true;
-    this.apiService.deleteRouteFromDB(route.id).subscribe((_:any)=>{
-        this.isLoading = false;
-        this.toastr.success('Route Deleted Successfully', 'Notification!' , {
-          timeOut : 4000 ,
-          closeButton : true , 
-          positionClass : 'toast-top-right'
-        });
-        this.deliveryRoutes = this.deliveryRoutes.filter(r => r.id !== route.id);
-        if (this.selectedRoute?.id === route.id) {
-          this.selectedRoute = null;
-        }
+    this.apiService.deleteRouteFromDB(route.id).subscribe((_: any) => {
+      this.isLoading = false;
+      this.toastr.success('Route Deleted Successfully', 'Notification!', {
+        timeOut: 4000,
+        closeButton: true,
+        positionClass: 'toast-top-right'
+      });
+      this.deliveryRoutes = this.deliveryRoutes.filter(r => r.id !== route.id);
+      if (this.selectedRoute?.id === route.id) {
+        this.selectedRoute = null;
+      }
     });
   }
 
-  sendRouteViaWhatsApp(route: any) 
-  {
+  sendRouteViaWhatsApp(route: any) {
+    if (!route.driver || route.driver.trim().length == 0) {
+      this.toastr.error('Please assign a driver before sending the route.', 'Error!', {
+        timeOut: 4000,
+        closeButton: true,
+        positionClass: 'toast-top-right'
+      });
+      return;
+    }
+    //we can split into multiple messages also later , if this grows too long.
+    let message = `Delivery Route for Driver: ${route.driver}\n\n`;
 
+    route.shops.forEach((shop: any, index: number) => {
+
+      let mapsLink = `https://www.google.com/maps?q=${shop.latitude},${shop.longitude}`;
+      if(shop.latitude == "not-found" || shop.longitude == "not-found")
+      {
+        mapsLink = "Location not available";
+      }
+
+      message += `${index + 1}. ${shop.shop}\n` +
+        `Address : ${shop.address}\n` +
+        `Contact: ${shop.contact}\n` +
+        `Location: ${mapsLink}\n\n`;
+    });
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+    window.open(whatsappUrl, '_blank');
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     if (this.uniqueShopsSubscription) {
       this.uniqueShopsSubscription.unsubscribe();
     }

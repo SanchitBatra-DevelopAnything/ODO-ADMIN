@@ -114,7 +114,7 @@ export class OrdersComponent implements OnInit {
   }
 
   sendPendingOrdersForDeliveryRoutes() {
-    const shopSet = new Set<{ shop: string; latitude: string; longitude: string; contact: string }>();
+    const shopSet = new Set<{ shop: string; latitude: string; longitude: string; contact: string , address : string }>();
     console.log(this.pendingOrders.length);
     this.pendingOrders.forEach((order: any) => {
       if (order.shop) {
@@ -123,7 +123,8 @@ export class OrdersComponent implements OnInit {
         shop: order.shop,
         latitude: order['delivery-latitude'] || 'not-found',
         longitude: order['delivery-longitude'] || 'not-found',
-        contact: order.contact || 'not-found'
+        contact: order.contact || 'not-found',
+        address : order.shopAddress || 'not-found' 
       });
       }
     });
