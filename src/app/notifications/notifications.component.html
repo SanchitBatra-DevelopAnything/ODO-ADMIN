@@ -1,46 +1,72 @@
-<div class="row">
-    <div class="col">
-        <div class="container">
-            <h3 style = "display : inline; font-size:48px;" class = "pangolin">User Requests!</h3> 
-            <p>All these users want to join ODO's network! Please approve to <span style ="color:green; font-weight: bold;">Allow</span> them or <span style = "color:red; font-weight: bold;">Reject</span></p>
-            <hr>
-        </div>
+<div class="container mt-4">
+    <div class="text-center mb-4">
+      <h3 class="pangolin" style="font-size: 42px; margin-bottom: 10px;">User Requests!</h3>
+      <p style="font-size: 18px; color: #555;">
+        All these users want to join <span style="color: #007bff; font-weight: 600;">ODO's network</span>!  
+        Please <span style="color: green; font-weight: bold;">Approve</span> to allow them or  
+        <span style="color: red; font-weight: bold;">Reject</span> if not.
+      </p>
+      <hr style="width: 80%; margin: 0 auto; opacity: 0.4;">
     </div>
-</div>
-
-<div class="loader center" *ngIf = "isLoading">
-
-</div>
-
-<div class="container" *ngIf = "!isLoading">
-
-    <p *ngIf = "notificationData.length == 0" style = "color: red; font-size: 20px;" class = "pangolin">No Pending User Requests!</p>
- <div class="row">
-     <div class="col-xs-12 col-md-3"  *ngFor="let data of notificationData; let i=index;" style = "margin-bottom: 5px;">
-        <div class="card flex justify-content-center">
-            <p-card header="NAME : {{data.name}}">
-                <p style = "font-weight: bold; color: red; font-size:15px;">
-                    GST NO. {{data.GST}}
-                </p>
-                <p style = "font-weight: bold; color: red; font-size:15px;">
-                    Shop : {{data.shop}}
-                </p>
-                <p style = "font-weight: bold; color: red; font-size:15px;">
-                    Area : {{data.area}}
-                </p>
-                <p style = "font-weight: bold; color: red; font-size:15px;">
-                    Ph No. : {{data.contact}}
-                </p>
-                <p style = "font-weight: bold; color: red; font-size:15px;">
-                    Referred By : {{data.referrer}}
-                </p>
-                <ng-template pTemplate="footer">
-                    <p-button label="Approve" icon="pi pi-check" (click) = "onApprove(i)"></p-button>
-                    <p-button label="Reject" icon="pi pi-times" styleClass="p-button-secondary" [style]="{ 'margin-left': '.5em' }" (click) = "onReject(i)"></p-button>
-                </ng-template>
+  
+    <!-- Loader -->
+    <div class="loader center" *ngIf="isLoading"></div>
+  
+    <!-- User Cards -->
+    <div *ngIf="!isLoading">
+      <p *ngIf="notificationData.length == 0" class="pangolin text-center" style="color: red; font-size: 22px;">
+        No Pending User Requests!
+      </p>
+  
+      <div class="row justify-content-center g-4">
+        <div
+          class="col-xs-12 col-sm-6 col-md-4 col-lg-3"
+          *ngFor="let data of notificationData; let i = index"
+        >
+          <div class="card user-card shadow-sm border-0">
+            <p-card>
+              <ng-template pTemplate="header">
+                <h5 class="text-center mb-0" style="color: #333; font-weight: 600;">{{ data.name }}</h5>
+              </ng-template>
+  
+              <div class="user-image-box">
+                <img
+                  [src]="data?.selfieUrl"
+                  alt="Selfie"
+                  class="user-image"
+                />
+              </div>
+  
+              <div class="user-info">
+                <p><strong>GST No.:</strong> {{ data.GST }}</p>
+                <p><strong>Shop:</strong> {{ data.shop }}</p>
+                <p><strong>Area:</strong> {{ data.area }}</p>
+                <p><strong>Phone:</strong> {{ data.contact }}</p>
+                <p><strong>Referred By:</strong> {{ data.referrer }}</p>
+              </div>
+  
+              <ng-template pTemplate="footer">
+                <div class="d-flex justify-content-between">
+                  <p-button
+                    label="Approve"
+                    icon="pi pi-check"
+                    styleClass="p-button-success p-button-sm"
+                    (click)="onApprove(i)"
+                  ></p-button>
+  
+                  <hr>
+                  <p-button
+                    label="Reject"
+                    icon="pi pi-times"
+                    styleClass="p-button-danger p-button-sm"
+                    (click)="onReject(i)"
+                  ></p-button>
+                </div>
+              </ng-template>
             </p-card>
+          </div>
         </div>
-     </div>
- </div>   
-
-</div>
+      </div>
+    </div>
+  </div>
+  
