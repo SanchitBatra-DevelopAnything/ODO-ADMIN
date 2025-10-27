@@ -15,7 +15,8 @@ export class ApiService {
 
   public getAdmins() : Observable<any>
   { 
-    return this.http.get(this.dbUrl + "admins.json");
+    // return this.http.get(this.dbUrl + "admins.json");
+    return this.http.get(this.apiUrl + "v1/admins");
   }
 
   public getCategories() : Observable<any> {
@@ -287,12 +288,14 @@ export class ApiService {
 
   public deleteAdmin(adminKey:any) : Observable<any>
   {
-    return this.http.delete(this.dbUrl+"admins/"+adminKey+".json");
+    // return this.http.delete(this.dbUrl+"admins/"+adminKey+".json");
+    return this.http.delete(this.apiUrl+"v1/admins/"+adminKey);
   }
 
   public addAdmin(adminBody:any) : Observable<any>
   {
-    return this.http.post(this.dbUrl+"admins.json" , adminBody);
+    // return this.http.post(this.dbUrl+"admins.json" , adminBody);
+    return this.http.post(this.apiUrl+"v1/admins" , adminBody);
   }
 
   public updateSortOrder(brands:any) : Observable<any>
