@@ -10,6 +10,7 @@ export class ApiService {
   //category can be considered a brand in ODO's scenario.
 
   dbUrl = "https://odo-admin-app-default-rtdb.asia-southeast1.firebasedatabase.app/";
+  apiUrl = "https://odo-b2b-api-production.up.railway.app/";
   constructor(private http:HttpClient) { }
 
   public getAdmins() : Observable<any>
@@ -202,18 +203,20 @@ export class ApiService {
 
   public getDistributorships() : Observable<any>
   {
-    return this.http.get(this.dbUrl+"Areas.json");
+    return this.http.get(this.apiUrl+"v1/areas");
+    // return this.http.get(this.dbUrl+"Areas.json");
   }
 
   public deleteDistributorship(key:any) : Observable<any>
   {
-    return this.http.delete(this.dbUrl+"Areas/"+key+".json");
+    // return this.http.delete(this.dbUrl+"Areas/"+key+".json");
+    return this.http.delete(this.apiUrl+"v1/areas/"+key);
   }
 
   public addDistributorship(params:any) : Observable<any>
   {
-    console.log(params);
-    return this.http.post(this.dbUrl+"Areas.json" , params);
+    // return this.http.post(this.dbUrl+"Areas.json" , params);
+    return this.http.post(this.apiUrl+"v1/areas" , params);
   }
 
   public getPriceLists() : Observable<any>
