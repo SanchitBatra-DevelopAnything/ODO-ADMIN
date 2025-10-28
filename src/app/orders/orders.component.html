@@ -10,29 +10,43 @@
     <hr>
     <button *ngIf = "!isLoading" class = "btn btn-success" (click) = "goToDeliveryRoutePage()">Make Delivery Routes</button>
     <hr>
-    <p style = "color:red;">Select date to download total parchi.</p>
 
     <div class="loader" *ngIf = "isLoading">
 
     </div>
 
-    <mat-form-field appearance="outline">
-        <mat-label>Select Date</mat-label>
-        <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" placeholder="dd-mm-yyyy" (dateChange)="onDateChange($event)">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
+    <button class="btn btn-warning" *ngIf="!selectionMode" (click)="enableSelectionMode()">
+        Select Orders for Total Parchi
+      </button>
+      
+      <button class="btn btn-success" *ngIf="selectionMode" (click)="generateTotalParchi()">
+        Generate Total Parchi
+      </button>
+      
+      <button class="btn btn-danger" *ngIf="selectionMode" (click)="cancelSelectionMode()">
+        Cancel Selection
+      </button>
+      
+      <p *ngIf="selectionMode" style="color:red; font-weight:bold;">
+        Selection mode active — Click orders to select
+      </p>
+      
 
     <h3 class = "pangolin">Active Orders from members of <strong>ODO!</strong></h3>
     <hr>
     <div class="row">
 
-        <div *ngFor = "let order of pendingOrders; let i = index;" class = "col-xs-2 w3-card pointer order-card" (click) = "showBill(order.shop , order.orderedBy , pendingOrdersKeys[i])">
-            <p style = "font-weight: bold;">{{order.shop | uppercase}}</p>
-            <p style = "font-weight: bold;">By : {{order.orderedBy | uppercase}}</p>
-            <p style = "font-weight: bold; font-size: 12px;">{{order.orderTime}}</p>
-            <p style = "color: red;">AREA : {{order.area}}</p>
-        </div>
+        <div *ngFor="let order of pendingOrders; let i = index"
+     class="col-xs-2 w3-card pointer order-card"
+     [ngClass]="{'selected-order': selectionMode && isOrderSelected(pendingOrdersKeys[i])}"
+     (click)="toggleOrderSelection(order, pendingOrdersKeys[i])">
+
+    <p style="font-weight: bold;">{{order.shop | uppercase}}</p>
+    <p style="font-weight: bold;">By : {{order.orderedBy | uppercase}}</p>
+    <p style="font-weight: bold; font-size: 12px;">{{order.orderTime}}</p>
+    <p style="color: red;">AREA : {{order.area}}</p>
+</div>
+
 
     </div>
 

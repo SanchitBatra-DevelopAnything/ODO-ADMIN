@@ -25,6 +25,11 @@ export class OrdersComponent implements OnInit {
   isLoading = false;
   selectedDate: any = null;
 
+  selectedOrdersForTotalParchi: any = [];
+  selectionMode = false;
+
+  
+
   @ViewChild('picker') datepicker!: MatDatepicker<Date>;
 
   constructor(private apiService: ApiService, private router: Router , private utilityService : UtilityService) {
@@ -113,6 +118,35 @@ export class OrdersComponent implements OnInit {
 
   }
 
+  isOrderSelected(key: string): boolean {
+    return this.selectedOrdersForTotalParchi.some((o:any) => o.key === key);
+  }
+  
+
+  toggleOrderSelection(order: any, key: any) {
+    if (!this.selectionMode) {
+      this.showBill(order.shop, order.orderedBy, key);
+      return;
+    }
+  
+    const exists = this.selectedOrdersForTotalParchi.find((o:any) => o.key === key);
+    if (exists) {
+      this.selectedOrdersForTotalParchi = this.selectedOrdersForTotalParchi.filter((o:any) => o.key !== key);
+    } else {
+      this.selectedOrdersForTotalParchi.push({ order, key });
+    }
+  }
+
+  enableSelectionMode() {
+    this.selectionMode = true;
+    this.selectedOrdersForTotalParchi = [];
+  }
+  
+  cancelSelectionMode() {
+    this.selectionMode = false;
+    this.selectedOrdersForTotalParchi = [];
+  }
+
   sendPendingOrdersForDeliveryRoutes() {
     const shopSet = new Set<{ shop: string; latitude: string; longitude: string; contact: string , address : string }>();
     console.log(this.pendingOrders.length);
@@ -195,6 +229,11 @@ export class OrdersComponent implements OnInit {
 
     // Step 6: Success alert
     alert('✅ CSV file successfully generated with valid shop locations!');
+  }
+
+  generateTotalParchi()
+  {
+
   }
 
   downloadTotalParchi(dateFilteredOrders: any) {
