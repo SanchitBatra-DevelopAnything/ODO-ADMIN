@@ -8,15 +8,14 @@ import { Observable, ObservedValueOf } from 'rxjs';
 export class ApiService {
 
   //category can be considered a brand in ODO's scenario.
+  //distributoriships can be considered as areas.
 
   dbUrl = "https://odo-admin-app-default-rtdb.asia-southeast1.firebasedatabase.app/";
-  apiUrl = "https://odo-b2b-api-production.up.railway.app/";
   constructor(private http:HttpClient) { }
 
   public getAdmins() : Observable<any>
   { 
-    // return this.http.get(this.dbUrl + "admins.json");
-    return this.http.get(this.apiUrl + "v1/admins");
+     return this.http.get(this.dbUrl + "admins.json");
   }
 
   public getCategories() : Observable<any> {
@@ -204,20 +203,17 @@ export class ApiService {
 
   public getDistributorships() : Observable<any>
   {
-    return this.http.get(this.apiUrl+"v1/areas");
-    // return this.http.get(this.dbUrl+"Areas.json");
+    return this.http.get(this.dbUrl+"Areas.json");
   }
 
   public deleteDistributorship(key:any) : Observable<any>
   {
-    // return this.http.delete(this.dbUrl+"Areas/"+key+".json");
-    return this.http.delete(this.apiUrl+"v1/areas/"+key);
+    return this.http.delete(this.dbUrl+"Areas/"+key+".json");
   }
 
   public addDistributorship(params:any) : Observable<any>
   {
-    // return this.http.post(this.dbUrl+"Areas.json" , params);
-    return this.http.post(this.apiUrl+"v1/areas" , params);
+     return this.http.post(this.dbUrl+"Areas.json" , params);
   }
 
   public getPriceLists() : Observable<any>
@@ -288,14 +284,13 @@ export class ApiService {
 
   public deleteAdmin(adminKey:any) : Observable<any>
   {
-    // return this.http.delete(this.dbUrl+"admins/"+adminKey+".json");
-    return this.http.delete(this.apiUrl+"v1/admins/"+adminKey);
+    return this.http.delete(this.dbUrl+"admins/"+adminKey+".json");
+    
   }
 
   public addAdmin(adminBody:any) : Observable<any>
   {
-    // return this.http.post(this.dbUrl+"admins.json" , adminBody);
-    return this.http.post(this.apiUrl+"v1/admins" , adminBody);
+    return this.http.post(this.dbUrl+"admins.json" , adminBody);
   }
 
   public updateSortOrder(brands:any) : Observable<any>
