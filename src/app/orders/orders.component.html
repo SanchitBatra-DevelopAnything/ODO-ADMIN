@@ -2,12 +2,11 @@
     <h3>
         Active Orders!
     </h3>
-    <p style = "font-weight: bold;">Click on the Order for viewing its BILL</p>
+    <p *ngIf="!selectionMode" style = "font-weight: bold;">Click on the Order for viewing its BILL</p>
     <hr>
-    <button class = "btn btn-primary" (click) = "oldOrderPage()">Show Last 7 Days Orders</button>
+    <button class = "btn btn-primary" (click) = "oldOrderPage()" style = "margin: 20px;">Show Last 7 Days Orders</button>
     <hr>
-    <button *ngIf = "!isLoading" class = "btn btn-success" (click) = "downloadCSV()">Download Locations for Delivery</button>
-    <hr>
+    <button *ngIf = "!isLoading" class = "btn btn-success" (click) = "downloadLocationsCSV()" style = "margin: 20px;">Download Locations for Delivery</button>
     <button *ngIf = "!isLoading" class = "btn btn-success" (click) = "goToDeliveryRoutePage()">Make Delivery Routes</button>
     <hr>
 
@@ -15,21 +14,25 @@
 
     </div>
 
-    <button class="btn btn-warning" *ngIf="!selectionMode" (click)="enableSelectionMode()">
-        Select Orders for Total Parchi
-      </button>
+    
+        <button class="btn btn-warning" *ngIf="!selectionMode" (click)="enableSelectionMode()" style = "margin: 20px;">
+            Select Orders for Total Parchi
+          </button>
+    
+   
+
       
-      <button class="btn btn-success" *ngIf="selectionMode" (click)="generateTotalParchi()">
+      <button class="btn btn-success" *ngIf="selectionMode" (click)="generateTotalParchiAndMarkOrdersForDelivery()" style = "margin: 20px;">
         Generate Total Parchi
       </button>
       
-      <button class="btn btn-danger" *ngIf="selectionMode" (click)="cancelSelectionMode()">
+      <button class="btn btn-danger" *ngIf="selectionMode" (click)="cancelSelectionMode()" style = "margin: 20px;">
         Cancel Selection
       </button>
       
-      <p *ngIf="selectionMode" style="color:red; font-weight:bold;">
+      <h3 *ngIf="selectionMode" style="color:red; font-weight:bold;">
         Selection mode active — Click orders to select
-      </p>
+      </h3>
       
 
     <h3 class = "pangolin">Active Orders from members of <strong>ODO!</strong></h3>
