@@ -6,6 +6,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { UtilityService } from '../services/utility/utility.service';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -24,6 +25,11 @@ export class OrdersComponent implements OnInit {
 
   isLoading = false;
   selectedDate: any = null;
+
+  selectedOrdersForTotalParchi: any = [];
+  selectionMode = false;
+
+  
 
   @ViewChild('picker') datepicker!: MatDatepicker<Date>;
 
@@ -113,6 +119,35 @@ export class OrdersComponent implements OnInit {
 
   }
 
+  isOrderSelected(key: string): boolean {
+    return this.selectedOrdersForTotalParchi.some((o:any) => o.key === key);
+  }
+  
+
+  toggleOrderSelection(order: any, key: any) {
+    if (!this.selectionMode) {
+      this.showBill(order.shop, order.orderedBy, key);
+      return;
+    }
+  
+    const exists = this.selectedOrdersForTotalParchi.find((o:any) => o.key === key);
+    if (exists) {
+      this.selectedOrdersForTotalParchi = this.selectedOrdersForTotalParchi.filter((o:any) => o.key !== key);
+    } else {
+      this.selectedOrdersForTotalParchi.push({ order, key });
+    }
+  }
+
+  enableSelectionMode() {
+    this.selectionMode = true;
+    this.selectedOrdersForTotalParchi = [];
+  }
+  
+  cancelSelectionMode() {
+    this.selectionMode = false;
+    this.selectedOrdersForTotalParchi = [];
+  }
+
   sendPendingOrdersForDeliveryRoutes() {
     const shopSet = new Set<{ shop: string; latitude: string; longitude: string; contact: string , address : string }>();
     console.log(this.pendingOrders.length);
@@ -141,7 +176,7 @@ export class OrdersComponent implements OnInit {
     this.router.navigate(['/processedOrders']);
   }
 
-  downloadCSV() {
+  downloadLocationsCSV() {
     const invalidShops = this.activeOrders.filter((order: any) =>
       !order['delivery-latitude'] ||
       !order['delivery-longitude'] ||
@@ -197,12 +232,47 @@ export class OrdersComponent implements OnInit {
     alert('✅ CSV file successfully generated with valid shop locations!');
   }
 
-  downloadTotalParchi(dateFilteredOrders: any) {
+  generateTotalParchiAndMarkOrdersForDelivery()
+  {
+    if(this.selectedOrdersForTotalParchi.length == 0)
+    {
+      alert('No orders selected for Total Parchi generation.');
+      return;
+    }
+    this.isLoading = true;
+    this.downloadTotalParchi(this.selectedOrdersForTotalParchi.map((o:any) => o.order));
+    //use apiService.updateOrderStatus to mark orders as out-for-delivery
+    const updateRequests = this.selectedOrdersForTotalParchi.map((o: any) => {
+      return this.apiService.updateOrderStatus(o.key, "out-for-delivery");
+    });
+  
+    // Execute all update requests in parallel
+    forkJoin(updateRequests).subscribe({
+      next: (res) => {
+        console.log("All selected orders marked out for delivery successfully!", res);
+        alert("Orders successfully marked as Out for Delivery!");
+        this.selectedOrdersForTotalParchi = [];
+        this.isLoading = false;
+        this.cancelSelectionMode();
+        this.getActiveOrders();
+      },
+      error: (err) => {
+        console.error("Error updating order statuses", err);
+        alert("Failed to update some orders. Please retry.");
+        this.selectedOrdersForTotalParchi = [];
+        this.isLoading = false;
+        this.cancelSelectionMode();
+        this.getActiveOrders();
+      }
+    });
+  }
+
+  downloadTotalParchi(orders: any) {
     // Step 1: aggregate all items by name
     const totalMap: { [key: string]: number } = {};
 
     // Loop through all orders
-    Object.values(dateFilteredOrders).forEach((order: any) => {
+    Object.values(orders).forEach((order: any) => {
       if (order.items && Array.isArray(order.items)) {
         order.items.forEach((item: any) => {
           const name = item.item.trim().toUpperCase(); // normalize name
@@ -231,27 +301,28 @@ export class OrdersComponent implements OnInit {
     saveAs(blob, `Total_Parchi_${new Date().toISOString().slice(0, 10)}.xlsx`);
   }
 
-  openCalendar() {
-    this.datepicker.open();
-  }
+  // openCalendar() {
+  //   this.datepicker.open();
+  // }
 
-  onDateChange(e: any) {
-    const date: Date = e.value; // this is a Date object
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
+  //This is the function which was developed to download total parchi based on date orders.
+  // onDateChange(e: any) {
+  //   const date: Date = e.value; // this is a Date object
+  //   const day = date.getDate();
+  //   const month = date.getMonth() + 1;
+  //   const year = date.getFullYear();
 
-    const formatted = `${day}-${month}-${year}`;
-    console.log('Formatted:', formatted);
+  //   const formatted = `${day}-${month}-${year}`;
+  //   console.log('Formatted:', formatted);
 
-    this.selectedDate = formatted;
+  //   this.selectedDate = formatted;
 
-    let dateFilteredOrders = this.activeOrders.filter((order: any) => order.orderDate == this.selectedDate);
+  //   let dateFilteredOrders = this.activeOrders.filter((order: any) => order.orderDate == this.selectedDate);
 
-    console.log(JSON.stringify(dateFilteredOrders));
+  //   console.log(JSON.stringify(dateFilteredOrders));
 
-    this.downloadTotalParchi(dateFilteredOrders);
-  }
+  //   this.downloadTotalParchi(dateFilteredOrders);
+  // }
 
   goToDeliveryRoutePage()
   {
