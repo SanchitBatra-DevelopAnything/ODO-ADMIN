@@ -251,7 +251,7 @@ export class OrdersComponent implements OnInit {
       next: (res) => {
         console.log("All selected orders marked out for delivery successfully!", res);
         alert("Orders successfully marked as Out for Delivery!");
-        this.selectedOrdersForTotalParchi = [];
+        
         this.isLoading = false;
         this.cancelSelectionMode();
         this.getActiveOrders();
@@ -259,7 +259,7 @@ export class OrdersComponent implements OnInit {
       error: (err) => {
         console.error("Error updating order statuses", err);
         alert("Failed to update some orders. Please retry.");
-        this.selectedOrdersForTotalParchi = [];
+        
         this.isLoading = false;
         this.cancelSelectionMode();
         this.getActiveOrders();
