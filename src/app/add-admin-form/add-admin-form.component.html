@@ -11,9 +11,10 @@
              <label for="name">PASSWORD : </label>
             <input type="text" id="name" formControlName="password" class = "form-control">
             <hr>
-            <label>Area:</label>
-    <select formControlName="area" required class = "form-control">
-      <option *ngFor="let area of areas" [value]="area.areaName">{{ area.areaName }}</option>
+            <p>This sub admin will control the dark store below : </p>
+            <label>Dark Store:</label>
+    <select formControlName="darkStoreId" required class = "form-control">
+      <option *ngFor="let darkStore of darkStores; let i = index" [value]="darkStoreKeys[i]">{{ darkStore.darkStoreName }}</option>
     </select>
            </div>
            

@@ -12,32 +12,33 @@ import { UtilityService } from '../services/utility/utility.service';
 })
 export class AddAdminFormComponent {
   adminForm: FormGroup;
-  areas: any[] = [];
-  areaKeys:any[] = [];
+  darkStores: any[] = [];
+  darkStoreKeys:any[] = [];
   isLoading:boolean = false;
 
   constructor(private fb: FormBuilder, private apiService:ApiService , private toastr:ToastrService , private utilityService:UtilityService) {
     this.adminForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
-      area: ['', Validators.required]
+      darkStoreId: ['', Validators.required]
     });
   }
 
   ngOnInit() {
     this.isLoading = true;
-    this.fetchAreas();
+    this.fetchDarkStores();
   }
 
-  fetchAreas() {
-  this.apiService.getDistributorships().subscribe((areaData)=>{
-    if(areaData == null)
+  fetchDarkStores() {
+  this.apiService.getDarkStores().subscribe((darkStoresData)=>{
+    if(darkStoresData == null)
     {
-      this.areas=[];
+      this.darkStores=[];
       this.isLoading = false;
       return;
     }
-    this.areas = Object.values(areaData);
+    this.darkStores = Object.values(darkStoresData);
+    this.darkStoreKeys = Object.keys(darkStoresData);
     this.isLoading = false;
   });
   }
@@ -49,7 +50,7 @@ export class AddAdminFormComponent {
       const adminData = {
         'username' : this.adminForm.value.username,
         'password' : this.adminForm.value.password,
-        'area' : this.adminForm.value.area,
+        'darkStoreId' : this.adminForm.value.darkStoreId,
         'type': 'Sub'
       };
 
