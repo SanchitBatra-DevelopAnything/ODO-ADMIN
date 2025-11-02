@@ -10,6 +10,7 @@
     <ul class="list-group list-group-flush">
         <!--referrer[0] has the key if needed.-->
         <li class="list-group-item" style ="height:50px;" *ngFor = "let referrer of referrerData; let i = index;">{{referrer[1].referrerName | uppercase}} , {{referrer[1].contact}} ,  Referrals : {{referrer[1].referrals}}
+            <button class = "btn btn-primary" (click) = "onEditReferrer()" style = "float:right;">EDIT</button>
         </li>
       </ul>
 </div>

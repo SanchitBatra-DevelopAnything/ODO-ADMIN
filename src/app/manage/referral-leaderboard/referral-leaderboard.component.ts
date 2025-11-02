@@ -3,6 +3,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subscription } from 'rxjs';
 import { AddReferrerFormComponent } from 'src/app/add-referrer-form/add-referrer-form.component';
+import { EditReferrerFormComponent } from 'src/app/edit-referrer-form/edit-referrer-form.component';
 import { ApiService } from 'src/app/services/api/api.service';
 import { UtilityService } from 'src/app/services/utility/utility.service';
 
@@ -61,6 +62,16 @@ export class ReferralLeaderboardComponent {
         height : "800px",
         width:"600px",
     });
+    }
+
+    onEditReferrer()
+    {
+      this.ref = this.dialogService.open(EditReferrerFormComponent, {
+        header : 'Edit Referrer',
+        maximizable:true,
+        height : "800px",
+        width:"600px",
+      });
     }
   
     ngOnDestroy()
