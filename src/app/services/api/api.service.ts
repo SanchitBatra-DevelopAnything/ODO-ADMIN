@@ -52,7 +52,7 @@ export class ApiService {
     return this.http.post(this.dbUrl+"Distributors.json" , data);
   }
 
-  public deleteNotification(key:any) :Observable<any> {
+public deleteNotification(key:any) :Observable<any> {
     return this.http.delete(this.dbUrl+"DistributorNotifications/"+key+".json");
   }
 

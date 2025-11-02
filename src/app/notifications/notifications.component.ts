@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../services/api/api.service';
+import { getDatabase, ref, update, increment } from 'firebase/database';
+import { initializeApp } from 'firebase/app';
+import { environment } from 'src/environments/environment';
+
 
 @Component({
   selector: 'app-notifications',
@@ -13,6 +17,9 @@ export class NotificationsComponent implements OnInit {
   notificationData:any;
   notificationKeys:any;
   leaderBoardData:any;
+
+  app = initializeApp(environment.firebaseConfig);
+   db = getDatabase(this.app);
 
 
 
@@ -71,29 +78,12 @@ export class NotificationsComponent implements OnInit {
 
     this.apiService.deleteNotification(this.notificationKeys[index]).subscribe((_)=>{
       this.apiService.makeUser(this.notificationData[index]).subscribe((_)=>{
-        const referrer = this.leaderBoardData.find((r:any) => r.referrerName.toLowerCase() === this.notificationData[index].referrer.toLowerCase());
-        if (referrer) {
-          referrer.referrals += 1;
-          this.apiService.updateReferralLeaderboardData(this.leaderBoardData).subscribe((_)=>{
-            this.loadNotifications();
-            this.toastr.success('Request Approved Successfully , Leaderboard Updated accordingly!', 'Notification!' , {
-              timeOut : 4000 ,
-              closeButton : true , 
-              positionClass : 'toast-top-right'
-            });
-          }
-          );
-        }
-        else
-        {
-          this.loadNotifications();
-          this.toastr.success('Request Approved Successfully , No referrer catched , leaderboard not updated!', 'Notification!' , {
-            timeOut : 4000 ,
-            closeButton : true , 
-            positionClass : 'toast-top-right'
-          });
-        }
-       
+        console.log("User Made Successfully");
+        console.log(this.notificationData[index]);
+        //used firebaseSDK to increment the count atomically.
+        update(ref(this.db, `ReferralLeaderboard/${this.notificationData[index].referrerId}`), {
+          referrals: increment(1)
+        });
       });
     });
   }
