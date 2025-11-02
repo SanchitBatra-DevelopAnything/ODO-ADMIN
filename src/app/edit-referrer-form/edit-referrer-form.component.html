@@ -1,0 +1,39 @@
+<div *ngIf="!isLoading" class="container">
+    <h1>Edit Referrer</h1>
+  
+    <form [formGroup]="editReferrerForm" (ngSubmit)="onSubmit()">
+  
+      <div class="form-group">
+        <label for="businessName">BUSINESS CODE :</label>
+        <input id="businessName" formControlName="businessName" class="form-control">
+  
+        <hr>
+        <label for="referrerName">Referrer Name :</label>
+        <input id="referrerName" formControlName="referrerName" class="form-control">
+  
+        <hr>
+        <label for="contact">Mobile Number :</label>
+        <input id="contact" formControlName="contact" class="form-control">
+  
+        <p style="color: orange; font-weight: bold; font-size: 15px;">
+          Iss referrer ke members ke saare orders iss dark store se deliver honge :
+        </p>
+  
+        <label>Dark Store:</label>
+        <select formControlName="darkStoreId" class="form-control">
+          <option *ngFor="let ds of darkStores; let i = index"
+                  [value]="darkStoreKeys[i]">
+            {{ ds.darkStoreName }}
+          </option>
+        </select>
+      </div>
+  
+      <button class="btn choc-button" type="submit">Update</button>
+    </form>
+  </div>
+  
+  <div class="loader"
+       *ngIf="isLoading"
+       style="position:absolute;top:50%;left:50%;">
+  </div>
+  

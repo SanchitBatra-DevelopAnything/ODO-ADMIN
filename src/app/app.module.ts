@@ -69,6 +69,7 @@ import { SafeUrlPipe } from './safe-url.pipe';
 import { DeliveryRouteMakerComponent } from './orders/delivery-route-maker/delivery-route-maker.component';
 import { AddDarkStoreComponent } from './add-dark-store/add-dark-store.component';
 import { DarkStoreComponent } from './manage/dark-store/dark-store.component';
+import { EditReferrerFormComponent } from './edit-referrer-form/edit-referrer-form.component';
 
 // import { EditItemComponent } from './edit-item/edit-item.component';
 // import { DistributorAreasComponent } from './manage/distributor-areas/distributor-areas.component';
@@ -149,6 +150,7 @@ export const MY_DATE_FORMATS = {
     DeliveryRouteMakerComponent,
     AddDarkStoreComponent,
     DarkStoreComponent,
+    EditReferrerFormComponent,
   ],
   imports: [
     BrowserModule,

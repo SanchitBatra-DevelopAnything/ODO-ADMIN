@@ -317,6 +317,16 @@ public deleteNotification(key:any) :Observable<any> {
     return this.http.get(this.dbUrl+"ReferralLeaderboard.json");
   }
 
+  public getReferrer(referrerId:string) : Observable<any>
+  {
+    return this.http.get(this.dbUrl+"ReferralLeaderboard/"+referrerId+".json");
+  }
+
+  public editReferrer(referrerId:string , updatedData:any) : Observable<any>
+  {
+    return this.http.patch(this.dbUrl+"ReferralLeaderboard/"+referrerId+".json" , updatedData);
+  }
+
   public addReferrer(referrerData:any) : Observable<any>
   {
     return this.http.post(this.dbUrl+"ReferralLeaderboard.json" , referrerData);
