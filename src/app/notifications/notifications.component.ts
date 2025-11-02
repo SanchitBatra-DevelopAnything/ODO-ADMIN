@@ -72,21 +72,48 @@ export class NotificationsComponent implements OnInit {
     });
   }
 
-  onApprove(index:any)
-  {
+  onApprove(index: any) {
     this.isLoading = true;
-
-    this.apiService.deleteNotification(this.notificationKeys[index]).subscribe((_)=>{
-      this.apiService.makeUser(this.notificationData[index]).subscribe((_)=>{
+  
+    this.apiService.deleteNotification(this.notificationKeys[index]).subscribe(() => {
+      this.apiService.makeUser(this.notificationData[index]).subscribe(() => {
+  
         console.log("User Made Successfully");
         console.log(this.notificationData[index]);
-        //used firebaseSDK to increment the count atomically.
-        update(ref(this.db, `ReferralLeaderboard/${this.notificationData[index].referrerId}`), {
-          referrals: increment(1)
+  
+        update(
+          ref(this.db, `ReferralLeaderboard/${this.notificationData[index].referrerId}`),
+          { referrals: increment(1) }
+        )
+        .then(() => {
+          this.loadNotifications();
+          this.toastr.success(
+            'Referral Count Updated Successfully!',
+            'Notification!',
+            {
+              timeOut: 4000,
+              closeButton: true,
+              positionClass: 'toast-top-right'
+            }
+          );
+        })
+        .catch(error => {
+          this.loadNotifications();
+          this.toastr.warning(
+            'Could not update referral count!',
+            'Notification!',
+            {
+              timeOut: 4000,
+              closeButton: true,
+              positionClass: 'toast-top-right'
+            }
+          );
         });
+  
       });
     });
   }
+  
 
   onReject(index:any)
   {
