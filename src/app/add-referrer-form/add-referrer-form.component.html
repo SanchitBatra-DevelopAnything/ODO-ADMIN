@@ -1,6 +1,8 @@
 <div *ngIf = "!isLoading" class = "container">
     <h1>Add a new referrer!</h1>
-    <h5 class ="emoji">Now users can select who referred them!</h5>
+    
+
+    
 
 
     <form [formGroup]="addReferrerForm" (ngSubmit) = "onSubmit(addReferrerForm.value)">

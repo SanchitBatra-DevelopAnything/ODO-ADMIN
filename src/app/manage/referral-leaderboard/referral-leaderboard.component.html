@@ -4,6 +4,9 @@
         <button class = "btn choc-button" (click) = "onAddReferrer()">Add A New Referrer</button> 
     <hr>
 
+    <p style = "color: red; font-weight: bold;">Cannot delete without review. Evrything on the order cycle depends on the referrerId which gets lost once you delete.</p>
+    <p style = "color: red; font-weight: bold;">To delete , all dependent members must be deleted and re-signed-up again with new referrer.</p>
+
     <ul class="list-group list-group-flush">
         <!--referrer[0] has the key if needed.-->
         <li class="list-group-item" style ="height:50px;" *ngFor = "let referrer of referrerData; let i = index;">{{referrer[1].referrerName | uppercase}} , {{referrer[1].contact}} ,  Referrals : {{referrer[1].referrals}}
