@@ -4,7 +4,7 @@ import { ApiService } from '../services/api/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { UtilityService } from '../services/utility/utility.service';
-import { ToastrComponentlessModule, ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-referrer-form',
