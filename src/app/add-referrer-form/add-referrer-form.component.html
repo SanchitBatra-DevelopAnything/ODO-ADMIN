@@ -6,17 +6,24 @@
     <form [formGroup]="addReferrerForm" (ngSubmit) = "onSubmit(addReferrerForm.value)">
 
            <div class="form-group">
-             <label for="name">REFERRER CODE : </label>
-             <input type="text" id="name" formControlName="businessName" class = "form-control">
+             <label for="name">BUSINESS CODE : </label>
+             <input type="text" id="name" formControlName="businessName" class = "form-control" placeholder="Like ODO1 , ODO2">
              <hr>
              <label for="mobile">Referrer Name : </label>
              <input type="text" id="mobile" formControlName="referrerName" class = "form-control">
              <hr>
              <label for="mobile">Mobile Number : </label>
              <input type="text" id="mobile" formControlName="contact" class = "form-control">
+
+             <p style = "color: orange; font-weight: bold; font-size: 15px;">Iss referrer ke members ke saare orders iss dark store se deliver honge : </p>
+             <label>Dark Store:</label>
+     <select formControlName="darkStoreId" required class = "form-control">
+       <option *ngFor="let darkStore of darkStores; let i = index" [value]="darkStoreKeys[i]">{{ darkStore.darkStoreName }}</option>
+     </select>
+
            </div>       
            <button type="submit" class = "btn choc-button">Submit</button>
-         </form>
+          </form>
 
 </div>
 

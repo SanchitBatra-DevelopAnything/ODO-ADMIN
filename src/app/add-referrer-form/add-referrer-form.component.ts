@@ -14,15 +14,35 @@ export class AddReferrerFormComponent {
   ref:DynamicDialogRef | undefined;
     isLoading:boolean = false;
     addReferrerForm:any;
+    darkStores:any[] = [];
+    darkStoreKeys:any[] = [];
   
     constructor(private apiService:ApiService , private formBuilder:FormBuilder , private toastr:ToastrService , private utilityService:UtilityService,private dialogService:DialogService){}
   
     ngOnInit()
     {
       this.addReferrerForm = this.formBuilder.group({
+        businessName: ['', Validators.required],
         referrerName: ['', Validators.required],
         contact : ['' , Validators.required],
+        darkStoreId : ['', Validators.required],
       });
+      this.isLoading = true;
+      this.fetchDarkStores();
+    }
+  
+    fetchDarkStores() {
+    this.apiService.getDarkStores().subscribe((darkStoresData)=>{
+      if(darkStoresData == null)
+      {
+        this.darkStores=[];
+        this.isLoading = false;
+        return;
+      }
+      this.darkStores = Object.values(darkStoresData);
+      this.darkStoreKeys = Object.keys(darkStoresData);
+      this.isLoading = false;
+    });
     }
   
     onSubmit(formValue : any)  {
