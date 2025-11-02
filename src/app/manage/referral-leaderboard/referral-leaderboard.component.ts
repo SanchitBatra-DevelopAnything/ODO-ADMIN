@@ -44,12 +44,8 @@ export class ReferralLeaderboardComponent {
           this.isLoading = false;
           return;
         }
-        let sortedEntries = Object.entries(referrers)
-        .sort(([, a], [, b]) => (b as any).referrals - (a as any).referrals);
-        this.referrerData = sortedEntries;
-
-        console.log(sortedEntries);
-        console.log(this.referrerData);
+        this.referrerData = Object.values(referrers);
+        this.referrerKeys = Object.keys(referrers);
         this.isLoading = false;
       });
     }
@@ -64,13 +60,14 @@ export class ReferralLeaderboardComponent {
     });
     }
 
-    onEditReferrer()
+    onEditReferrer(referrerIdForEdit:string)
     {
       this.ref = this.dialogService.open(EditReferrerFormComponent, {
         header : 'Edit Referrer',
         maximizable:true,
         height : "800px",
         width:"600px",
+        data: { referrerId: referrerIdForEdit }
       });
     }
   

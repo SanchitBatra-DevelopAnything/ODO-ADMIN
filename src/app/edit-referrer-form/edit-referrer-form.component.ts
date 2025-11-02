@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../services/api/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-edit-referrer-form',
@@ -21,11 +22,12 @@ export class EditReferrerFormComponent {
     private fb: FormBuilder,
     private apiService: ApiService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    public config: DynamicDialogConfig
   ) {}
 
   ngOnInit(): void {
-    this.referrerId = this.route.snapshot.paramMap.get('id')!;
+    this.referrerId = this.config.data?.referrerId;
 
     // ✅ Initialize empty form first
     this.editReferrerForm = this.fb.group({
@@ -40,7 +42,7 @@ export class EditReferrerFormComponent {
 
   loadReferrerAndDarkStores() {
     this.isLoading = true;
-
+    console.log("ReferrerID captured  : "+this.referrerId);
     // ✅ Get both in parallel
     this.apiService.getReferrer(this.referrerId).subscribe(referrerData => {
       this.apiService.getDarkStores().subscribe(darkStoresData => {
