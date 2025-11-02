@@ -1,0 +1,14 @@
+<div class = "loader" *ngIf = "isLoading"></div>
+<div class="container" *ngIf = "!isLoading">
+    <h3 class = "inline-heading">ODO Dark Stores</h3>
+        <button class = "btn choc-button" (click) = "onAddDarkStore()">Add A New Dark Store</button> 
+    <hr>
+
+    <p style = "color:red">When an order is placed , dark store is selected on the fly based on referrer. Hence, cannot be deleted directly without reviewing.</p>
+
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item" style ="height:50px;" *ngFor = "let store of darkStoresData; let i = index;">{{store.darkStoreName | uppercase}}
+            
+        </li>
+      </ul>
+</div>

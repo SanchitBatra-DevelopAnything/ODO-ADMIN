@@ -1,0 +1,17 @@
+<div *ngIf = "!isLoading" class = "container">
+    <h1>Add a new dark store!</h1>
+    <h5 class ="emoji">Dark Stores are your godowns!</h5>
+
+
+    <form [formGroup]="addDarkStoreForm" (ngSubmit) = "onSubmit(addDarkStoreForm.value)">
+
+           <div class="form-group">
+             <label for="name">DARK STORE NAME : </label>
+             <input type="text" id="name" formControlName="darkStoreName" class = "form-control">
+           </div>       
+           <button type="submit" class = "btn choc-button">Submit</button>
+         </form>
+
+</div>
+
+<div class="loader" *ngIf = "isLoading" style = "position: absolute; top:50%; left: 50%;"></div>

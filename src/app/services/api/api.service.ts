@@ -6,7 +6,7 @@ import { Observable, ObservedValueOf } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-
+ 
   //category can be considered a brand in ODO's scenario.
   //distributoriships can be considered as areas.
 
@@ -355,6 +355,14 @@ public deleteNotification(key:any) :Observable<any> {
   public getDeliveryRoutesFromDB() : Observable<any>
   {
     return this.http.get(this.dbUrl+"deliveryRoutes.json");
+  }
+
+  getDarkStores() : Observable<any> {
+    return this.http.get(this.dbUrl+"darkStores.json");
+  }
+
+  addDarkStore(darkStoreData:any) : Observable<any> {
+    return this.http.post(this.dbUrl+"darkStores.json" , darkStoreData);
   }
   
 }

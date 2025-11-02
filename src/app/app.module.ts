@@ -67,6 +67,8 @@ import { AddReferrerFormComponent } from './add-referrer-form/add-referrer-form.
 import { GoogleMapComponent } from './google-map/google-map.component';
 import { SafeUrlPipe } from './safe-url.pipe';
 import { DeliveryRouteMakerComponent } from './orders/delivery-route-maker/delivery-route-maker.component';
+import { AddDarkStoreComponent } from './add-dark-store/add-dark-store.component';
+import { DarkStoreComponent } from './manage/dark-store/dark-store.component';
 
 // import { EditItemComponent } from './edit-item/edit-item.component';
 // import { DistributorAreasComponent } from './manage/distributor-areas/distributor-areas.component';
@@ -93,7 +95,8 @@ const appRoutes : Routes = [
     {path : 'admins' , component : AdminsComponent , canActivate : [AuthGuardService , AdminGuardService]},
     {path : 'banners/b2b' , component : BannersComponent , canActivate : [AuthGuardService , AdminGuardService]},
     {path : 'referral/leaderboard' , component : ReferralLeaderboardComponent , canActivate : [AuthGuardService , AdminGuardService]},
-    {path : 'delivery' , component : GoogleMapComponent , canActivate : [AuthGuardService , AdminGuardService]}
+    {path : 'delivery' , component : GoogleMapComponent , canActivate : [AuthGuardService , AdminGuardService]},
+    {path : 'darkstores' , component : DarkStoreComponent, canActivate : [AuthGuardService , AdminGuardService]}
   ]},
   {path : 'processedOrders' , component : OldOrdersComponent , canActivate : [AuthGuardService]},
   {path : 'orderBill/:orderKey' , component : OrderDetailComponent , canActivate :[AuthGuardService]},
@@ -144,6 +147,8 @@ export const MY_DATE_FORMATS = {
     GoogleMapComponent,
     SafeUrlPipe,
     DeliveryRouteMakerComponent,
+    AddDarkStoreComponent,
+    DarkStoreComponent,
   ],
   imports: [
     BrowserModule,
