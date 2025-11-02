@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../services/api/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { UtilityService } from '../services/utility/utility.service';
+import { ToastrComponentlessModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-referrer-form',
@@ -23,7 +25,9 @@ export class EditReferrerFormComponent {
     private apiService: ApiService,
     private route: ActivatedRoute,
     private router: Router,
-    public config: DynamicDialogConfig
+    public config: DynamicDialogConfig,
+    public utilityService:UtilityService,
+    public toastr:ToastrService,
   ) {}
 
   ngOnInit(): void {
@@ -72,8 +76,14 @@ export class EditReferrerFormComponent {
 
     this.apiService.editReferrer(this.referrerId, this.editReferrerForm.value)
       .subscribe(() => {
-        console.log("Referrer updated successfully!");
-        this.router.navigate(['/referrers']); // redirect
+        this.utilityService.referrerAdded.next(true);
+          this.isLoading = false;
+          this.toastr.success('Updated Referrer Successfully , Please close the form!', 'Notification!' , {
+            timeOut : 4000 ,
+            closeButton : true , 
+            positionClass : 'toast-top-right'
+          });
+          this.editReferrerForm.reset();
       });
   }
 }
