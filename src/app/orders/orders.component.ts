@@ -65,13 +65,13 @@ export class OrdersComponent implements OnInit {
         // Segregate orders based on status
         this.activeOrders.forEach((order: any, index: number) => {
           const key = this.activeOrdersKeys[index];
-          const status = order.status ? order.status.trim().toLowerCase() : '';
+          const status = order.status ? order.status.trim().toLowerCase() : 'pending';
 
-          if (!status || status === 'PENDING') {
+          if (!status || status === 'pending') {
             // If status is null/empty/undefined OR explicitly 'pending'
             this.pendingOrders.push(order);
             this.pendingOrdersKeys.push(key);
-          } else if (status === 'OUT_FOR_DELIVERY') {
+          } else if (status === 'out-for-delivery') {
             this.outForDeliveryOrders.push(order);
             this.outForDeliveryOrdersKeys.push(key);
           }
@@ -89,6 +89,7 @@ export class OrdersComponent implements OnInit {
         // Filter only those admins where type === "Sub"
         const filteredOrders = allOrderData.map((order, index) => ({ order, key: allOrderKeys[index] }))
         .map((item:any) => {
+          //this is to have backward compaitibility , in new flow , each order must have a darkStoreId.
           if (!item.order.darkStoreId || item.order.darkStoreId.trim() === '') {
             item.order.darkStoreId = "not-found";
           }
@@ -108,13 +109,13 @@ export class OrdersComponent implements OnInit {
         // Segregate orders based on status
         this.activeOrders.forEach((order: any, index: number) => {
           const key = this.activeOrdersKeys[index];
-          const status = order.status;
+          const status = order.status? order.status : 'pending';
 
-          if (!status || status === 'PENDING') {
+          if (!status || status === 'pending') {
             // If status is null/empty/undefined OR explicitly 'pending'
             this.pendingOrders.push(order);
             this.pendingOrdersKeys.push(key);
-          } else if (status === 'OUT_FOR_DELIVERY') {
+          } else if (status === 'out-for-delivery') {
             this.outForDeliveryOrders.push(order);
             this.outForDeliveryOrdersKeys.push(key);
           }
