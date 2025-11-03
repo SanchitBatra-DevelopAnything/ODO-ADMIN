@@ -96,6 +96,8 @@ export class OrdersComponent implements OnInit {
         return item;})
           .filter((item: any) => item.order.darkStoreId == adminDarkStoreId);
 
+          console.log(JSON.stringify(filteredOrders));
+
         // Extract filtered data back into separate arrays
         this.activeOrders = filteredOrders.map(item => item.order);
         this.activeOrdersKeys = filteredOrders.map(item => item.key);
