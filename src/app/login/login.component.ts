@@ -113,8 +113,8 @@ export class LoginComponent {
     sessionStorage.setItem("loggedInUser" , this.loginForm.value.username);
     sessionStorage.setItem("loggedIn" , "true");
     sessionStorage.setItem("adminType" , currentAdmin.type);
-    //super admin has no area but type = Super , each sub-admin has an area.
-    sessionStorage.setItem("loggedInArea" , currentAdmin.area);
+    //super admin has no darkStore but type = Super , each sub-admin has a darkStore.
+    sessionStorage.setItem("loggedInDarkStoreId" , currentAdmin.darkStoreId);
     this.utilityService.userLoggedIn.next(true); //inform app component ki header on kardo.
     if(sessionStorage.getItem('adminType')!='Sub')
     {

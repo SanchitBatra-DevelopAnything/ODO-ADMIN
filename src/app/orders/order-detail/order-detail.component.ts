@@ -154,7 +154,7 @@ export class OrderDetailComponent {
 
   outForDelivery()
   {
-    this.apiService.updateOrderStatus(this.orderKey , "out-for-delivery").subscribe((_ : any)=>{
+    this.apiService.updateOrderStatus(this.orderKey , "OUT_FOR_DELIVERY").subscribe((_ : any)=>{
       this.toastr.success('Order marked as Out for Delivery!' , 'Notitfication!' , {
         timeOut : 4000,
         closeButton : true,

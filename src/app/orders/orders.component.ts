@@ -67,27 +67,33 @@ export class OrdersComponent implements OnInit {
           const key = this.activeOrdersKeys[index];
           const status = order.status ? order.status.trim().toLowerCase() : '';
 
-          if (!status || status === 'pending') {
+          if (!status || status === 'PENDING') {
             // If status is null/empty/undefined OR explicitly 'pending'
             this.pendingOrders.push(order);
             this.pendingOrdersKeys.push(key);
-          } else if (status === 'out-for-delivery') {
+          } else if (status === 'OUT_FOR_DELIVERY') {
             this.outForDeliveryOrders.push(order);
             this.outForDeliveryOrdersKeys.push(key);
           }
+          //add delivered and pending here later.
         });
       }
       else {
         //for Sub-Admins
         // Convert object to array
         console.log("Starting to filter the orders");
-        const adminArea = sessionStorage.getItem('loggedInArea');
+        const adminDarkStoreId = sessionStorage.getItem('loggedInDarkStoreId');
         const allOrderData = Object.values(orders);
         const allOrderKeys = Object.keys(orders);
 
         // Filter only those admins where type === "Sub"
         const filteredOrders = allOrderData.map((order, index) => ({ order, key: allOrderKeys[index] }))
-          .filter((item: any) => item.order.area.trim().toLowerCase() == adminArea?.trim().toLowerCase());
+        .map((item:any) => {
+          if (!item.order.darkStoreId || item.order.darkStoreId.trim() === '') {
+            item.order.darkStoreId = "not-found";
+          }
+        return item;})
+          .filter((item: any) => item.order.darkStoreId == adminDarkStoreId);
 
         // Extract filtered data back into separate arrays
         this.activeOrders = filteredOrders.map(item => item.order);
@@ -102,13 +108,13 @@ export class OrdersComponent implements OnInit {
         // Segregate orders based on status
         this.activeOrders.forEach((order: any, index: number) => {
           const key = this.activeOrdersKeys[index];
-          const status = order.status ? order.status.trim().toLowerCase() : '';
+          const status = order.status;
 
-          if (!status || status === 'pending') {
+          if (!status || status === 'PENDING') {
             // If status is null/empty/undefined OR explicitly 'pending'
             this.pendingOrders.push(order);
             this.pendingOrdersKeys.push(key);
-          } else if (status === 'out-for-delivery') {
+          } else if (status === 'OUT_FOR_DELIVERY') {
             this.outForDeliveryOrders.push(order);
             this.outForDeliveryOrdersKeys.push(key);
           }
