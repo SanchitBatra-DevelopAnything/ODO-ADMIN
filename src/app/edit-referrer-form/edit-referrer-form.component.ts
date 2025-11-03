@@ -38,6 +38,7 @@ export class EditReferrerFormComponent {
       businessName: ['', Validators.required],
       referrerName: ['', Validators.required],
       contact: ['', Validators.required],
+      area : ['' , Validators.required],
       darkStoreId: ['', Validators.required]
     });
 
@@ -60,6 +61,7 @@ export class EditReferrerFormComponent {
         this.editReferrerForm.patchValue({
           businessName: referrerData.businessName,
           referrerName: referrerData.referrerName,
+          area : referrerData.area,
           contact: referrerData.contact,
           darkStoreId: referrerData.darkStoreId // ✅ Dropdown preselects correct one
         });
