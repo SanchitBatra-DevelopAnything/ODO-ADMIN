@@ -1,1 +1,22 @@
-<p>add-delivery-partner-form works!</p>
+<div *ngIf = "!isLoading" class = "container">
+    <h1>Add a new delivery partner!</h1>
+    <h5 class ="emoji">These ones are responsible for the 2hour delivery plan.</h5>
+
+
+    <form [formGroup]="addDeliveryPartnerForm" (ngSubmit) = "onSubmit(addDeliveryPartnerForm.value)">
+
+           <div class="form-group">
+             <label for="name">PARTNER NAME : </label>
+             <input type="text" id="name" formControlName="partnerName" class = "form-control">
+           </div>
+           <hr>
+           <div class="form-group">
+            <label for="contact">MOBILE NUMBER : </label>
+            <input type="text" id="contact" formControlName="contact" class = "form-control">
+          </div>       
+           <button type="submit" class = "btn choc-button">Submit</button>
+         </form>
+
+</div>
+
+<div class="loader" *ngIf = "isLoading" style = "position: absolute; top:50%; left: 50%;"></div>

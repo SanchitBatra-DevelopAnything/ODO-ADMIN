@@ -1,1 +1,12 @@
-<p>delivery-partners works!</p>
+<div class = "loader" *ngIf = "isLoading"></div>
+<div class="container" *ngIf = "!isLoading">
+    <h3 class = "inline-heading">Delivery Partners - ODO</h3>
+        <button class = "btn choc-button" (click) = "onAddDeliveryPartner()">Add A New Delivery Partner</button> 
+    <hr>
+
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item" style ="height:50px;" *ngFor = "let partner of deliveryPartnerData; let i = index;">{{partner.partnerName | uppercase}} , {{partner.contact}}
+            <button class = "btn btn-danger" style = "float:right;" (click) = "deleteDeliveryPartner(i)">Delete</button>
+        </li>
+      </ul>
+</div>
