@@ -9,6 +9,18 @@ export class UtilityService {
   //these are for delivery route making.
   private _shopsForDelivery : any[]=[];
   sendUniqueShopsForDeliveryRoute = new BehaviorSubject<any[]>([]);
+
+  
+  deliveryPartnersSubject = new BehaviorSubject<any[]>([]);
+  deliveryPartners$ = this.deliveryPartnersSubject.asObservable();
+
+  setPartners(list: any[]) {
+    this.deliveryPartnersSubject.next(list);
+  }
+
+  getPartners() {
+    return this.deliveryPartnersSubject.getValue();
+  }
   
 
   setDeliveryShops(shops: any[]) {

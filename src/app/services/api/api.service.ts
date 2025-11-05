@@ -347,9 +347,10 @@ public deleteNotification(key:any) :Observable<any> {
     return this.http.put(this.dbUrl + "ReferralLeaderboard.json", leaderboardMap);
   }
 
-  public updateOrderStatus(orderKey:string , newStatus:string) : Observable<any>
+  public updateOrder(orderKey:string , orderUpdateData:{status : string , deliveryPartnerId : string}) : Observable<any>
   {
-    return this.http.patch(this.dbUrl+"activeDistributorOrders/"+orderKey+".json" , {status : newStatus});
+    //expected to receive {status: 'out-for-delivery' , deliveryPartnerId : ''};
+    return this.http.patch(this.dbUrl+"activeDistributorOrders/"+orderKey+".json" , orderUpdateData);
   }
 
   public saveRouteInDB(routeData:any , routeId:any): Observable<any>

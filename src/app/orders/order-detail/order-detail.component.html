@@ -19,13 +19,13 @@
     </div>
 
     <hr>
-    <div class = "container">
+    <div class="container">
         <h3>Shop Address : </h3>
-        <p style = "font-weight: bold;">{{orderData['shopAddress']}}</p>
+        <p style="font-weight: bold;">{{orderData['shopAddress']}}</p>
     </div>
 
-    <div *ngIf = "orderData['delivery-latitude']!='not-found' && orderData['delivery-latitude']!=undefined">
-        <button class = "btn btn-success" (click) = "openGoogleMaps()">Open location in maps.</button>
+    <div *ngIf="orderData['delivery-latitude']!='not-found' && orderData['delivery-latitude']!=undefined">
+        <button class="btn btn-success" (click)="openGoogleMaps()">Open location in maps.</button>
     </div>
 
 
@@ -43,7 +43,8 @@
 
             <div class="col-xs-3">
                 <div class="container">
-                    <button class="btn btn-danger btn-lg" (click)="deleteOrder()" *ngIf="adminType!='Sub'">REJECT THIS ORDER</button>
+                    <button class="btn btn-danger btn-lg" (click)="deleteOrder()" *ngIf="adminType!='Sub'">REJECT THIS
+                        ORDER</button>
                 </div>
             </div>
 
@@ -53,12 +54,29 @@
                 </div>
             </div>
 
-            <div class="col-xs-3" *ngIf="orderData.status!='out-for-delivery'">
-                <div class="container">
-                    <button class="btn btn-primary btn-lg" (click)="outForDelivery()">Out For Delivery.</button>
+            <div class="col-xs-3" *ngIf="orderData.status=='pending' || orderData.status == null">
+                <div class="container" *ngIf="!visibleDeliveryPartnerDropdown">
+                    <button class="btn btn-primary btn-lg" (click)="showDeliveryPartnerDropdown()">Out For
+                        Delivery.</button>
+                </div>
+                <div *ngIf="visibleDeliveryPartnerDropdown" class="dropdown-wrapper">
+                    <p style = "color:red; font-weight: bold;">Please do not refresh the page.</p>
+                    <label>Select Delivery Partner:</label>
+                    <select [(ngModel)]="selectedDeliveryPartnerId" class="form-control">
+                        <option *ngFor="let partner of deliveryPartners" [value]="partner.id">
+                            {{ partner.partnerName }} , {{ partner.contact }}
+                        </option>
+                    </select>
+
+                    <button class="btn btn-success mt-2" (click)="outForDelivery()">
+                        Confirm
+                    </button>
+
+                    <button class="btn btn-secondary mt-2" (click)="cancelSelection()">
+                        Cancel
+                    </button>
                 </div>
             </div>
-
         </div>
 
     </div>
@@ -114,7 +132,8 @@
                 <th mat-header-cell *matHeaderCellDef style="font-size:15px;" class="mat-cell"> Discounted Price </th>
 
                 <td mat-cell *matCellDef="let element" style="font-size:15px;" class="mat-cell">
-                    <strong>{{element['Discounted Price']}}</strong></td>
+                    <strong>{{element['Discounted Price']}}</strong>
+                </td>
                 <!-- <td mat-cell *matCellDef="let element" style = "font-size:35px;" *ngIf = "!showPrices"> ----- </td> -->
             </ng-container>
 

@@ -28,6 +28,7 @@ export class OrdersComponent implements OnInit {
 
   selectedOrdersForTotalParchi: any = [];
   selectionMode = false;
+  deliveryPartners:any;
 
   
 
@@ -40,6 +41,21 @@ export class OrdersComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.isLoading = true;
     this.getActiveOrders();
+    this.getDeliveryPartners();
+  }
+
+  getDeliveryPartners()
+  {
+    this.isLoading = true;
+    this.apiService.getDeliveryPartners().subscribe((res: any) => {
+      this.deliveryPartners = Object.keys(res).map(key => ({
+        id: key,
+        partnerName: res[key].partnerName,
+        contact: res[key].contact
+      }));
+      this.utilityService.setPartners(this.deliveryPartners);
+      this.isLoading = false;
+    });
   }
 
   getActiveOrders() {
@@ -251,29 +267,29 @@ export class OrdersComponent implements OnInit {
     this.isLoading = true;
     this.downloadTotalParchi(this.selectedOrdersForTotalParchi.map((o:any) => o.order));
     //use apiService.updateOrderStatus to mark orders as out-for-delivery
-    const updateRequests = this.selectedOrdersForTotalParchi.map((o: any) => {
-      return this.apiService.updateOrderStatus(o.key, "out-for-delivery");
-    });
+    // const updateRequests = this.selectedOrdersForTotalParchi.map((o: any) => {
+    //   return this.apiService.updateOrderStatus(o.key, "out-for-delivery");
+    // });
   
-    // Execute all update requests in parallel
-    forkJoin(updateRequests).subscribe({
-      next: (res) => {
-        console.log("All selected orders marked out for delivery successfully!", res);
-        alert("Orders successfully marked as Out for Delivery!");
+    // // Execute all update requests in parallel
+    // forkJoin(updateRequests).subscribe({
+    //   next: (res) => {
+    //     console.log("All selected orders marked out for delivery successfully!", res);
+    //     alert("Orders successfully marked as Out for Delivery!");
         
-        this.isLoading = false;
-        this.cancelSelectionMode();
-        this.getActiveOrders();
-      },
-      error: (err) => {
-        console.error("Error updating order statuses", err);
-        alert("Failed to update some orders. Please retry.");
+    //     this.isLoading = false;
+    //     this.cancelSelectionMode();
+    //     this.getActiveOrders();
+    //   },
+    //   error: (err) => {
+    //     console.error("Error updating order statuses", err);
+    //     alert("Failed to update some orders. Please retry.");
         
-        this.isLoading = false;
-        this.cancelSelectionMode();
-        this.getActiveOrders();
-      }
-    });
+    //     this.isLoading = false;
+    //     this.cancelSelectionMode();
+    //     this.getActiveOrders();
+    //   }
+    // });
   }
 
   downloadTotalParchi(orders: any) {

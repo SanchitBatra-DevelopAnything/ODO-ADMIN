@@ -27,6 +27,9 @@ export class OrderDetailComponent {
   discount:number = 0;
   subTotal:number = 0;
   adminType:any = 'Sub';
+  selectedDeliveryPartnerId:string = "";
+  visibleDeliveryPartnerDropdown:boolean = false;
+  deliveryPartners:any[] = [];
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
@@ -39,20 +42,13 @@ export class OrderDetailComponent {
     this.displayedColumns = ['Sno' , 'Item','Quantity'  , 'Price' , 'Discount', 'Discounted Price'];
     this.adminType = sessionStorage.getItem('adminType');
     this.getOrderItems();
+    this.deliveryPartners = this.utilityService.getPartners();
   }
 
   goBackToOrders()
   {
     this.router.navigate(['/dailyReport']);
   }
-
-  // deleteOrder()
-  // {
-  //   this.apiService.deleteActiveOrder(this.orderArea , this.orderedBy , this.orderKey).subscribe((_)=>{
-  //     this.sureRejectVisible = false;
-  //     this.router.navigate(['/dailyReport']);
-  //   });
-  // }
 
   getOrderItems()
   {
@@ -154,8 +150,8 @@ export class OrderDetailComponent {
 
   outForDelivery()
   {
-    this.apiService.updateOrderStatus(this.orderKey , "out-for-delivery").subscribe((_ : any)=>{
-      this.toastr.success('Order marked as Out for Delivery!' , 'Notitfication!' , {
+    this.apiService.updateOrder(this.orderKey , {'status' : 'out-for-delivery' , 'deliveryPartnerId' : this.selectedDeliveryPartnerId}).subscribe((_ : any)=>{
+      this.toastr.success('Order marked as Out for Delivery and assigned successfully!' , 'Notitfication!' , {
         timeOut : 4000,
         closeButton : true,
         positionClass : 'toast-top-right'
@@ -163,6 +159,17 @@ export class OrderDetailComponent {
       this.router.navigate(['/dailyReport']);
     });
   }
+
+  showDeliveryPartnerDropdown()
+  {
+    this.visibleDeliveryPartnerDropdown = true;
+  }
+
+  cancelSelection()
+  {
+    this.visibleDeliveryPartnerDropdown = false;
+  }
+  
 
 }
 
