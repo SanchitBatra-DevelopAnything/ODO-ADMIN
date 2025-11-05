@@ -374,5 +374,17 @@ public deleteNotification(key:any) :Observable<any> {
   addDarkStore(darkStoreData:any) : Observable<any> {
     return this.http.post(this.dbUrl+"darkStores.json" , darkStoreData);
   }
+
+  addDeliveryPartner(partnerData:any) : Observable<any> {
+    return this.http.post(this.dbUrl+"deliveryPartners.json" , partnerData);
+  }
+
+  deleteDeliveryPartner(partnerKey:any) : Observable<any> {
+    return this.http.delete(this.dbUrl+"deliveryPartners/"+partnerKey+".json");
+  }
+
+  getDeliveryPartners() : Observable<any> {
+    return this.http.get(this.dbUrl+"deliveryPartners.json");
+  }
   
 }

@@ -70,6 +70,8 @@ import { DeliveryRouteMakerComponent } from './orders/delivery-route-maker/deliv
 import { AddDarkStoreComponent } from './add-dark-store/add-dark-store.component';
 import { DarkStoreComponent } from './manage/dark-store/dark-store.component';
 import { EditReferrerFormComponent } from './edit-referrer-form/edit-referrer-form.component';
+import { DeliveryPartnersComponent } from './manage/delivery-partners/delivery-partners.component';
+import { AddDeliveryPartnerFormComponent } from './add-delivery-partner-form/add-delivery-partner-form.component';
 
 // import { EditItemComponent } from './edit-item/edit-item.component';
 // import { DistributorAreasComponent } from './manage/distributor-areas/distributor-areas.component';
@@ -97,7 +99,8 @@ const appRoutes : Routes = [
     {path : 'banners/b2b' , component : BannersComponent , canActivate : [AuthGuardService , AdminGuardService]},
     {path : 'referral/leaderboard' , component : ReferralLeaderboardComponent , canActivate : [AuthGuardService , AdminGuardService]},
     {path : 'delivery' , component : GoogleMapComponent , canActivate : [AuthGuardService , AdminGuardService]},
-    {path : 'darkstores' , component : DarkStoreComponent, canActivate : [AuthGuardService , AdminGuardService]}
+    {path : 'darkstores' , component : DarkStoreComponent, canActivate : [AuthGuardService , AdminGuardService]},
+    {path : 'deliveryPartners' , component : DeliveryPartnersComponent, canActivate : [AuthGuardService , AdminGuardService]},
   ]},
   {path : 'processedOrders' , component : OldOrdersComponent , canActivate : [AuthGuardService]},
   {path : 'orderBill/:orderKey' , component : OrderDetailComponent , canActivate :[AuthGuardService]},
@@ -151,6 +154,8 @@ export const MY_DATE_FORMATS = {
     AddDarkStoreComponent,
     DarkStoreComponent,
     EditReferrerFormComponent,
+    DeliveryPartnersComponent,
+    AddDeliveryPartnerFormComponent,
   ],
   imports: [
     BrowserModule,

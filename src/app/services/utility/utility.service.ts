@@ -36,6 +36,7 @@ export class UtilityService {
   bannerAdded:Subject<boolean>;
   referrerAdded:Subject<boolean>;
   darkStoreAdded : Subject<boolean>;
+  deliveryPartnerAdded : Subject<boolean>;
 
   constructor() { 
     this.userLoggedIn = new Subject<boolean>();
@@ -49,5 +50,6 @@ export class UtilityService {
     this.bannerAdded = new Subject<boolean>();
     this.referrerAdded = new Subject<boolean>();
     this.darkStoreAdded = new Subject<boolean>();
+    this.deliveryPartnerAdded = new Subject<boolean>();
 }
 }
