@@ -39,6 +39,9 @@ export class EditReferrerFormComponent {
       referrerName: ['', Validators.required],
       contact: ['', Validators.required],
       area : ['' , Validators.required],
+      password : [
+        '', Validators.required
+      ],
       darkStoreId: ['', Validators.required]
     });
 
@@ -63,6 +66,7 @@ export class EditReferrerFormComponent {
           referrerName: referrerData.referrerName,
           area : referrerData.area,
           contact: referrerData.contact,
+          password : referrerData.password,
           darkStoreId: referrerData.darkStoreId // ✅ Dropdown preselects correct one
         });
 

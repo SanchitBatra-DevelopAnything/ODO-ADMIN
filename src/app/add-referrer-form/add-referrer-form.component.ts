@@ -26,6 +26,7 @@ export class AddReferrerFormComponent {
         referrerName: ['', Validators.required],
         contact : ['' , Validators.required],
         area:['' , Validators.required],
+        password : ['' , Validators.required],
         darkStoreId : ['', Validators.required],
       });
       this.isLoading = true;

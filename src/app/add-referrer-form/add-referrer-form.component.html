@@ -3,8 +3,11 @@
     <form [formGroup]="addReferrerForm" (ngSubmit) = "onSubmit(addReferrerForm.value)">
 
            <div class="form-group">
-             <label for="name">BUSINESS CODE : </label>
+             <label for="name">BUSINESS CODE /Referrer App Username : </label>
              <input type="text" id="name" formControlName="businessName" class = "form-control" placeholder="Like ODO1 , ODO2">
+             <hr>
+             <label for="name">Referrer App Password : </label>
+             <input type="text" id="password" formControlName="password" class = "form-control">
              <hr>
              <label for="mobile">Referrer Name : </label>
              <input type="text" id="mobile" formControlName="referrerName" class = "form-control">
