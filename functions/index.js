@@ -109,4 +109,94 @@ exports.getDistributorsByReferrer = functions.https.onRequest(async (req, res) =
   }
 });
 
+exports.getOrdersForReferrerApp = functions.https.onRequest(async (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Methods", "GET, POST");
+
+  const referrerId = req.query.referrerId;
+  const date = req.query.date;
+
+  if (!referrerId || !date) {
+    return res.status(400).json({
+      error: "Missing referrerId or date in query params"
+    });
+  }
+
+  try {
+    const db = admin.database();
+
+    //----------------------------------
+    // ✅ Fetch from activeDistributorOrders
+    //----------------------------------
+    const activeSnap = await db.ref("activeDistributorOrders")
+      .orderByChild("referrerId")
+      .equalTo(referrerId)
+      .once("value");
+
+    let activeOrders = [];
+    if (activeSnap.exists()) {
+      const data = activeSnap.val();
+      activeOrders = Object.values(data)
+        .filter(o =>
+          o.orderDate === date &&
+          ["pending", "delivered", "out-for-delivery"].includes(o.status)
+        )
+        .map(o => ({
+          orderedFrom: o.shop,
+          status: o.status,
+          amount: o.totalPriceAfterDiscount ?? 0
+        }));
+    }
+
+    //----------------------------------
+    // ✅ Fetch from processedDistributorOrders/{date}
+    //----------------------------------
+    const processedPath = `processedDistributorOrders/${date}`;
+    const processedSnap = await db.ref(processedPath)
+      .orderByChild("referrerId")
+      .equalTo(referrerId)
+      .once("value");
+
+    let processedOrders = [];
+    if (processedSnap.exists()) {
+      const data = processedSnap.val();
+      processedOrders = Object.values(data)
+        .map(o => ({
+          orderedFrom: o.shop,
+          status: "delivered", // ✅ Always delivered here
+          amount: o.totalPriceAfterDiscount ?? 0
+        }));
+    }
+
+    //----------------------------------
+    // ✅ Combine both lists
+    //----------------------------------
+    const orders = [...activeOrders, ...processedOrders];
+
+    //----------------------------------
+    // ✅ Calculate total amount
+    //----------------------------------
+    const totalAmount = orders.reduce(
+      (sum, o) => sum + (o.amount || 0),
+      0
+    );
+
+    //----------------------------------
+    // ✅ Final Response
+    //----------------------------------
+    const response = {
+      orders,
+      totalAmount
+    };
+
+    return res.status(200).json(response);
+
+  } catch (error) {
+    console.error("Error fetching orders: ", error);
+    return res.status(500).json({
+      error: "Error fetching orders"
+    });
+  }
+});
+
 
