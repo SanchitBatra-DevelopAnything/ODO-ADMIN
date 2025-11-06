@@ -77,3 +77,36 @@ exports.checkDistributorContact = functions.https.onRequest((req, res) => {
   });
 });
 
+exports.getDistributorsByReferrer = functions.https.onRequest(async (req, res) => {
+  const referrerId = req.query.referrerId || req.body.referrerId;
+
+  if (!referrerId) {
+    return res.status(400).json({ error: "Missing referrerId" });
+  }
+
+  try {
+    const snapshot = await admin
+      .database()
+      .ref("Distributors")
+      .orderByChild("referrerId")
+      .equalTo(referrerId)
+      .once("value");
+
+    if (!snapshot.exists()) {
+      return res.json([]);
+    }
+
+    const distributors = snapshot.val();
+
+    const names = Object.values(distributors)
+        .map((dist) => dist.name)
+        .filter((n) => n != null);
+
+    return res.json(names);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
+
+
