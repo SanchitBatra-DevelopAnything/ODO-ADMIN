@@ -203,6 +203,7 @@ exports.getOrdersForReferrerApp = functions.https.onRequest(async (req, res) => 
 //Delivery Partner Related Functions
 exports.getAssignedOrdersMetadata = functions.https.onRequest(async (req, res) => {
   try {
+    const db = admin.database();
     const deliveryPartnerId = req.query.deliveryPartnerId;
     if (!deliveryPartnerId) {
       return res.status(400).json({ error: "Missing deliveryPartnerId" });
