@@ -200,3 +200,77 @@ exports.getOrdersForReferrerApp = functions.https.onRequest(async (req, res) => 
 });
 
 
+//Delivery Partner Related Functions
+exports.getAssignedOrdersMetadata = functions.https.onRequest(async (req, res) => {
+  try {
+    const deliveryPartnerId = req.query.deliveryPartnerId;
+    if (!deliveryPartnerId) {
+      return res.status(400).json({ error: "Missing deliveryPartnerId" });
+    }
+
+    // ✅ Fetch only orders assigned to this delivery partner
+    const snapshot = await db
+      .ref("activeDistributorOrders")
+      .orderByChild("deliveryPartnerId")
+      .equalTo(deliveryPartnerId)
+      .once("value");
+
+    const orders = snapshot.val();
+    if (!orders) {
+      return res.status(200).json([]);
+    }
+
+    const grouped = {};
+
+    // Group orders by shop
+    Object.entries(orders).forEach(([orderId, orderData]) => {
+      const shopName = orderData.shop;
+
+      if (!grouped[shopName]) {
+        grouped[shopName] = {
+          orderIds: [],
+          totalAmount: 0,
+          referrerId: orderData.referrerId,
+          "delivery-latitude": orderData["delivery-latitude"],
+          "delivery-longitude": orderData["delivery-longitude"],
+        };
+      }
+
+      grouped[shopName].orderIds.push(orderId);
+      grouped[shopName].totalAmount +=
+        parseFloat(orderData.totalPriceAfterDiscount) || 0;
+    });
+
+    // Fetch referrer details
+    for (const shopName in grouped) {
+      const referrerId = grouped[shopName].referrerId;
+      const refSnapshot = await db
+        .ref(`ReferralLeaderboard/${referrerId}`)
+        .once("value");
+      const refData = refSnapshot.val();
+
+      grouped[shopName].referrerName = refData?.referrerName || null;
+      grouped[shopName].referrerContact = refData?.contact || null;
+
+      delete grouped[shopName].referrerId;
+    }
+
+    // Format result
+    const result = Object.entries(grouped).map(([shop, data]) => ({
+      shop,
+      orderIds: data.orderIds,
+      totalAmount: data.totalAmount,
+      referrerName: data.referrerName,
+      referrerContact: data.referrerContact,
+      "delivery-latitude": data["delivery-latitude"],
+      "delivery-longitude": data["delivery-longitude"],
+    }));
+
+    return res.status(200).json(result);
+  } catch (err) {
+    console.error("Error fetching assigned orders:", err);
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+
