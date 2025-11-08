@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Observable, ObservedValueOf } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,7 @@ export class ApiService {
  
   //category can be considered a brand in ODO's scenario.
   //distributoriships can be considered as areas.
+  //changing all POSTs to customID put as on firebase realtime database , ids were getting changed and relationships were affected.
 
   dbUrl = "https://odo-admin-app-default-rtdb.asia-southeast1.firebasedatabase.app/";
   constructor(private http:HttpClient) { }
@@ -24,6 +26,7 @@ export class ApiService {
 
   public addItem(value:any , catKey:any) : Observable<any>
   {
+    //use put with own UUID generation to avoid relationship issues as firebase keys are not reliable and can change.
     return this.http.post(this.dbUrl+"Categories/"+catKey+"/items.json" , value);
   }
 
@@ -49,7 +52,8 @@ export class ApiService {
 
   public makeUser(data:any) : Observable<any>
   {
-    return this.http.post(this.dbUrl+"Distributors.json" , data);
+    const newId = uuidv4();
+    return this.http.put(this.dbUrl+"Distributors/"+newId+".json" , data);
   }
 
 public deleteNotification(key:any) :Observable<any> {
@@ -213,7 +217,8 @@ public deleteNotification(key:any) :Observable<any> {
 
   public addDistributorship(params:any) : Observable<any>
   {
-     return this.http.post(this.dbUrl+"Areas.json" , params);
+    const newId = uuidv4();
+     return this.http.put(this.dbUrl+"Areas/"+newId+".json" , params);
   }
 
   public getPriceLists() : Observable<any>
@@ -290,7 +295,8 @@ public deleteNotification(key:any) :Observable<any> {
 
   public addAdmin(adminBody:any) : Observable<any>
   {
-    return this.http.post(this.dbUrl+"admins.json" , adminBody);
+    const newId = uuidv4();
+    return this.http.put(this.dbUrl+"admins/"+newId+".json" , adminBody);
   }
 
   public updateSortOrder(brands:any) : Observable<any>
@@ -329,7 +335,8 @@ public deleteNotification(key:any) :Observable<any> {
 
   public addReferrer(referrerData:any) : Observable<any>
   {
-    return this.http.post(this.dbUrl+"ReferralLeaderboard.json" , referrerData);
+    const newId = uuidv4();
+    return this.http.put(this.dbUrl+"ReferralLeaderboard/"+newId+".json" , referrerData);
   }
 
   private generateFirebaseKey(): string {
@@ -373,11 +380,13 @@ public deleteNotification(key:any) :Observable<any> {
   }
 
   addDarkStore(darkStoreData:any) : Observable<any> {
-    return this.http.post(this.dbUrl+"darkStores.json" , darkStoreData);
+    const newId = uuidv4();
+    return this.http.put(this.dbUrl+"darkStores/"+newId+".json" , darkStoreData);
   }
 
   addDeliveryPartner(partnerData:any) : Observable<any> {
-    return this.http.post(this.dbUrl+"deliveryPartners.json" , partnerData);
+    const newId = uuidv4();
+    return this.http.put(this.dbUrl+"deliveryPartners/"+newId+".json" , partnerData);
   }
 
   deleteDeliveryPartner(partnerKey:any) : Observable<any> {
