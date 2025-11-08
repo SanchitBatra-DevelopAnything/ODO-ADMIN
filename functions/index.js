@@ -274,4 +274,49 @@ exports.getAssignedOrdersMetadata = functions.https.onRequest(async (req, res) =
   }
 });
 
+exports.getOrdersByIds = functions.https.onRequest(async (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.set("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    return res.status(204).send("");
+  }
+
+  try {
+    // ✅ Get orderIds from query param or body
+    let orderIds = [];
+    const db = admin.database();
+
+    if (req.method === "GET" && req.query.orderIds) {
+      // Comma-separated: ?orderIds=order_1,order_2
+      orderIds = req.query.orderIds.split(",").map((id) => id.trim());
+    } else if (req.method === "POST" && req.body?.orderIds) {
+      orderIds = req.body.orderIds;
+    }
+
+    if (!Array.isArray(orderIds) || orderIds.length === 0) {
+      return res.status(400).json({ error: "orderIds parameter is required" });
+    }
+
+    // ✅ Fetch all orders concurrently
+    const promises = orderIds.map(async (orderId) => {
+      const snapshot = await db.ref(`activeDistributorOrders/${orderId}`).once("value");
+      if (snapshot.exists()) {
+        return { id: orderId, ...snapshot.val() };
+      } else {
+        return { id: orderId, error: "Order not found" };
+      }
+    });
+
+    const results = await Promise.all(promises);
+
+    // ✅ Return combined list
+    return res.status(200).json(results);
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
 
