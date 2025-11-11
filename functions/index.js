@@ -205,27 +205,41 @@ exports.getAssignedOrdersMetadata = functions.https.onRequest(async (req, res) =
   try {
     const db = admin.database();
     const deliveryPartnerId = req.query.deliveryPartnerId;
+
     if (!deliveryPartnerId) {
       return res.status(400).json({ error: "Missing deliveryPartnerId" });
     }
 
-    // ✅ Fetch only orders assigned to this delivery partner
+    // ✅ Step 1: Fetch all orders for this delivery partner
     const snapshot = await db
       .ref("activeDistributorOrders")
       .orderByChild("deliveryPartnerId")
       .equalTo(deliveryPartnerId)
       .once("value");
 
-    const orders = snapshot.val();
-    if (!orders) {
-      return res.status(200).json([]);
+    if (!snapshot.exists()) {
+      return res.status(200).json([]); // no orders found
     }
 
+    const ordersObj = snapshot.val() || {};
+
+    // ✅ Step 2: Filter only "out-for-delivery" orders
+    const filteredOrders = Object.entries(ordersObj)
+      .filter(([_, order]) => order.status === "out-for-delivery") // filter by status
+      .reduce((acc, [orderId, order]) => {
+        acc[orderId] = order; // rebuild map
+        return acc;
+      }, {});
+
+    if (Object.keys(filteredOrders).length === 0) {
+      return res.status(200).json([]); // no matching orders
+    }
+
+    // ✅ Step 3: Group by shop
     const grouped = {};
 
-    // Group orders by shop
-    Object.entries(orders).forEach(([orderId, orderData]) => {
-      const shopName = orderData.shop;
+    for (const [orderId, orderData] of Object.entries(filteredOrders)) {
+      const shopName = orderData.shop || "Unknown Shop";
 
       if (!grouped[shopName]) {
         grouped[shopName] = {
@@ -240,23 +254,28 @@ exports.getAssignedOrdersMetadata = functions.https.onRequest(async (req, res) =
       grouped[shopName].orderIds.push(orderId);
       grouped[shopName].totalAmount +=
         parseFloat(orderData.totalPriceAfterDiscount) || 0;
-    });
+    }
 
-    // Fetch referrer details
+    // ✅ Step 4: Enrich with referrer details
     for (const shopName in grouped) {
       const referrerId = grouped[shopName].referrerId;
-      const refSnapshot = await db
-        .ref(`ReferralLeaderboard/${referrerId}`)
-        .once("value");
-      const refData = refSnapshot.val();
+      if (referrerId) {
+        const refSnapshot = await db
+          .ref(`ReferralLeaderboard/${referrerId}`)
+          .once("value");
+        const refData = refSnapshot.val();
 
-      grouped[shopName].referrerName = refData?.referrerName || null;
-      grouped[shopName].referrerContact = refData?.contact || null;
+        grouped[shopName].referrerName = refData?.referrerName || null;
+        grouped[shopName].referrerContact = refData?.contact || null;
+      } else {
+        grouped[shopName].referrerName = null;
+        grouped[shopName].referrerContact = null;
+      }
 
       delete grouped[shopName].referrerId;
     }
 
-    // Format result
+    // ✅ Step 5: Format the result
     const result = Object.entries(grouped).map(([shop, data]) => ({
       shop,
       orderIds: data.orderIds,
@@ -273,6 +292,7 @@ exports.getAssignedOrdersMetadata = functions.https.onRequest(async (req, res) =
     return res.status(500).json({ error: err.message });
   }
 });
+
 
 exports.getOrdersByIds = functions.https.onRequest(async (req, res) => {
   res.set("Access-Control-Allow-Origin", "*");
@@ -311,8 +331,11 @@ exports.getOrdersByIds = functions.https.onRequest(async (req, res) => {
 
     const results = await Promise.all(promises);
 
+    //filter results to only return orders where status = "out-for-delivery" as they can change after order gets updated in deliveryApp.
+    const filteredResults = results.filter(order => order.status === "out-for-delivery");
+
     // ✅ Return combined list
-    return res.status(200).json(results);
+    return res.status(200).json(filteredResults);
   } catch (error) {
     console.error("Error fetching orders:", error);
     return res.status(500).json({ error: error.message });
