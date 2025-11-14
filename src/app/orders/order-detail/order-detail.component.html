@@ -18,6 +18,36 @@
         </div>
     </div>
 
+    <!--Add an image card if orderData has imageUrl , image should be visible in a small card not too big-->
+    <div *ngIf="orderData['imageUrl'] && orderData['imageUrl'] !== 'not-found'" class="container mt-3">
+
+        <h3>Image Proof :</h3>
+      
+        <div class="card shadow-sm" style="width: 12rem; border-radius: 10px;">
+      
+            <img 
+              [src]="orderData['imageUrl']" 
+              class="card-img-top"
+              alt="Order Image Proof"
+              style="height: 300px; width:300px; object-fit: cover; border-radius: 10px 10px 0 0;"
+            >
+      
+            <div class="card-body p-2 text-center">
+                <a 
+                  [href]="orderData['imageUrl']" 
+                  target="_blank" 
+                  class="btn btn-sm btn-primary"
+                  style="width: 100%;"
+                >
+                    View Full Image
+                </a>
+            </div>
+      
+        </div>
+      
+      </div>
+      
+
     <hr>
     <div class="container">
         <h3>Shop Address : </h3>

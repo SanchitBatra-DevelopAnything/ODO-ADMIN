@@ -22,6 +22,10 @@ export class OrdersComponent implements OnInit {
   pendingOrdersKeys: any = [];
   outForDeliveryOrders: any = [];
   outForDeliveryOrdersKeys: any = [];
+  deliveredOrders: any = [];
+  deliveredOrdersKeys: any = [];
+  rejectedOrders: any = [];
+  rejectedOrdersKeys: any = [];
 
   isLoading = false;
   selectedDate: any = null;
@@ -29,6 +33,8 @@ export class OrdersComponent implements OnInit {
   selectedOrdersForTotalParchi: any = [];
   selectionMode = false;
   deliveryPartners:any;
+  activeTab: string = 'closed';
+
 
   
 
@@ -91,7 +97,14 @@ export class OrdersComponent implements OnInit {
             this.outForDeliveryOrders.push(order);
             this.outForDeliveryOrdersKeys.push(key);
           }
-          //add delivered and pending here later.
+          else if (status === 'rejected') {
+            this.rejectedOrders.push(order);
+            this.rejectedOrdersKeys.push(key);
+          }
+          else if (status === 'delivered') {
+            this.deliveredOrders.push(order);
+            this.deliveredOrdersKeys.push(key);
+          }
         });
       }
       else {
@@ -136,6 +149,14 @@ export class OrdersComponent implements OnInit {
           } else if (status === 'out-for-delivery') {
             this.outForDeliveryOrders.push(order);
             this.outForDeliveryOrdersKeys.push(key);
+          }
+          else if (status === 'rejected') {
+            this.rejectedOrders.push(order);
+            this.rejectedOrdersKeys.push(key);
+          }
+          else if (status === 'delivered') {
+            this.deliveredOrders.push(order);
+            this.deliveredOrdersKeys.push(key);
           }
         });
       }

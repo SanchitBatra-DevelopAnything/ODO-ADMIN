@@ -7,6 +7,17 @@
       height:130px;
       margin-top:15px; min-height:70px; padding-top:20px; text-align: center; background-color:greenyellow; margin-right: 3px; color:black; display : flex; flex-direction: column;
   }
+
+  .order-card-rejected{
+    height:130px;
+    color:#ffffff;
+    margin-top:15px; min-height:70px; padding-top:20px; text-align: center; background-color:red; margin-right: 3px; color:black; display : flex; flex-direction: column;
+}
+
+.order-card-delivered{
+  height:130px;
+  margin-top:15px; min-height:70px; padding-top:20px; text-align: center; background-color:darkgreen; margin-right: 3px; color:black; display : flex; flex-direction: column;
+}
   
   .flex-container {
       display: flex;
@@ -34,5 +45,15 @@
       border: 3px solid green;
       background-color: #e6ffe6;
     }
+
+    .nav-link {
+      cursor: pointer;
+    }
+    
+    .nav-link.active {
+      font-weight: bold;
+      border-bottom: 2px solid #007bff;
+    }
+    
     
     

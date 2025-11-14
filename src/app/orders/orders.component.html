@@ -1,71 +1,143 @@
 <div class="container">
-    <h3>
-        Active Orders!
-    </h3>
-    <p *ngIf="!selectionMode" style = "font-weight: bold;">Click on the Order for viewing its BILL</p>
-    <hr>
-    <button class = "btn btn-primary" (click) = "oldOrderPage()" style = "margin: 20px;">Show Last 7 Days Orders</button>
-    <hr>
-    <button *ngIf = "!isLoading" class = "btn btn-success" (click) = "downloadLocationsCSV()" style = "margin: 20px;">Download Locations for Delivery</button>
-    <button *ngIf = "!isLoading" class = "btn btn-success" (click) = "goToDeliveryRoutePage()">Make Delivery Routes</button>
-    <hr>
 
-    <div class="loader" *ngIf = "isLoading">
+  <!-- ====================== TABS ====================== -->
+  <ul class="nav nav-tabs">
+      <li class="nav-item">
+          <a 
+              class="nav-link" 
+              [class.active]="activeTab === 'active'"
+              (click)="activeTab = 'active'"
+          >
+              Active Orders
+          </a>
+      </li>
 
-    </div>
+      <li class="nav-item">
+          <a 
+              class="nav-link" 
+              [class.active]="activeTab === 'closed'"
+              (click)="activeTab = 'closed'"
+          >
+              Closed Orders
+          </a>
+      </li>
+  </ul>
 
-    
-        <button class="btn btn-warning" *ngIf="!selectionMode" (click)="enableSelectionMode()" style = "margin: 20px;">
-            Select Orders for Total Parchi
-          </button>
-    
-   
+  <br>
 
-      
-      <button class="btn btn-success" *ngIf="selectionMode" (click)="generateTotalParchiAndMarkOrdersForDelivery()" style = "margin: 20px;">
-        Generate Total Parchi
+  <!-- ================================================= -->
+  <!-- ================= ACTIVE ORDERS TAB ============= -->
+  <!-- ================================================= -->
+  <div *ngIf="activeTab === 'active'">
+
+      <h3>Active Orders!</h3>
+      <p *ngIf="!selectionMode" style="font-weight: bold;">Click on the Order for viewing its BILL</p>
+      <hr>
+      <button class="btn btn-primary" (click)="oldOrderPage()" style="margin: 20px;">Show Last 7 Days Orders</button>
+      <hr>
+      <button *ngIf="!isLoading" class="btn btn-success" (click)="downloadLocationsCSV()" style="margin: 20px;">Download Locations for Delivery</button>
+      <button *ngIf="!isLoading" class="btn btn-success" (click)="goToDeliveryRoutePage()">Make Delivery Routes</button>
+      <hr>
+
+      <div class="loader" *ngIf="isLoading"></div>
+
+      <button class="btn btn-warning" *ngIf="!selectionMode" (click)="enableSelectionMode()" style="margin: 20px;">
+          Select Orders for Total Parchi
       </button>
-      
-      <button class="btn btn-danger" *ngIf="selectionMode" (click)="cancelSelectionMode()" style = "margin: 20px;">
-        Cancel Selection
+
+      <button class="btn btn-success" *ngIf="selectionMode" (click)="generateTotalParchiAndMarkOrdersForDelivery()" style="margin: 20px;">
+          Generate Total Parchi
       </button>
-      
+
+      <button class="btn btn-danger" *ngIf="selectionMode" (click)="cancelSelectionMode()" style="margin: 20px;">
+          Cancel Selection
+      </button>
+
       <h3 *ngIf="selectionMode" style="color:red; font-weight:bold;">
-        Selection mode active — Click orders to select
+          Selection mode active — Click orders to select
       </h3>
-      
 
-    <h3 class = "pangolin">Active Orders from members of <strong>ODO!</strong></h3>
-    <hr>
-    <div class="row">
-
-        <div *ngFor="let order of pendingOrders; let i = index"
-     class="col-xs-2 w3-card pointer order-card"
-     [ngClass]="{'selected-order': selectionMode && isOrderSelected(pendingOrdersKeys[i])}"
-     (click)="toggleOrderSelection(order, pendingOrdersKeys[i])">
-
-    <p style="font-weight: bold;">{{order.shop | uppercase}}</p>
-    <p style="font-weight: bold;">By : {{order.orderedBy | uppercase}}</p>
-    <p style="font-weight: bold; font-size: 12px;">{{order.orderTime}}</p>
-    <p style="color: red;">AREA : {{order.area}}</p>
-</div>
+      <h3 class="pangolin">Active Orders from members of <strong>ODO!</strong></h3>
+      <hr>
 
 
-    </div>
 
-    <hr>
+      <!-- PENDING ORDERS -->
+      <div class="row">
+          <div
+              *ngFor="let order of pendingOrders; let i = index"
+              class="col-xs-2 w3-card pointer order-card"
+              [ngClass]="{'selected-order': selectionMode && isOrderSelected(pendingOrdersKeys[i])}"
+              (click)="toggleOrderSelection(order, pendingOrdersKeys[i])">
 
-    <h3 class = "pangolin">Out For Delivery Orders!</h3>
-    <hr>
-    <div class="row">
+              <p style="font-weight: bold;">{{order.shop | uppercase}}</p>
+              <p style="font-weight: bold;">By : {{order.orderedBy | uppercase}}</p>
+              <p style="font-weight: bold; font-size: 12px;">{{order.orderTime}}</p>
+              <p style="color: red;">AREA : {{order.area}}</p>
+          </div>
+      </div>
 
-        <div *ngFor = "let order of outForDeliveryOrders; let i = index;" class = "col-xs-2 w3-card pointer order-card-delivery" (click) = "showBill(order.shop , order.orderedBy , outForDeliveryOrdersKeys[i])">
-            <p style = "font-weight: bold;">{{order.shop | uppercase}}</p>
-            <p style = "font-weight: bold;">By : {{order.orderedBy | uppercase}}</p>
-            <p style = "font-weight: bold; font-size: 12px;">{{order.orderTime}}</p>
-            <p style = "color: red;">AREA : {{order.area}}</p>
-        </div>
+      <hr>
 
-    </div>
-    
+      <!-- OUT FOR DELIVERY ORDERS -->
+      <h3 class="pangolin">Out For Delivery Orders!</h3>
+      <hr>
+      <div class="row">
+          <div 
+              *ngFor="let order of outForDeliveryOrders; let i = index" 
+              class="col-xs-2 w3-card pointer order-card-delivery" 
+              (click)="showBill(order.shop , order.orderedBy , outForDeliveryOrdersKeys[i])">
+
+              <p style="font-weight: bold;">{{order.shop | uppercase}}</p>
+              <p style="font-weight: bold;">By : {{order.orderedBy | uppercase}}</p>
+              <p style="font-weight: bold; font-size: 12px;">{{order.orderTime}}</p>
+              <p style="color: red;">AREA : {{order.area}}</p>
+          </div>
+      </div>
+
+  </div>
+
+
+
+  <!-- ================================================ -->
+  <!-- ================= CLOSED ORDERS TAB ============ -->
+  <!-- ================================================ -->
+  <div *ngIf="activeTab === 'closed'">
+
+      <!-- REJECTED ORDERS -->
+      <h3 class="pangolin">Rejected Orders!</h3>
+      <hr>
+      <div class="row">
+          <div 
+              *ngFor="let order of rejectedOrders; let i = index" 
+              class="col-xs-2 w3-card pointer order-card-rejected" 
+              (click)="showBill(order.shop , order.orderedBy , rejectedOrdersKeys[i])">
+
+              <p style="font-weight: bold; color:white">{{order.shop | uppercase}}</p>
+              <p style="font-weight: bold; color:white">By : {{order.orderedBy | uppercase}}</p>
+              <p style="font-weight: bold; font-size: 12px; color:white;">{{order.orderTime}}</p>
+              <p style="color: red;">AREA : {{order.area}}</p>
+          </div>
+      </div>
+
+      <hr>
+
+      <!-- DELIVERED ORDERS -->
+      <h3 class="pangolin">Delivered Orders!</h3>
+      <hr>
+      <div class="row">
+          <div 
+              *ngFor="let order of deliveredOrders; let i = index" 
+              class="col-xs-2 w3-card pointer order-card-delivered" 
+              (click)="showBill(order.shop , order.orderedBy , deliveredOrdersKeys[i])">
+
+              <p style="font-weight: bold; color:white">{{order.shop | uppercase}}</p>
+              <p style="font-weight: bold; color:white">By : {{order.orderedBy | uppercase}}</p>
+              <p style="font-weight: bold; font-size: 12px; color:white;">{{order.orderTime}}</p>
+              <p style="color: red;">AREA : {{order.area}}</p>
+          </div>
+      </div>
+
+  </div>
+
 </div>
