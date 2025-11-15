@@ -342,4 +342,82 @@ exports.getOrdersByIds = functions.https.onRequest(async (req, res) => {
   }
 });
 
+//get store balance in delivery partner app
+exports.getStoreBalance = functions.https.onRequest(async (req, res) => {
+  try {
+    const partnerId = req.query.partnerId;
+
+    if (!partnerId) {
+      return res.status(400).json({ error: "partnerId is required" });
+    }
+
+    const db = admin.database();
+
+    // 👉 Fetch ONLY orders belonging to this delivery partner
+    const snapshot = await db
+      .ref("activeDistributorOrders")
+      .orderByChild("deliveryPartnerId")
+      .equalTo(partnerId)
+      .get();
+
+    if (!snapshot.exists()) {
+      return res.json({ totalHisaab: 0, data: {} });
+    }
+
+    const partnerOrders = snapshot.val();
+
+    // 👉 Filter manually for delivered orders (small list now)
+    const deliveredOrders = Object.values(partnerOrders).filter(
+      (order) => order.status === "delivered"
+    );
+
+    // 👉 Group orders by darkStoreId
+    const groupedOrders = {};
+    deliveredOrders.forEach((order) => {
+      const storeId = order.darkStoreId;
+      if (!groupedOrders[storeId]) groupedOrders[storeId] = [];
+      groupedOrders[storeId].push(order);
+    });
+
+    let totalHisaab = 0;
+    const responseData = {};
+
+    // 👉 Build final Flutter-friendly format
+    for (const darkStoreId of Object.keys(groupedOrders)) {
+      // Fetch store name
+      const storeSnap = await db
+        .ref(`darkStores/${darkStoreId}/darkStoreName`)
+        .get();
+
+      const storeName = storeSnap.exists()
+        ? storeSnap.val()
+        : `Store_${darkStoreId}`;
+
+      // Map orders to required format
+      const orders = groupedOrders[darkStoreId].map((o) => {
+        const amount = o.totalPriceAfterDiscount ?? 0;
+        totalHisaab += amount;
+
+        return {
+          shopName: o.shop,
+          amount: amount,
+        };
+      });
+
+      responseData[storeName] = {
+        orders: orders,
+      };
+    }
+
+    return res.json({
+      totalHisaab,
+      data: responseData,
+    });
+
+  } catch (error) {
+    console.error("ERROR", error);
+    return res.status(500).json({ error: error.message });
+  }
+});
+
 
