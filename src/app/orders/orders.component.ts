@@ -33,7 +33,7 @@ export class OrdersComponent implements OnInit {
   selectedOrdersForTotalParchi: any = [];
   selectionMode = false;
   deliveryPartners:any;
-  activeTab: string = 'closed';
+  activeTab: string = 'active';
 
 
   
