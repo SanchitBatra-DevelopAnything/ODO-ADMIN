@@ -420,4 +420,172 @@ exports.getStoreBalance = functions.https.onRequest(async (req, res) => {
   }
 });
 
+///--------KHOKHA APP FUNCTIONS ---------////
+exports.getItemsByKhokhaStore = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    try {
+      const storeId = req.query.storeId;
+
+      if (!storeId) {
+        return res.status(400).json({ error: "storeId is required" });
+      }
+
+      const snapshot = await admin
+        .database()
+        .ref("khokhaItems")
+        .once("value");
+
+      const data = snapshot.val();
+
+      if (!data) {
+        return res.json([]);
+      }
+
+      const items = Object.entries(data).map(([id, value]) => {
+        const storeStock = value.stock?.[storeId];
+
+        return {
+          id,
+          categoryId: value.categoryId,
+          name: value.name,
+          price: value.price,
+          imageUrl: value.imageUrl,
+
+          // ONLY current available stock
+          stock:
+            typeof storeStock === "object"
+              ? storeStock.value ?? 0
+              : storeStock ?? 0
+        };
+      });
+
+      res.json(items);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+});
+
+
+
+//function to restock by acquiring a lock such that at this point order placed from app fails.
+exports.updateStockForStore = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    const { storeId, items, operation } = req.body;
+
+    // Basic validation
+    if (
+      !storeId ||
+      !Array.isArray(items) ||
+      items.length === 0 ||
+      !["add", "subtract"].includes(operation)
+    ) {
+      return res.status(400).json({ error: "Invalid request" });
+    }
+
+    const db = admin.database();
+    const lockRef = db.ref(`storeLocks/${storeId}`);
+
+    try {
+      /** ===============================
+       * 1️⃣ ADD (RESTOCK)
+       * =============================== */
+      if (operation === "add") {
+        // Acquire lock
+        await lockRef.set({
+          restockInProgress: true,
+          updatedAt: Date.now()
+        });
+
+        const txns = items.map(({ itemId, qty }) => {
+          if (!itemId || typeof qty !== "number" || qty <= 0) {
+            throw new Error("Invalid item payload");
+          }
+
+          return db
+            .ref(`khokhaItems/${itemId}/stock/${storeId}/value`)
+            .transaction(current => {
+              if (typeof current !== "number") return qty;
+              return current + qty;
+            });
+        });
+
+        const results = await Promise.all(txns);
+
+        if (results.some(r => !r.committed)) {
+          throw new Error("Stock add failed");
+        }
+
+        // Release lock
+        await lockRef.set({
+          restockInProgress: false,
+          updatedAt: Date.now()
+        });
+
+        return res.json({
+          success: true,
+          message: "Stock added successfully"
+        });
+      }
+
+      /** ===============================
+       * 2️⃣ SUBTRACT (ORDER)
+       * =============================== */
+      if (operation === "subtract") {
+        const lockSnap = await lockRef.once("value");
+
+        if (lockSnap.val()?.restockInProgress) {
+          return res
+            .status(409)
+            .json({ error: "Restock in progress, try later" });
+        }
+
+        const txns = items.map(({ itemId, qty }) => {
+          if (!itemId || typeof qty !== "number" || qty <= 0) {
+            throw new Error("Invalid item payload");
+          }
+
+          return db
+            .ref(`khokhaItems/${itemId}/stock/${storeId}/value`)
+            .transaction(current => {
+              if (typeof current !== "number") return current;
+              if (current < qty) return current; // abort safely
+              return current - qty;
+            });
+        });
+
+        const results = await Promise.all(txns);
+
+        if (results.some(r => !r.committed)) {
+          return res
+            .status(409)
+            .json({ error: "Insufficient stock" });
+        }
+
+        return res.json({
+          success: true,
+          message: "Stock subtracted successfully"
+        });
+      }
+    } catch (err) {
+      console.error(err);
+
+      // Safety: unlock if restock crashes
+      if (operation === "add") {
+        await lockRef.set({
+          restockInProgress: false,
+          updatedAt: Date.now()
+        });
+      }
+
+      res.status(500).json({ error: err.message });
+    }
+  });
+});
+
+
+
+
+
 
