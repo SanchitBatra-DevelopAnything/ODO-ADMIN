@@ -361,5 +361,10 @@ export class ApiService {
   {
     return this.http.post("https://getaggregatedstoreparchibydate-jipkkwipyq-uc.a.run.app" , {date});
   }
+
+  public getKhokhaAggregatedOrderDetail(storeId:string, date:string):Observable<any>
+  {
+    return this.http.post("https://generateadminsummary-jipkkwipyq-uc.a.run.app" , {storeId , date , operation:"view"});
+  }
   
 }

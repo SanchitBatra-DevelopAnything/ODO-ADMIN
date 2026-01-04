@@ -630,106 +630,107 @@ exports.setDailyOpeningLimit = onSchedule(
 );
 
 exports.generateAdminSummary = functions.https.onRequest(
-  async (req, res) => {
-    try {
-      const { storeId, date , operation } = req.body;
-      const db = admin.database();
+  (req, res) => {
+    cors(req, res, async () => {
+      try {
+        const { storeId, date, operation } = req.body;
+        const db = admin.database();
 
-      if (!storeId || !date) {
-        return res.status(400).json({
-          error: "storeId and date are required"
+        if (!storeId || !date) {
+          return res.status(400).json({
+            error: "storeId and date are required"
+          });
+        }
+
+        const ordersSnap = await db
+          .ref(`khokhaOrders/${storeId}/${date}`)
+          .once("value");
+
+        const itemsSold = {};
+        let totalUPI = 0;
+        let totalCash = 0;
+
+        ordersSnap.forEach(orderSnap => {
+          const order = orderSnap.val();
+
+          if (order.paymentType === "UPI") totalUPI += order.orderTotal;
+          if (order.paymentType === "CASH") totalCash += order.orderTotal;
+
+          Object.values(order.items || {}).forEach(item => {
+            const itemId = item.itemId;
+            const qty = item.quantity || item.qty || 0;
+
+            itemsSold[itemId] = (itemsSold[itemId] || 0) + qty;
+          });
         });
-      }
 
-      const ordersSnap = await db
-        .ref(`khokhaOrders/${storeId}/${date}`)
-        .once("value");
+        const resultItems = [];
 
-      const itemsSold = {};
-      let totalUPI = 0;
-      let totalCash = 0;
+        for (const itemId of Object.keys(itemsSold)) {
+          const [stockSnap, priceSnap] = await Promise.all([
+            db.ref(`khokhaItems/${itemId}/stock/${storeId}`).once("value"),
+            db.ref(`khokhaItems/${itemId}/price`).once("value")
+          ]);
 
-      ordersSnap.forEach(orderSnap => {
-        const order = orderSnap.val();
+          const stock = stockSnap.val();
+          const price = priceSnap.val();
+          const soldQty = itemsSold[itemId];
+          const closingStock = stock.openingLimit - soldQty;
 
-        if (order.paymentType === "UPI") totalUPI += order.orderTotal;
-        if (order.paymentType === "CASH") totalCash += order.orderTotal;
+          resultItems.push({
+            itemId,
+            price,
+            soldQty,
+            totalAmount: soldQty * price,
 
-        Object.values(order.items || {}).forEach(item => {
-          const itemId = item.itemId;
-          const qty = item.quantity || item.qty || 0;
-        
-          itemsSold[itemId] = (itemsSold[itemId] || 0) + qty;
-        });
-        
-      });
+            openingLimit: stock.openingLimit,
+            currentLimit: stock.limit,
+            closingStock,
 
-      const resultItems = [];
+            replenishQty:
+              stock.limit > closingStock ? stock.limit - closingStock : 0,
+            collectBackQty:
+              stock.limit < closingStock ? closingStock - stock.limit : 0
+          });
+        }
 
-      for (const itemId of Object.keys(itemsSold)) {
-        const [stockSnap, priceSnap] = await Promise.all([
-          db.ref(`khokhaItems/${itemId}/stock/${storeId}`).once("value"),
-          db.ref(`khokhaItems/${itemId}/price`).once("value")
-        ]);
+        const aggregatedOrder = {
+          date,
+          storeId,
+          items: resultItems,
+          payments: {
+            totalUPICollection: totalUPI,
+            totalCashCollection: totalCash
+          },
+          generatedAt: Date.now()
+        };
 
-        const stock = stockSnap.val();
-        const price = priceSnap.val();
-        const soldQty = itemsSold[itemId];
-        const closingStock = stock.openingLimit - soldQty;
+        // realtime view only
+        if (operation === "view") {
+          return res.json({
+            status: "SUCCESS",
+            message: "Aggregated order generated",
+            aggregatedOrder
+          });
+        }
 
-        resultItems.push({
-          itemId,
-          price,
-          soldQty,
-          totalAmount: soldQty * price,
+        await db
+          .ref(`khokhaAggregatedOrders/${date}/${storeId}`)
+          .set(aggregatedOrder);
 
-          openingLimit: stock.openingLimit,
-          currentLimit: stock.limit,
-          closingStock,
-
-          replenishQty:
-            stock.limit > closingStock ? stock.limit - closingStock : 0,
-          collectBackQty:
-            stock.limit < closingStock ? closingStock - stock.limit : 0
-        });
-      }
-
-      const aggregatedOrder = {
-        date,
-        storeId,
-        items: resultItems,
-        payments: {
-          totalUPICollection: totalUPI,
-          totalCashCollection: totalCash
-        },
-        generatedAt: Date.now()
-      };
-
-      //this is for khokha to view a realtime view of aggregated total.
-      if(operation === "view"){
         return res.json({
           status: "SUCCESS",
           message: "Aggregated order generated",
-          aggregatedOrder
+          path: `khokhaAggregatedOrders/${date}/${storeId}`
+        });
+
+      } catch (e) {
+        console.error(e);
+        return res.status(500).json({
+          error: "Internal server error " + e.message
         });
       }
-
-      await db
-        .ref(`khokhaAggregatedOrders/${date}/${storeId}`)
-        .set(aggregatedOrder);
-
-      return res.json({
-        status: "SUCCESS",
-        message: "Aggregated order generated",
-        path: `khokhaAggregatedOrders/${date}/${storeId}`
-      });
-
-    } catch (e) {
-      console.error(e);
-      return res.status(500).json({
-        error: "Internal server error "+e.message
-      });
-    }
+    });
   }
 );
 

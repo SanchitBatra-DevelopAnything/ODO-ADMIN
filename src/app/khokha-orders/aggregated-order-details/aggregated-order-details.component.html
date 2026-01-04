@@ -1,1 +1,58 @@
-<p>aggregated-order-details works!</p>
+<div *ngIf="loading">Loading...</div>
+
+<div *ngIf="!loading && aggregatedOrder">
+
+  <h2>Aggregated Order</h2>
+
+  <div class="meta">
+    <div><b>Store:</b> {{ aggregatedOrder.storeId }}</div>
+    <div><b>Date:</b> {{ aggregatedOrder.date }}</div>
+  </div>
+
+  <!-- Payments (ONLY IF /bill) -->
+  <div class="payments" *ngIf="showPayments">
+    <h3>Payments</h3>
+    <div>UPI: ₹{{ aggregatedOrder.payments.totalUPICollection }}</div>
+    <div>Cash: ₹{{ aggregatedOrder.payments.totalCashCollection }}</div>
+  </div>
+
+  <!-- Items Table -->
+  <table>
+    <thead>
+      <tr>
+        <th>Item ID</th>
+        <th>Price</th>
+        <th>Sold Qty</th>
+        <th>Total Amount</th>
+        <th>Opening Limit</th>
+        <th>Current Limit</th>
+        <th>Closing Stock</th>
+        <th>Give more (free)</th>
+        <th>Collect Back</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let item of aggregatedOrder.items">
+        <td>{{ item.itemId }}</td>
+        <td>{{ item.price }}</td>
+        <td>{{ item.soldQty }}</td>
+        <td>{{ item.totalAmount }}</td>
+        <td>{{ item.openingLimit }}</td>
+        <td>{{ item.currentLimit }}</td>
+        <td>{{ item.closingStock }}</td>
+
+        <td
+          [class.green]="item.replenishQty > 0">
+          {{ item.replenishQty }}
+        </td>
+
+        <td
+          [class.red]="item.collectBackQty > 0">
+          {{ item.collectBackQty }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
