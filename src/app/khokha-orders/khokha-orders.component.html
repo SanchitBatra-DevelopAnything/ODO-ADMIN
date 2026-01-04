@@ -1,0 +1,22 @@
+<div class="container">
+    <h2>Aggregated Orders</h2>
+  
+    <input type="date" [(ngModel)]="date" />
+    <button (click)="fetch()" class = "btn btn-primary">Fetch</button>
+  
+    <div *ngIf="loading">Loading...</div>
+  
+    <div class="parchi-container">
+      <div class="parchi" *ngFor="let store of stores" (click)="openDetail(store)" style="cursor: pointer;">
+        <div class="title">Aggregated Order</div>
+        <div class="line"></div>
+        <div><b>Store:</b> {{ store }}</div>
+        <div><b>Date:</b> {{ date }}</div>
+      </div>
+    </div>
+  
+    <div *ngIf="!loading && stores.length === 0">
+      No aggregation found for this date
+    </div>
+  </div>
+  

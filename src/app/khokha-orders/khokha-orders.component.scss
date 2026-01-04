@@ -1,0 +1,35 @@
+.container {
+    padding: 20px;
+  }
+  
+  input {
+    margin-right: 10px;
+  }
+  
+  .parchi-container {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  
+  .parchi {
+    width: 220px;
+    background: #fff;
+    border: 1px dashed #333;
+    padding: 12px;
+    font-family: monospace;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+  
+  .line {
+    border-top: 1px dashed #333;
+    margin: 6px 0;
+  }
+  

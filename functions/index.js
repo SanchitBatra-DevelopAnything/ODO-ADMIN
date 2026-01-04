@@ -632,7 +632,7 @@ exports.setDailyOpeningLimit = onSchedule(
 exports.generateAdminSummary = functions.https.onRequest(
   async (req, res) => {
     try {
-      const { storeId, date } = req.body;
+      const { storeId, date , operation } = req.body;
       const db = admin.database();
 
       if (!storeId || !date) {
@@ -655,10 +655,13 @@ exports.generateAdminSummary = functions.https.onRequest(
         if (order.paymentType === "UPI") totalUPI += order.orderTotal;
         if (order.paymentType === "CASH") totalCash += order.orderTotal;
 
-        Object.keys(order.items).forEach(itemId => {
-          itemsSold[itemId] =
-            (itemsSold[itemId] || 0) + order.items[itemId].qty;
+        Object.values(order.items || {}).forEach(item => {
+          const itemId = item.itemId;
+          const qty = item.quantity || item.qty || 0;
+        
+          itemsSold[itemId] = (itemsSold[itemId] || 0) + qty;
         });
+        
       });
 
       const resultItems = [];
@@ -702,6 +705,15 @@ exports.generateAdminSummary = functions.https.onRequest(
         generatedAt: Date.now()
       };
 
+      //this is for khokha to view a realtime view of aggregated total.
+      if(operation === "view"){
+        return res.json({
+          status: "SUCCESS",
+          message: "Aggregated order generated",
+          aggregatedOrder
+        });
+      }
+
       await db
         .ref(`khokhaAggregatedOrders/${date}/${storeId}`)
         .set(aggregatedOrder);
@@ -715,9 +727,56 @@ exports.generateAdminSummary = functions.https.onRequest(
     } catch (e) {
       console.error(e);
       return res.status(500).json({
-        error: "Internal server error"
+        error: "Internal server error "+e.message
       });
     }
+  }
+);
+
+exports.getAggregatedStoreParchiByDate = functions.https.onRequest(
+  (req, res) => {
+    cors(req, res, async () => {
+      try {
+        // Allow only POST
+        if (req.method !== "POST") {
+          return res.status(405).json({ error: "Method not allowed" });
+        }
+
+        const { date } = req.body;
+
+        if (!date) {
+          return res.status(400).json({
+            error: "date is required (YYYY-MM-DD)"
+          });
+        }
+
+        const db = admin.database();
+
+        const snap = await db
+          .ref(`khokhaAggregatedOrders/${date}`)
+          .once("value");
+
+        if (!snap.exists()) {
+          return res.json({
+            date,
+            stores: []
+          });
+        }
+
+        const stores = Object.keys(snap.val());
+
+        return res.json({
+          date,
+          stores
+        });
+
+      } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+          error: "Internal server error"
+        });
+      }
+    });
   }
 );
 

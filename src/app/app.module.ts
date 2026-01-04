@@ -67,6 +67,8 @@ import { AddReferrerFormComponent } from './add-referrer-form/add-referrer-form.
 import { GoogleMapComponent } from './google-map/google-map.component';
 import { SafeUrlPipe } from './safe-url.pipe';
 import { DeliveryRouteMakerComponent } from './orders/delivery-route-maker/delivery-route-maker.component';
+import { KhokhaOrdersComponent } from './khokha-orders/khokha-orders.component';
+import { AggregatedOrderDetailsComponent } from './khokha-orders/aggregated-order-details/aggregated-order-details.component';
 
 // import { EditItemComponent } from './edit-item/edit-item.component';
 // import { DistributorAreasComponent } from './manage/distributor-areas/distributor-areas.component';
@@ -86,6 +88,7 @@ const appRoutes : Routes = [
   {path : 'itemsOf/:categoryKey/:categoryName' , component : ItemListComponent , canActivate : [AuthGuardService , AdminGuardService] },
   {path:'notifications' , component:NotificationsComponent , canActivate : [AuthGuardService]},
   {path : 'dailyReport' , component : OrdersComponent , canActivate : [AuthGuardService]},
+  {path : 'khokhaDailyReport' , component : KhokhaOrdersComponent , canActivate : [AuthGuardService]},
   {path : 'manage' , component : ManageComponent , canActivate : [AuthGuardService , AdminGuardService]},
   {path : 'manage' , component : ManageComponent , children:[
     {path : 'distributors', component : DistributorsListComponent , canActivate : [AuthGuardService , AdminGuardService]},
@@ -98,6 +101,21 @@ const appRoutes : Routes = [
   {path : 'processedOrders' , component : OldOrdersComponent , canActivate : [AuthGuardService]},
   {path : 'orderBill/:orderKey' , component : OrderDetailComponent , canActivate :[AuthGuardService]},
   {path : 'deliveryRouteMaker' , component : DeliveryRouteMakerComponent , canActivate :[AuthGuardService]},
+  {
+    path: 'aggregated-order-details',
+    component: AggregatedOrderDetailsComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'aggregated-order-details/:storeId/:date',
+    component: AggregatedOrderDetailsComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'aggregated-order-details/:storeId/:date/bill',
+    component: AggregatedOrderDetailsComponent,
+    canActivate: [AuthGuardService]
+  }
 ];
 
 export const MY_DATE_FORMATS = {
@@ -144,6 +162,8 @@ export const MY_DATE_FORMATS = {
     GoogleMapComponent,
     SafeUrlPipe,
     DeliveryRouteMakerComponent,
+    KhokhaOrdersComponent,
+    AggregatedOrderDetailsComponent,
   ],
   imports: [
     BrowserModule,

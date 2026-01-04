@@ -356,5 +356,10 @@ export class ApiService {
   {
     return this.http.get(this.dbUrl+"deliveryRoutes.json");
   }
+
+  public getKhokhaStoresForActiveKhokhaOrders(date:string) : Observable<any>
+  {
+    return this.http.post("https://getaggregatedstoreparchibydate-jipkkwipyq-uc.a.run.app" , {date});
+  }
   
 }
