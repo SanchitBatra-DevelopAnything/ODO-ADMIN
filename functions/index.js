@@ -3,6 +3,7 @@ const { https } = require("firebase-functions/v2"); // Use v2 https for consiste
 const admin = require("firebase-admin");
 const functions = require("firebase-functions");
 const cors = require("cors")({ origin: true }); // ✅ FIX: Import and configure CORS
+const { onSchedule } = require("firebase-functions/v2/scheduler");
 
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {
@@ -583,6 +584,145 @@ exports.updateStockForStore = functions.https.onRequest((req, res) => {
     }
   });
 });
+
+
+
+
+
+exports.setDailyOpeningLimit = onSchedule(
+  {
+    schedule: "0 5 * * *",        // 5:00 AM every day
+    timeZone: "Asia/Kolkata",      // India timezone
+  },
+  async (event) => {
+    const db = admin.database();
+    try {
+      const today = new Date().toLocaleDateString("en-CA", {
+        timeZone: "Asia/Kolkata",
+      });
+      const itemsSnap = await db.ref("khokhaItems").once("value");
+
+      const updates = {};
+
+      itemsSnap.forEach((itemSnap) => {
+        const itemId = itemSnap.key;
+        const stock = itemSnap.child("stock").val();
+        if (!stock) return;
+
+        Object.keys(stock).forEach((storeId) => {
+          updates[
+            `khokhaItems/${itemId}/stock/${storeId}/openingLimit`
+          ] = stock[storeId].limit;
+
+          updates[
+            `khokhaItems/${itemId}/stock/${storeId}/openingLimitDate`
+          ] = today;
+        });
+      });
+
+      await db.ref().update(updates);
+      console.log("Opening limits set for", today);
+
+    } catch (err) {
+      console.error("Error in setDailyOpeningLimit:", err);
+    }
+  }
+);
+
+exports.generateAdminSummary = functions.https.onRequest(
+  async (req, res) => {
+    try {
+      const { storeId, date } = req.body;
+      const db = admin.database();
+
+      if (!storeId || !date) {
+        return res.status(400).json({
+          error: "storeId and date are required"
+        });
+      }
+
+      const ordersSnap = await db
+        .ref(`khokhaOrders/${storeId}/${date}`)
+        .once("value");
+
+      const itemsSold = {};
+      let totalUPI = 0;
+      let totalCash = 0;
+
+      ordersSnap.forEach(orderSnap => {
+        const order = orderSnap.val();
+
+        if (order.paymentType === "UPI") totalUPI += order.orderTotal;
+        if (order.paymentType === "CASH") totalCash += order.orderTotal;
+
+        Object.keys(order.items).forEach(itemId => {
+          itemsSold[itemId] =
+            (itemsSold[itemId] || 0) + order.items[itemId].qty;
+        });
+      });
+
+      const resultItems = [];
+
+      for (const itemId of Object.keys(itemsSold)) {
+        const [stockSnap, priceSnap] = await Promise.all([
+          db.ref(`khokhaItems/${itemId}/stock/${storeId}`).once("value"),
+          db.ref(`khokhaItems/${itemId}/price`).once("value")
+        ]);
+
+        const stock = stockSnap.val();
+        const price = priceSnap.val();
+        const soldQty = itemsSold[itemId];
+        const closingStock = stock.openingLimit - soldQty;
+
+        resultItems.push({
+          itemId,
+          price,
+          soldQty,
+          totalAmount: soldQty * price,
+
+          openingLimit: stock.openingLimit,
+          currentLimit: stock.limit,
+          closingStock,
+
+          replenishQty:
+            stock.limit > closingStock ? stock.limit - closingStock : 0,
+          collectBackQty:
+            stock.limit < closingStock ? closingStock - stock.limit : 0
+        });
+      }
+
+      const aggregatedOrder = {
+        date,
+        storeId,
+        items: resultItems,
+        payments: {
+          totalUPICollection: totalUPI,
+          totalCashCollection: totalCash
+        },
+        generatedAt: Date.now()
+      };
+
+      await db
+        .ref(`khokhaAggregatedOrders/${date}/${storeId}`)
+        .set(aggregatedOrder);
+
+      return res.json({
+        status: "SUCCESS",
+        message: "Aggregated order generated",
+        path: `khokhaAggregatedOrders/${date}/${storeId}`
+      });
+
+    } catch (e) {
+      console.error(e);
+      return res.status(500).json({
+        error: "Internal server error"
+      });
+    }
+  }
+);
+
+
+
 
 
 
