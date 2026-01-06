@@ -72,6 +72,7 @@ import { AggregatedOrderDetailsComponent } from './khokha-orders/aggregated-orde
 import { KhokhaCategoriesComponent } from './khokha-categories/khokha-categories.component';
 import { AddKhokhaItemComponent } from './add-khokha-item/add-khokha-item.component';
 import { KhokhaItemListComponent } from './khokha-item-list/khokha-item-list.component';
+import { EditKhokhaItemComponent } from './edit-khokha-item/edit-khokha-item.component';
 
 // import { EditItemComponent } from './edit-item/edit-item.component';
 // import { DistributorAreasComponent } from './manage/distributor-areas/distributor-areas.component';
@@ -172,6 +173,7 @@ export const MY_DATE_FORMATS = {
     KhokhaCategoriesComponent,
     AddKhokhaItemComponent,
     KhokhaItemListComponent,
+    EditKhokhaItemComponent,
   ],
   imports: [
     BrowserModule,

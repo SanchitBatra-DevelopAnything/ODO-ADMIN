@@ -384,5 +384,15 @@ export class ApiService {
   {
     return this.http.post("https://getkhokhaitemsbycategory-jipkkwipyq-uc.a.run.app" , {categoryKey});
   }
+
+  public getPaanIndiaItemById(itemId:string) : Observable<any> {
+    return this.http.get(this.dbUrl+"khokhaItems/"+itemId+".json");
+  }
+
+  public updateKhokhaItem(itemId:string, payload:any) : Observable<any> {
+    
+      return this.http.patch(this.dbUrl+"khokhaItems/"+itemId+".json" , payload);
+    
+  }
   
 }
