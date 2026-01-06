@@ -69,6 +69,7 @@ import { SafeUrlPipe } from './safe-url.pipe';
 import { DeliveryRouteMakerComponent } from './orders/delivery-route-maker/delivery-route-maker.component';
 import { KhokhaOrdersComponent } from './khokha-orders/khokha-orders.component';
 import { AggregatedOrderDetailsComponent } from './khokha-orders/aggregated-order-details/aggregated-order-details.component';
+import { KhokhaCategoriesComponent } from './khokha-categories/khokha-categories.component';
 
 // import { EditItemComponent } from './edit-item/edit-item.component';
 // import { DistributorAreasComponent } from './manage/distributor-areas/distributor-areas.component';
@@ -85,6 +86,7 @@ import { AggregatedOrderDetailsComponent } from './khokha-orders/aggregated-orde
 const appRoutes : Routes = [
   {path: '' , component:LoginComponent , pathMatch:"full"},
   {path: 'categories' , component : CategoriesListComponent , canActivate : [AuthGuardService , AdminGuardService]},
+  {path: 'paanIndiaCategories' , component : KhokhaCategoriesComponent , canActivate : [AuthGuardService , AdminGuardService]},
   {path : 'itemsOf/:categoryKey/:categoryName' , component : ItemListComponent , canActivate : [AuthGuardService , AdminGuardService] },
   {path:'notifications' , component:NotificationsComponent , canActivate : [AuthGuardService]},
   {path : 'dailyReport' , component : OrdersComponent , canActivate : [AuthGuardService]},
@@ -164,6 +166,7 @@ export const MY_DATE_FORMATS = {
     DeliveryRouteMakerComponent,
     KhokhaOrdersComponent,
     AggregatedOrderDetailsComponent,
+    KhokhaCategoriesComponent,
   ],
   imports: [
     BrowserModule,

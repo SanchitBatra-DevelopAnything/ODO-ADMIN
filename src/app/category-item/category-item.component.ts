@@ -28,6 +28,20 @@ export class CategoryItemComponent implements OnInit {
     return this.category.categoryName;
   }
 
+  onAddPaanIndiaItem()
+  {
+    this.ref = this.dialogService.open(AddItemComponent, { 
+      data: {
+          key:this.categoryKeyInDb,
+          category:this.category
+      },
+      header: 'Add an item',
+      maximizable:true,
+      height : "800px",
+      width:"600px",
+  });
+  }
+
   onAddItem()
   {
     this.ref = this.dialogService.open(AddItemComponent, { 

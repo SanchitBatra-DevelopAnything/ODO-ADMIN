@@ -366,5 +366,9 @@ export class ApiService {
   {
     return this.http.post("https://generateadminsummary-jipkkwipyq-uc.a.run.app" , {storeId , date , operation:"view"});
   }
+
+  public getCategoriesForPaanIndia() : Observable<any> {
+    return this.http.get(this.dbUrl+"khokhaCategories.json");
+  }
   
 }
