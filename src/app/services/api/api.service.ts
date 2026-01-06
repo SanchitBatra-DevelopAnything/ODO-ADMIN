@@ -6,6 +6,7 @@ import { Observable, ObservedValueOf } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
+  
 
   //category can be considered a brand in ODO's scenario.
   //distributoriships can be considered as areas.
@@ -369,6 +370,14 @@ export class ApiService {
 
   public getCategoriesForPaanIndia() : Observable<any> {
     return this.http.get(this.dbUrl+"khokhaCategories.json");
+  }
+
+  public getPaanIndiaStores() : Observable<any> {
+    return this.http.get(this.dbUrl+"khokhaStores.json");
+  }
+
+  public createKhokhaItem(payload:any) : Observable<any> {
+    return this.http.post(this.dbUrl+"khokhaItems.json" , payload);
   }
   
 }

@@ -70,6 +70,7 @@ import { DeliveryRouteMakerComponent } from './orders/delivery-route-maker/deliv
 import { KhokhaOrdersComponent } from './khokha-orders/khokha-orders.component';
 import { AggregatedOrderDetailsComponent } from './khokha-orders/aggregated-order-details/aggregated-order-details.component';
 import { KhokhaCategoriesComponent } from './khokha-categories/khokha-categories.component';
+import { AddKhokhaItemComponent } from './add-khokha-item/add-khokha-item.component';
 
 // import { EditItemComponent } from './edit-item/edit-item.component';
 // import { DistributorAreasComponent } from './manage/distributor-areas/distributor-areas.component';
@@ -167,6 +168,7 @@ export const MY_DATE_FORMATS = {
     KhokhaOrdersComponent,
     AggregatedOrderDetailsComponent,
     KhokhaCategoriesComponent,
+    AddKhokhaItemComponent,
   ],
   imports: [
     BrowserModule,

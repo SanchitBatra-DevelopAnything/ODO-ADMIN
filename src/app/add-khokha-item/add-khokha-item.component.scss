@@ -1,0 +1,146 @@
+.add-item-container {
+    max-width: 540px;
+    margin: auto;
+    background: #ffffff;
+    padding: 32px;
+    border-radius: 14px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 28px;
+    color: #1f2937;
+  }
+  
+  .item-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    margin-bottom: 22px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #6b7280;
+    font-weight: 500;
+  }
+  
+  input[type='text'],
+  input[type='number'] {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  }
+  
+  /* File Upload */
+  .file-upload {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .file-upload input {
+    display: none;
+  }
+  
+  .file-upload label {
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: #f3f4f6;
+    border: 1px dashed #d1d5db;
+    cursor: pointer;
+    font-size: 14px;
+    color: #374151;
+  }
+  
+  .file-upload label:hover {
+    background: #e5e7eb;
+  }
+  
+  .uploading {
+    font-size: 13px;
+    color: #2563eb;
+    font-weight: 500;
+  }
+  
+  /* Image Preview */
+  .preview {
+    margin-top: 14px;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+  }
+  
+  /* Stock Section */
+  .stock-section {
+    margin-top: 30px;
+  }
+  
+  .section-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #374151;
+  }
+  
+  .store-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    background: #f9fafb;
+    border-radius: 10px;
+    margin-bottom: 12px;
+  }
+  
+  .store-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  .store-row input {
+    width: 90px;
+    text-align: center;
+  }
+  
+  /* Button */
+  .primary-btn {
+    margin-top: 30px;
+    padding: 14px;
+    border-radius: 12px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+  }
+  
+  .primary-btn:hover {
+    background: #1d4ed8;
+  }
+  
+  .primary-btn:active {
+    transform: scale(0.98);
+  }
+  
