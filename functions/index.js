@@ -468,6 +468,44 @@ exports.getItemsByKhokhaStore = functions.https.onRequest((req, res) => {
   });
 });
 
+exports.getKhokhaItemsByCategory = functions.https.onRequest(
+  (req, res) => {
+    cors(req, res, async () => {
+      try {
+        const { categoryKey } = req.body;
+
+        if (!categoryKey) {
+          return res.status(400).json({
+            error: 'categoryKey is required'
+          });
+        }
+
+        const db = admin.database();
+
+        const snapshot = await db
+          .ref('khokhaItems')
+          .orderByChild('categoryId')
+          .equalTo(categoryKey)
+          .once('value');
+
+        if (!snapshot.exists()) {
+          return res.json({});
+        }
+
+        return res.json(snapshot.val());
+
+      } catch (error) {
+        console.error('Error fetching khokha items:', error);
+        return res.status(500).json({
+          error: 'Internal Server Error'
+        });
+      }
+    });
+  }
+);
+
+
+
 
 
 //function to restock by acquiring a lock such that at this point order placed from app fails.

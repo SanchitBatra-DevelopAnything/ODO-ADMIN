@@ -35,6 +35,8 @@ export class UtilityService {
   categoryAdded:Subject<boolean>;
   bannerAdded:Subject<boolean>;
   referrerAdded:Subject<boolean>;
+  paanIndiaItemDeleted:Subject<boolean>;
+  paanIndiaItemEditted:Subject<boolean>;
 
   constructor() { 
     this.userLoggedIn = new Subject<boolean>();
@@ -47,5 +49,7 @@ export class UtilityService {
     this.categoryAdded = new Subject<boolean>();
     this.bannerAdded = new Subject<boolean>();
     this.referrerAdded = new Subject<boolean>();
+    this.paanIndiaItemDeleted = new Subject<boolean>();
+    this.paanIndiaItemEditted = new Subject<boolean>();
 }
 }

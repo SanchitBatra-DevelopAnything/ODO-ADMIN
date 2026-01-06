@@ -379,5 +379,10 @@ export class ApiService {
   public createKhokhaItem(payload:any) : Observable<any> {
     return this.http.post(this.dbUrl+"khokhaItems.json" , payload);
   }
+
+  public getItemsForPaanIndia(categoryKey:string) : Observable<any>
+  {
+    return this.http.post("https://getkhokhaitemsbycategory-jipkkwipyq-uc.a.run.app" , {categoryKey});
+  }
   
 }

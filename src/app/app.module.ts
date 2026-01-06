@@ -71,6 +71,7 @@ import { KhokhaOrdersComponent } from './khokha-orders/khokha-orders.component';
 import { AggregatedOrderDetailsComponent } from './khokha-orders/aggregated-order-details/aggregated-order-details.component';
 import { KhokhaCategoriesComponent } from './khokha-categories/khokha-categories.component';
 import { AddKhokhaItemComponent } from './add-khokha-item/add-khokha-item.component';
+import { KhokhaItemListComponent } from './khokha-item-list/khokha-item-list.component';
 
 // import { EditItemComponent } from './edit-item/edit-item.component';
 // import { DistributorAreasComponent } from './manage/distributor-areas/distributor-areas.component';
@@ -89,6 +90,7 @@ const appRoutes : Routes = [
   {path: 'categories' , component : CategoriesListComponent , canActivate : [AuthGuardService , AdminGuardService]},
   {path: 'paanIndiaCategories' , component : KhokhaCategoriesComponent , canActivate : [AuthGuardService , AdminGuardService]},
   {path : 'itemsOf/:categoryKey/:categoryName' , component : ItemListComponent , canActivate : [AuthGuardService , AdminGuardService] },
+  {path : 'items/paanIndia/:categoryKey/:categoryName' , component : KhokhaItemListComponent , canActivate : [AuthGuardService , AdminGuardService] },
   {path:'notifications' , component:NotificationsComponent , canActivate : [AuthGuardService]},
   {path : 'dailyReport' , component : OrdersComponent , canActivate : [AuthGuardService]},
   {path : 'khokhaDailyReport' , component : KhokhaOrdersComponent , canActivate : [AuthGuardService]},
@@ -169,6 +171,7 @@ export const MY_DATE_FORMATS = {
     AggregatedOrderDetailsComponent,
     KhokhaCategoriesComponent,
     AddKhokhaItemComponent,
+    KhokhaItemListComponent,
   ],
   imports: [
     BrowserModule,

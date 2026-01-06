@@ -71,6 +71,13 @@ export class CategoryItemComponent implements OnInit {
 
   openCategoryScreen(e:any)
   {
-    this.router.navigate(['itemsOf/'+this.categoryKeyInDb+"/"+this.getCategoryName()]);
+    if(this.paanIndiaCategory)
+    {
+      this.router.navigate(['items/paanIndia/'+this.categoryKeyInDb+"/"+this.getCategoryName()]);
+    }
+    else
+    {
+      this.router.navigate(['itemsOf/'+this.categoryKeyInDb+"/"+this.getCategoryName()]);
+    }
   }
 }

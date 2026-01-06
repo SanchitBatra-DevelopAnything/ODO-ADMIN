@@ -1,0 +1,44 @@
+<div class="items-container">
+
+    <h2 class="title">Items</h2>
+  
+    <div *ngIf="loading" class="loading">
+      Loading items...
+    </div>
+  
+    <div *ngIf="!loading && items.length === 0" class="empty">
+      No items found for this category
+    </div>
+  
+    <div class="items-grid" *ngIf="!loading && items.length">
+  
+      <div class="item-card" *ngFor="let item of items">
+  
+        <img
+          [src]="item.imageUrl || 'assets/placeholder.png'"
+          alt="item image"
+        />
+  
+        <div class="card-body">
+  
+          <h3 class="item-name">{{ item.name }}</h3>
+  
+          <p class="price">₹ {{ item.price }}</p>
+  
+          
+          
+  
+          <button
+            class="edit-btn"
+            type="button"
+            (click)="editItem(item)"
+          >
+            Edit
+          </button>
+  
+        </div>
+      </div>
+  
+    </div>
+  </div>
+  
