@@ -394,5 +394,9 @@ export class ApiService {
       return this.http.patch(this.dbUrl+"khokhaItems/"+itemId+".json" , payload);
     
   }
+
+  public getKhokhaItemNameFromId(id:string) : Observable<any> {
+    return this.http.get(this.dbUrl+"khokhaItems/"+id+"/name.json");
+  }
   
 }

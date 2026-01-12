@@ -41,7 +41,7 @@ export class KhokhaCategoriesComponent {
       });
     }
   
-    onDestroy()
+    onDestroy() 
     {
       this.paanIndiaCategoryAddedSub.unsubscribe();
     }
